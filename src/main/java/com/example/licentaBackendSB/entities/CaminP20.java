@@ -46,7 +46,8 @@ public class CaminP20 {
         this.friendToken = friendToken;
     }
 
-    public CaminP20() {}
+    public CaminP20() {
+    }
 
     //Getters and Setters
     public Long getId() {
@@ -114,8 +115,7 @@ public class CaminP20 {
     }
 
     //Others methods
-    public static CaminP20 convertStudentToCaminP20(Student tmp)
-    {
+    public static CaminP20 convertStudentToCaminP20(Student tmp) {
         CaminP20 result = new CaminP20();
 
         result.setId(tmp.getId());

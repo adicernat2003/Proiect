@@ -1,7 +1,6 @@
 package com.example.licentaBackendSB.entities;
 
 import com.example.licentaBackendSB.others.randomizers.DoBandCNPandGenderRandomizer;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -49,7 +48,8 @@ public class StudentAccount {
         this.autoritate = autoritate;
     }
 
-    public StudentAccount() {}
+    public StudentAccount() {
+    }
 
     //GETTERs && SETTERs -----------------------------------------------------------------------------------------------
     public Long getId() {
@@ -136,8 +136,7 @@ public class StudentAccount {
     public static List<StudentAccount> hardcodeStudentsAccountsDB(List<Student> tmp) {
         List<StudentAccount> studentAccounts = new ArrayList<>();
 
-        for(long i = Student.startIndexing - 1L; i < Student.endIndexing; i++)
-        {
+        for (long i = Student.startIndexing - 1L; i < Student.endIndexing; i++) {
             String username = tmp.get((int) i).getCnp();
             String password = DoBandCNPandGenderRandomizer.splitDoBbyDot(tmp.get((int) i).getZi_de_nastere());
 

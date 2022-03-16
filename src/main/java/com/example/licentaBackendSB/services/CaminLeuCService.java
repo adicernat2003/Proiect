@@ -1,6 +1,5 @@
 package com.example.licentaBackendSB.services;
 
-import com.example.licentaBackendSB.entities.CaminLeuA;
 import com.example.licentaBackendSB.entities.CaminLeuC;
 import com.example.licentaBackendSB.repositories.CaminLeuCRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,23 +23,20 @@ public class CaminLeuCService {
 
     //Methods
     /*  ~~~~~~~~~~~ Get List of Leu C Students ~~~~~~~~~~~ */
-    public List<CaminLeuC> getLeuCStudents()
-    {
+    public List<CaminLeuC> getLeuCStudents() {
         //select * from caminLeuC (query in DB)
-        List <CaminLeuC> caminLeuCList = caminLeuCRepository.findAll();
+        List<CaminLeuC> caminLeuCList = caminLeuCRepository.findAll();
 
         return caminLeuCList;
     }
 
     /*  ~~~~~~~~~~~ Introduce Student in the Camin Table Corespunzator ~~~~~~~~~~~ */
-    public void introduceNewStudentCaminLeuC(CaminLeuC newStudentCamin)
-    {
+    public void introduceNewStudentCaminLeuC(CaminLeuC newStudentCamin) {
         caminLeuCRepository.save(newStudentCamin);
     }
 
     /* ~~~~~~~~~~~ Delete Student in the Camin Table Corespunzator ~~~~~~~~~~~ */
-    public void deleteStudentInCaminLeuC(CaminLeuC selectedStudentCamin)
-    {
+    public void deleteStudentInCaminLeuC(CaminLeuC selectedStudentCamin) {
 //        caminLeuCRepository.deleteById(selectedStudentCamin.getId());
         caminLeuCRepository.deleteByNumePrenumeMyTokenCNP(
                 selectedStudentCamin.getMyToken(),
@@ -51,8 +47,7 @@ public class CaminLeuCService {
 
     /*  ~~~~~~~~~~~ Update Student from Camin Leu C with FriendToken ~~~~~~~~~~~ */
     @Transactional
-    public void updateFriendTokenOfStudentInCaminLeuC(CaminLeuC studentCamin)
-    {
+    public void updateFriendTokenOfStudentInCaminLeuC(CaminLeuC studentCamin) {
         Optional<CaminLeuC> studentDinCaminLeuC = caminLeuCRepository.getStudentFromCamin(studentCamin.getCnp());
         studentDinCaminLeuC.get().setFriendToken(studentCamin.getFriendToken());
         studentDinCaminLeuC.ifPresent(caminLeuC -> caminLeuCRepository.updateFriendTokenFromStudentInCamin(caminLeuC.getFriendToken(), caminLeuC.getCnp()));

@@ -40,44 +40,38 @@ public class CaminService {
                     //Validari si Verificari
 
                     /** update capacitate*/
-                    if(newCamin.getCapacitate() > 0
-                            && !foundCamin.getCapacitate().equals(newCamin.getCapacitate()))
-                    {
+                    if (newCamin.getCapacitate() > 0
+                            && !foundCamin.getCapacitate().equals(newCamin.getCapacitate())) {
                         foundCamin.setCapacitate(newCamin.getCapacitate());
                     }
 
                     /** update nr camere total*/
-                    if(newCamin.getNrCamereTotal() > 0
-                            && !foundCamin.getNrCamereTotal().equals(newCamin.getNrCamereTotal()))
-                    {
+                    if (newCamin.getNrCamereTotal() > 0
+                            && !foundCamin.getNrCamereTotal().equals(newCamin.getNrCamereTotal())) {
                         foundCamin.setNrCamereTotal(newCamin.getNrCamereTotal());
                     }
 
                     /** update nr camere cu un student*/
-                    if(newCamin.getNrCamereUnStudent() > 0
-                            && !foundCamin.getNrCamereUnStudent().equals(newCamin.getNrCamereUnStudent()))
-                    {
+                    if (newCamin.getNrCamereUnStudent() > 0
+                            && !foundCamin.getNrCamereUnStudent().equals(newCamin.getNrCamereUnStudent())) {
                         foundCamin.setNrCamereUnStudent(newCamin.getNrCamereUnStudent());
                     }
 
                     /** update nr camere cu doi student*/
-                    if(newCamin.getNrCamereDoiStudenti() > 0
-                            && !foundCamin.getNrCamereDoiStudenti().equals(newCamin.getNrCamereDoiStudenti()))
-                    {
+                    if (newCamin.getNrCamereDoiStudenti() > 0
+                            && !foundCamin.getNrCamereDoiStudenti().equals(newCamin.getNrCamereDoiStudenti())) {
                         foundCamin.setNrCamereDoiStudenti(newCamin.getNrCamereDoiStudenti());
                     }
 
                     /** update nr camere cu trei student*/
-                    if(newCamin.getNrCamereTreiStudenti() > 0
-                            && !foundCamin.getNrCamereTreiStudenti().equals(newCamin.getNrCamereTreiStudenti()))
-                    {
+                    if (newCamin.getNrCamereTreiStudenti() > 0
+                            && !foundCamin.getNrCamereTreiStudenti().equals(newCamin.getNrCamereTreiStudenti())) {
                         foundCamin.setNrCamereTreiStudenti(newCamin.getNrCamereTreiStudenti());
                     }
 
                     /** update nr camere cu patru student*/
-                    if(newCamin.getNrCamerePatruStudenti() > 0
-                            && !foundCamin.getNrCamerePatruStudenti().equals(newCamin.getNrCamerePatruStudenti()))
-                    {
+                    if (newCamin.getNrCamerePatruStudenti() > 0
+                            && !foundCamin.getNrCamerePatruStudenti().equals(newCamin.getNrCamerePatruStudenti())) {
                         foundCamin.setNrCamerePatruStudenti(newCamin.getNrCamerePatruStudenti());
                     }
 
@@ -96,38 +90,32 @@ public class CaminService {
                     //Validari si Verificari
 
                     /** update capacitate*/
-                    if(!foundCamin.getCapacitate().equals(newCamin.getCapacitate()))
-                    {
+                    if (!foundCamin.getCapacitate().equals(newCamin.getCapacitate())) {
                         foundCamin.setCapacitate(newCamin.getCapacitate());
                     }
 
                     /** update nr camere total*/
-                    if(!foundCamin.getNrCamereTotal().equals(newCamin.getNrCamereTotal()))
-                    {
+                    if (!foundCamin.getNrCamereTotal().equals(newCamin.getNrCamereTotal())) {
                         foundCamin.setNrCamereTotal(newCamin.getNrCamereTotal());
                     }
 
                     /** update nr camere cu un student*/
-                    if(!foundCamin.getNrCamereUnStudent().equals(newCamin.getNrCamereUnStudent()))
-                    {
+                    if (!foundCamin.getNrCamereUnStudent().equals(newCamin.getNrCamereUnStudent())) {
                         foundCamin.setNrCamereUnStudent(newCamin.getNrCamereUnStudent());
                     }
 
                     /** update nr camere cu doi student*/
-                    if(!foundCamin.getNrCamereDoiStudenti().equals(newCamin.getNrCamereDoiStudenti()))
-                    {
+                    if (!foundCamin.getNrCamereDoiStudenti().equals(newCamin.getNrCamereDoiStudenti())) {
                         foundCamin.setNrCamereDoiStudenti(newCamin.getNrCamereDoiStudenti());
                     }
 
                     /** update nr camere cu trei student*/
-                    if(!foundCamin.getNrCamereTreiStudenti().equals(newCamin.getNrCamereTreiStudenti()))
-                    {
+                    if (!foundCamin.getNrCamereTreiStudenti().equals(newCamin.getNrCamereTreiStudenti())) {
                         foundCamin.setNrCamereTreiStudenti(newCamin.getNrCamereTreiStudenti());
                     }
 
                     /** update nr camere cu patru student*/
-                    if(!foundCamin.getNrCamerePatruStudenti().equals(newCamin.getNrCamerePatruStudenti()))
-                    {
+                    if (!foundCamin.getNrCamerePatruStudenti().equals(newCamin.getNrCamerePatruStudenti())) {
                         foundCamin.setNrCamerePatruStudenti(newCamin.getNrCamerePatruStudenti());
                     }
 

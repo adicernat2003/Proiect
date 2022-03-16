@@ -13,7 +13,7 @@ import java.util.List;
 
 @Component
 @Order(1)
-public class StudentsLoader implements CommandLineRunner{
+public class StudentsLoader implements CommandLineRunner {
 
     private final Logger logger = LoggerFactory.getLogger(StudentsLoader.class);
 
@@ -24,7 +24,7 @@ public class StudentsLoader implements CommandLineRunner{
     public void run(String... args) throws Exception {
         logger.info("Loading data from StudentLoader...");
 
-        List <Student> studentsDB = Student.hardcodedStudentsList;
+        List<Student> studentsDB = Student.hardcodedStudentsList;
 
         studentRepository.saveAll(studentsDB);
     }

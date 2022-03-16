@@ -2,9 +2,9 @@ package com.example.licentaBackendSB.entities;
 
 import com.example.licentaBackendSB.others.randomizers.CountyManager;
 import com.example.licentaBackendSB.others.randomizers.DoBandCNPandGenderRandomizer;
-import com.example.licentaBackendSB.others.sort.sortingAlgorithms.*;
 import com.example.licentaBackendSB.others.randomizers.nameRandomizer;
 import com.example.licentaBackendSB.others.randomizers.ygsRandomizer;
+import com.example.licentaBackendSB.others.sort.sortingAlgorithms.*;
 
 import javax.persistence.*;
 import java.util.*;

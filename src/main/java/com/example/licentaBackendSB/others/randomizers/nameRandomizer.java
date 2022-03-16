@@ -6,8 +6,7 @@ import java.util.Random;
 public class nameRandomizer {
 
     //needed for Student object class
-    public static String getAlphaNumericString(int n)
-    {
+    public static String getAlphaNumericString(int n) {
 
         // length is bounded by 256 Character
         byte[] array = new byte[256];
@@ -20,7 +19,7 @@ public class nameRandomizer {
         StringBuffer r = new StringBuffer();
 
         // remove all spacial char
-        String  AlphaNumericString
+        String AlphaNumericString
                 = randomString
                 .replaceAll("[^A-Za-z0-9]", "");
 

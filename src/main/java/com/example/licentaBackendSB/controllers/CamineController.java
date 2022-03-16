@@ -37,8 +37,7 @@ public class CamineController {
     /* ~~~~~~~~~~~ Get Camine View ~~~~~~~~~~~ */
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
-    public String getCaminePage(Model model)
-    {
+    public String getCaminePage(Model model) {
         Camin leuA = new Camin();
         Camin leuC = new Camin();
         Camin p20 = new Camin();
@@ -46,10 +45,8 @@ public class CamineController {
 
         List<Camin> camineList = caminService.getCamine();
 
-        for(Camin it: camineList)
-        {
-            switch(it.getNumeCamin())
-            {
+        for (Camin it : camineList) {
+            switch (it.getNumeCamin()) {
                 case "Leu A":
                     leuA = it;
                     break;
@@ -77,9 +74,8 @@ public class CamineController {
     /* ~~~~~~~~~~~ LeuA List ~~~~~~~~~~~ */
     @GetMapping("leuAlist")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
-    public String getLeuAStudents(Model model)
-    {
-        List <CaminLeuA> caminLeuAList = caminLeuAService.getLeuAStudents();
+    public String getLeuAStudents(Model model) {
+        List<CaminLeuA> caminLeuAList = caminLeuAService.getLeuAStudents();
         model.addAttribute("listOfLeuAStudents", caminLeuAList);
 
         return "pages/layer 4/camine/tables/leuAlist";
@@ -88,9 +84,8 @@ public class CamineController {
     /* ~~~~~~~~~~~ LeuC List ~~~~~~~~~~~ */
     @GetMapping("leuClist")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
-    public String getLeuCStudents(Model model)
-    {
-        List <CaminLeuC> caminLeuCList = caminLeuCService.getLeuCStudents();
+    public String getLeuCStudents(Model model) {
+        List<CaminLeuC> caminLeuCList = caminLeuCService.getLeuCStudents();
         model.addAttribute("listOfLeuCStudents", caminLeuCList);
 
         return "pages/layer 4/camine/tables/leuClist";
@@ -99,9 +94,8 @@ public class CamineController {
     /* ~~~~~~~~~~~ LeuC List ~~~~~~~~~~~ */
     @GetMapping("P20list")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
-    public String getP20Students(Model model)
-    {
-        List <CaminP20> caminP20List = caminP20Service.getP20Students();
+    public String getP20Students(Model model) {
+        List<CaminP20> caminP20List = caminP20Service.getP20Students();
         model.addAttribute("listOfP20Students", caminP20List);
 
         return "pages/layer 4/camine/tables/P20list";
@@ -110,9 +104,8 @@ public class CamineController {
     /* ~~~~~~~~~~~ LeuA List ~~~~~~~~~~~ */
     @GetMapping("P23list")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
-    public String getP23Students(Model model)
-    {
-        List <CaminP23> caminP23List = caminP23Service.getP23Students();
+    public String getP23Students(Model model) {
+        List<CaminP23> caminP23List = caminP23Service.getP23Students();
         model.addAttribute("listOfP23Students", caminP23List);
 
         return "pages/layer 4/camine/tables/P23list";
@@ -123,8 +116,7 @@ public class CamineController {
     @PreAuthorize("hasAuthority('student:write')")
     public String editCamin(
             @PathVariable("caminId") Long caminId,
-            Model model)
-    {
+            Model model) {
 
         Camin selectedCamin = caminService.editCamin(caminId);
         model.addAttribute("selectedCamintById", selectedCamin);
@@ -137,8 +129,7 @@ public class CamineController {
     @PreAuthorize("hasAuthority('student:write')")
     public String updateCamin(
             @PathVariable("caminId") Long caminId,
-            Camin newCamin)
-    {
+            Camin newCamin) {
         caminService.updateCamin(caminId, newCamin);
 
         return "redirect:/admin/camine";
@@ -147,8 +138,7 @@ public class CamineController {
     /* ~~~~~~~~~~~ Clear Fields and Update with 0 and Redirect to Camine Page ~~~~~~~~~~~ */
     @RequestMapping(path = "/clear/{caminId}")
     public String clearCamin(
-            @PathVariable("caminId") Long caminId)
-    {
+            @PathVariable("caminId") Long caminId) {
         //Preluam caminul actual stiind Id-ul
         Camin selectedCamin = caminService.editCamin(caminId);
 

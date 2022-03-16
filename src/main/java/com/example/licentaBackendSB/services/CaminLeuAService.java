@@ -25,9 +25,8 @@ public class CaminLeuAService {
     /*  ~~~~~~~~~~~ Get List of Leu A Students ~~~~~~~~~~~ */
     public List<CaminLeuA> getLeuAStudents() {
         //select * from caminLeuA (query in DB)
-        List<CaminLeuA> caminLeuAList = caminLeuARepository.findAll();
 
-        return caminLeuAList;
+        return caminLeuARepository.findAll();
     }
 
     /*  ~~~~~~~~~~~ Introduce Student in the Camin Table Corespunzator ~~~~~~~~~~~ */

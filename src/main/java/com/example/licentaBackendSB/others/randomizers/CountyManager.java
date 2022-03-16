@@ -4,9 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CountyManager {
-    public static String getCountyFromTwoDigitCode(String countyCode)
-    {
-        Map <Integer, String> counties = getCounties();
+    public static String getCountyFromTwoDigitCode(String countyCode) {
+        Map<Integer, String> counties = getCounties();
         String result = null;
 
         int countyIndex = Integer.parseInt(countyCode);
@@ -15,8 +14,7 @@ public class CountyManager {
         return result;
     }
 
-    public static Map<Integer, String> getCounties()
-    {
+    public static Map<Integer, String> getCounties() {
         Map<Integer, String> counties = new HashMap<>();
 
         counties.putIfAbsent(1, "Alba");

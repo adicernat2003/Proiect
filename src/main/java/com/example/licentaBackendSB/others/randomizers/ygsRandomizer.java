@@ -6,20 +6,18 @@ import java.util.List;
 public class ygsRandomizer {
 
     //needed for Student object class
-    public static String getRandomSeries()
-    {
+    public static String getRandomSeries() {
         //needs to be between ASCII code [65, 71]
         final int minASCIIcodeForSeries = 65;   //A
         final int maxASCIIcodeForSeries = 71;   //G
-        int randomASCII = (int)Math.floor(Math.random()*(maxASCIIcodeForSeries - minASCIIcodeForSeries + 1) + minASCIIcodeForSeries);
+        int randomASCII = (int) Math.floor(Math.random() * (maxASCIIcodeForSeries - minASCIIcodeForSeries + 1) + minASCIIcodeForSeries);
 
         return Character.toString((char) randomASCII);
     }
 
-    public static String getRandomGroup()
-    {
+    public static String getRandomGroup() {
         List<String> groups = new ArrayList<>();
-        int randomPos = (int)(Math.random() * 20);
+        int randomPos = (int) (Math.random() * 20);
         groups = getHarcodedGroups();
 
         return groups.get(randomPos);

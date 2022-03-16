@@ -46,7 +46,8 @@ public class CaminLeuC {
         this.friendToken = friendToken;
     }
 
-    public CaminLeuC() {}
+    public CaminLeuC() {
+    }
 
     //Getters and Setters
     public Long getId() {
@@ -114,8 +115,7 @@ public class CaminLeuC {
     }
 
     //Others methods
-    public static CaminLeuC convertStudentToCaminLeuC(Student tmp)
-    {
+    public static CaminLeuC convertStudentToCaminLeuC(Student tmp) {
         CaminLeuC result = new CaminLeuC();
 
         result.setId(tmp.getId());

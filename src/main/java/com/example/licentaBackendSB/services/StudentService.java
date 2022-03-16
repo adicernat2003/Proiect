@@ -18,15 +18,13 @@ public class StudentService {
 
     //Constructor
     @Autowired
-    public StudentService(StudentRepository studentRepository)
-    {
+    public StudentService(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
     }
 
     //Methods
     /*  ~~~~~~~~~~~ Get List of Students ~~~~~~~~~~~ */
-    public List<Student> getStudents()
-    {
+    public List<Student> getStudents() {
         //select * from student (query in DB)
         List<Student> studentsDB = studentRepository.findAll();
 
@@ -37,29 +35,23 @@ public class StudentService {
     }
 
     /*  ~~~~~~~~~~~ Find Student by Name and Surname ~~~~~~~~~~~ */
-    public Student findStudentByNameAndSurname(StudentAccount studentAccount)
-    {
+    public Student findStudentByNameAndSurname(StudentAccount studentAccount) {
         Optional<Student> foundStudent = studentRepository.findStudentByNameAndSurname(studentAccount.getNume(), studentAccount.getPrenume());
 
-        if(foundStudent.isPresent())
-        {
+        if (foundStudent.isPresent()) {
             return foundStudent.get();
-        }
-        else
-        {
+        } else {
             throw new IllegalStateException("Student doens't exist!");
         }
     }
 
     /*  ~~~~~~~~~~~ Add new Student ~~~~~~~~~~~ */
-    public void addNewStudent(Student student)
-    {
+    public void addNewStudent(Student student) {
 
         Optional<Student> studentOptional = studentRepository.findStudentByNameAndSurname(student.getNume(), student.getPrenume());
 
         //daca studentul cu exista cu numele respectiv, aruncam exceptie
-        if(studentOptional.isPresent())
-        {
+        if (studentOptional.isPresent()) {
             throw new IllegalStateException("Student already exists");
         }
         //implicit daca nu exista, il salvam in db
@@ -67,11 +59,9 @@ public class StudentService {
     }
 
     /*  ~~~~~~~~~~~ Delete Student from Student Table ~~~~~~~~~~~ */
-    public void deleteStudent(long studentId)
-    {
+    public void deleteStudent(long studentId) {
         boolean exists = studentRepository.existsById(studentId);
-        if(!exists)
-        {
+        if (!exists) {
             throw new IllegalStateException("Student with id " + studentId + " doesn't exist");
         }
 
@@ -79,8 +69,7 @@ public class StudentService {
     }
 
     /*  ~~~~~~~~~~~ Get Id of Student to update Student && FriendToken ~~~~~~~~~~~ */
-    public Student editStudent(Long studentId)
-    {
+    public Student editStudent(Long studentId) {
 
         return studentRepository.findById(studentId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid student Id:" + studentId));
@@ -88,72 +77,63 @@ public class StudentService {
 
     /*  ~~~~~~~~~~~ Update Student ~~~~~~~~~~~ */
     @Transactional
-    public void updateStudent(Long studentId, Student newStudent)
-    {
+    public void updateStudent(Long studentId, Student newStudent) {
         studentRepository.findById(studentId)
                 .map(foundStudent -> {
                     //Validari si Verificari
 
                     /** update nume*/
-                    if(newStudent.getNume() != null
+                    if (newStudent.getNume() != null
                             && newStudent.getNume().length() > 0
-                            && !foundStudent.getNume().equals(newStudent.getNume()))
-                    {
+                            && !foundStudent.getNume().equals(newStudent.getNume())) {
                         foundStudent.setNume(newStudent.getNume());
                     }
 
                     /** update prenume*/
-                    if(newStudent.getPrenume() != null
+                    if (newStudent.getPrenume() != null
                             && newStudent.getPrenume().length() > 0
-                            && !foundStudent.getPrenume().equals(newStudent.getPrenume()))
-                    {
+                            && !foundStudent.getPrenume().equals(newStudent.getPrenume())) {
                         foundStudent.setPrenume(newStudent.getPrenume());
                     }
 
                     /** update cnp*/
-                    if(newStudent.getCnp() != null
+                    if (newStudent.getCnp() != null
                             && newStudent.getCnp().length() > 0
-                            && !foundStudent.getCnp().equals(newStudent.getCnp()))
-                    {
+                            && !foundStudent.getCnp().equals(newStudent.getCnp())) {
                         foundStudent.setCnp(newStudent.getCnp());
                     }
 
                     /** update zi_de_nastere*/
-                    if(newStudent.getZi_de_nastere() != null
+                    if (newStudent.getZi_de_nastere() != null
                             && newStudent.getZi_de_nastere().length() > 0
-                            && !foundStudent.getZi_de_nastere().equals(newStudent.getZi_de_nastere()))
-                    {
+                            && !foundStudent.getZi_de_nastere().equals(newStudent.getZi_de_nastere())) {
                         foundStudent.setZi_de_nastere(newStudent.getZi_de_nastere());
                     }
 
                     /** update an*/
-                    if(newStudent.getAn() != null
-                            && !foundStudent.getAn().equals(newStudent.getAn()))
-                    {
+                    if (newStudent.getAn() != null
+                            && !foundStudent.getAn().equals(newStudent.getAn())) {
                         foundStudent.setAn(newStudent.getAn());
                     }
 
                     /** update grupa*/
-                    if(newStudent.getGrupa() != null
+                    if (newStudent.getGrupa() != null
                             && newStudent.getGrupa().length() > 0
-                            && !foundStudent.getGrupa().equals(newStudent.getGrupa()))
-                    {
+                            && !foundStudent.getGrupa().equals(newStudent.getGrupa())) {
                         foundStudent.setGrupa(newStudent.getGrupa());
                     }
 
                     /** update serie*/
-                    if(newStudent.getSerie() != null
+                    if (newStudent.getSerie() != null
                             && newStudent.getSerie().length() > 0
-                            && !foundStudent.getSerie().equals(newStudent.getSerie()))
-                    {
+                            && !foundStudent.getSerie().equals(newStudent.getSerie())) {
                         foundStudent.setSerie(newStudent.getSerie());
                     }
 
                     /** update judet*/
-                    if(newStudent.getJudet() != null
+                    if (newStudent.getJudet() != null
                             && newStudent.getJudet().length() > 0
-                            && !foundStudent.getJudet().equals(newStudent.getJudet()))
-                    {
+                            && !foundStudent.getJudet().equals(newStudent.getJudet())) {
                         foundStudent.setJudet(newStudent.getJudet());
                     }
 
@@ -166,18 +146,16 @@ public class StudentService {
 
     /*  ~~~~~~~~~~~ Update (THIS) with FriendToken ~~~~~~~~~~~ */
     @Transactional
-    public void updateFriendToken(Long studentId, Student newStudent)
-    {
+    public void updateFriendToken(Long studentId, Student newStudent) {
         studentRepository.findById(studentId)
                 .map(foundStudent -> {
                     //Validari si Verificari
 
                     /** update kid#1 with friendtoken*/
-                    if(newStudent.getFriendToken() != null
+                    if (newStudent.getFriendToken() != null
                             && newStudent.getFriendToken().length() > 0
                             && !foundStudent.getFriendToken().equals(newStudent.getFriendToken())
-                            && !foundStudent.getMyToken().equals(newStudent.getFriendToken()))
-                    {
+                            && !foundStudent.getMyToken().equals(newStudent.getFriendToken())) {
                         foundStudent.setFriendToken(newStudent.getFriendToken());
                     }
 
@@ -190,15 +168,13 @@ public class StudentService {
 
     /*  ~~~~~~~~~~~ Clear FriendToken ~~~~~~~~~~~ */
     @Transactional
-    public void clearFriendToken(Long studentId, Student selectedStudent)
-    {
+    public void clearFriendToken(Long studentId, Student selectedStudent) {
         studentRepository.findById(studentId)
                 .map(foundStudent -> {
                     //Validari si Verificari
 
                     /** clear friendToken and replace with null*/
-                    if(!foundStudent.getFriendToken().equals("null"))
-                    {
+                    if (!foundStudent.getFriendToken().equals("null")) {
                         foundStudent.setFriendToken(selectedStudent.getFriendToken());
                     }
 
@@ -210,39 +186,32 @@ public class StudentService {
     }
 
     /* ~~~~~~~~~~~ Validate if friend token exists in db ~~~~~~~~~~~ */
-    public String validateFriendToken(Student selectedStudent)
-    {
-        if(studentRepository.validateFriendTokenExists(selectedStudent.getFriendToken()))
-        {
+    public String validateFriendToken(Student selectedStudent) {
+        if (studentRepository.validateFriendTokenExists(selectedStudent.getFriendToken())) {
             return "All good!";
-        }
-        else
-        {
+        } else {
             return "Friend Token doesn't exist in database!";
         }
     }
 
     /* ~~~~~~~~~~~ Get second Student knowing his token ~~~~~~~~~~~ */
-    public Optional<Student> findStudentByMyToken(String hisToken)
-    {
-        Optional <Student> selectedStudent = studentRepository.findStudentByMyToken(hisToken);
+    public Optional<Student> findStudentByMyToken(String hisToken) {
+        Optional<Student> selectedStudent = studentRepository.findStudentByMyToken(hisToken);
 
         return selectedStudent;
     }
 
     /*  ~~~~~~~~~~~ Update Student Camin ~~~~~~~~~~~ */
     @Transactional
-    public void updateCamin(Long studentId, Student newStudent)
-    {
+    public void updateCamin(Long studentId, Student newStudent) {
         studentRepository.findById(studentId)
                 .map(foundStudent -> {
                     //Validari si Verificari
 
                     /** update nume*/
-                    if(newStudent.getCaminPreferat() != null
+                    if (newStudent.getCaminPreferat() != null
                             && newStudent.getCaminPreferat().length() > 0
-                            && !foundStudent.getCaminPreferat().equals(newStudent.getCaminPreferat()))
-                    {
+                            && !foundStudent.getCaminPreferat().equals(newStudent.getCaminPreferat())) {
                         foundStudent.setCaminPreferat(newStudent.getCaminPreferat());
                     }
 
@@ -255,15 +224,13 @@ public class StudentService {
 
     /*  ~~~~~~~~~~~ Clear Camin ~~~~~~~~~~~ */
     @Transactional
-    public void clearCamin(Long studentId, Student selectedStudent)
-    {
+    public void clearCamin(Long studentId, Student selectedStudent) {
         studentRepository.findById(studentId)
                 .map(foundStudent -> {
                     //Validari si Verificari
 
                     /** clear camin and replace with null*/
-                    if(!foundStudent.getCaminPreferat().equals("null"))
-                    {
+                    if (!foundStudent.getCaminPreferat().equals("null")) {
                         foundStudent.setCaminPreferat(selectedStudent.getCaminPreferat());
                     }
 
@@ -276,19 +243,15 @@ public class StudentService {
 
     /*  ~~~~~~~~~~~ Update Flag from Nu to Da and reverse ~~~~~~~~~~~ */
     @Transactional
-    public void updateFlag(Long studentId)
-    {
+    public void updateFlag(Long studentId) {
         studentRepository.findById(studentId)
                 .map(foundStudent -> {
                     //Validari si Verificari
 
                     /** update flag */
-                    if(foundStudent.getFlagCazSpecial().equals("Nu"))
-                    {
+                    if (foundStudent.getFlagCazSpecial().equals("Nu")) {
                         foundStudent.setFlagCazSpecial("Da");
-                    }
-                    else
-                    {
+                    } else {
                         foundStudent.setFlagCazSpecial("Nu");
                     }
 

@@ -42,8 +42,7 @@ public class Camin {
                  Integer nrCamereUnStudent,
                  Integer nrCamereDoiStudenti,
                  Integer nrCamereTreiStudenti,
-                 Integer nrCamerePatruStudenti)
-    {
+                 Integer nrCamerePatruStudenti) {
         this.id = id;
         this.numeCamin = numeCamin;
         this.capacitate = capacitate;
@@ -54,7 +53,8 @@ public class Camin {
         this.nrCamerePatruStudenti = nrCamerePatruStudenti;
     }
 
-    public Camin() {}
+    public Camin() {
+    }
 
     //Getters and Setters
     public Long getId() {
@@ -123,7 +123,7 @@ public class Camin {
 
     //Methods
     private static List<Camin> hardcodeCamine() {
-        List <Camin> hardcodedListOfCamine = new ArrayList<>();
+        List<Camin> hardcodedListOfCamine = new ArrayList<>();
 
         hardcodedListOfCamine.add(new Camin(
                 1L,
@@ -172,8 +172,7 @@ public class Camin {
         return hardcodedListOfCamine;
     }
 
-    public Boolean checkIfValuesAreZero()
-    {
+    public Boolean checkIfValuesAreZero() {
         return (this.capacitate.equals(0))
                 && (this.nrCamereTotal.equals(0))
                 && (this.nrCamereUnStudent.equals(0))

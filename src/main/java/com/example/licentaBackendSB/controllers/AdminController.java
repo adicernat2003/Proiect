@@ -8,7 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
@@ -22,8 +25,7 @@ public class AdminController {
 
     //Constructor
     @Autowired
-    public AdminController(StudentService studentService, StudentAccountService studentAccountService)
-    {
+    public AdminController(StudentService studentService, StudentAccountService studentAccountService) {
         this.studentService = studentService;
         this.studentAccountService = studentAccountService;
     }
@@ -31,8 +33,7 @@ public class AdminController {
     /* ~~~~~~~~~~~ AdminView ~~~~~~~~~~~ */
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
-    public String getAdminView(Model model)
-    {
+    public String getAdminView(Model model) {
         LoggedAccount loggedAccount = new LoggedAccount();
         model.addAttribute("loggedUsername", loggedAccount.getLoggedUsername());
         model.addAttribute("isDevAcc", loggedAccount.checkIfStandardAccLogged().toString());
@@ -43,8 +44,7 @@ public class AdminController {
     /* ~~~~~~~~~~~ Student List ~~~~~~~~~~~ */
     @GetMapping("students")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
-    public String getStudents(Model model)
-    {
+    public String getStudents(Model model) {
         List<Student> studentsDB = studentService.getStudents();
         model.addAttribute("listOfStudents", studentsDB);
         model.addAttribute("isAdmin", "admin");
@@ -55,8 +55,7 @@ public class AdminController {
     /* ~~~~~~~~~~~ Dev Admin Page ~~~~~~~~~~~ */
     @GetMapping("/devAdminPage")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
-    public String getDevAdminPage(Model model)
-    {
+    public String getDevAdminPage(Model model) {
         //todo adauga campuri si fa frumos devAdminPage
         return "pages/layer 4/info pages/developer/devAdminPage";
     }
@@ -80,10 +79,9 @@ public class AdminController {
 //    }
 
     /* ~~~~~~~~~~~ DELETE Student ~~~~~~~~~~~ */
-    @GetMapping( path = "/students/delete/{studentId}")
+    @GetMapping(path = "/students/delete/{studentId}")
     @PreAuthorize("hasAuthority('student:write')")
-    public String deleteStudent(@PathVariable("studentId") Long id)
-    {
+    public String deleteStudent(@PathVariable("studentId") Long id) {
         studentService.deleteStudent(id);
         studentAccountService.deleteStudent(id);
         return "redirect:/admin/students";
@@ -94,8 +92,7 @@ public class AdminController {
     @PreAuthorize("hasAuthority('student:write')")
     public String editStudent(
             @PathVariable("studentId") Long studentId,
-            Model model)
-    {
+            Model model) {
         Student selectedStudent = studentService.editStudent(studentId);        //getting student by id
         model.addAttribute("selectedStudentById", selectedStudent);
 
@@ -107,8 +104,7 @@ public class AdminController {
     @PreAuthorize("hasAuthority('student:write')")
     public String updateStudent(
             @PathVariable("studentId") Long studentId,
-            Student newStudent)
-    {
+            Student newStudent) {
         //campuri comune modificabile: nume, prenume
         //campuri comune nemodificabile: cnp, zi_de_nastere
         //campuri necomune student: an, grupa, serie, judet
@@ -122,8 +118,7 @@ public class AdminController {
     @RequestMapping(path = "/students/setFlag/{studentId}")
     @PreAuthorize("hasAuthority('student:write')")
     public String updateFlag(
-            @PathVariable("studentId") Long studentId)
-    {
+            @PathVariable("studentId") Long studentId) {
         studentService.updateFlag(studentId);
 
         return "redirect:/admin/students";

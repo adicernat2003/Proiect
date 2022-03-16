@@ -10,8 +10,7 @@ public class LoggedAccount {
 
     //Constructor
 
-    public LoggedAccount()
-    {
+    public LoggedAccount() {
         this.loggedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
     }
 
@@ -25,18 +24,16 @@ public class LoggedAccount {
     }
 
     //Methods
-    public Boolean checkIfStandardAccLogged()
-    {
+    public Boolean checkIfStandardAccLogged() {
         return this.loggedUsername.equals("checu")
                 || this.loggedUsername.equals("iancu")
                 || this.loggedUsername.equals("lixi");
     }
 
-    public String getAuthorityOfStandardAcc()
-    {
-        if(this.loggedUsername.equals("checu"))
+    public String getAuthorityOfStandardAcc() {
+        if (this.loggedUsername.equals("checu"))
             return "STUDENT";
-        else if(this.loggedUsername.equals("iancu"))
+        else if (this.loggedUsername.equals("iancu"))
             return "ADMIN";
         else
             return "ASSISTANT";

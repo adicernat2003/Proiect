@@ -23,26 +23,21 @@ public class IndexPageController {
     }
 
     @GetMapping("login")
-    public String getLoginView()
-    {
+    public String getLoginView() {
         return "pages/layer 1/login";
     }
 
     @GetMapping("menu")
-    public String getMenuView(Model model)
-    {
+    public String getMenuView(Model model) {
         //Preluam userul din sesiunea actuala si il cautam in baza de date sa scoatem numele si prenumele
         LoggedAccount loggedAccount = new LoggedAccount();
         Boolean isLoggedStandardAcc = loggedAccount.checkIfStandardAccLogged();
 
-        if(isLoggedStandardAcc)
-        {
+        if (isLoggedStandardAcc) {
             model.addAttribute("loggedStudentAccount", loggedAccount.getLoggedUsername());
             model.addAttribute("isLoggedStandardAcc", "true");
             model.addAttribute("authority", loggedAccount.getAuthorityOfStandardAcc());
-        }
-        else
-        {
+        } else {
             StudentAccount loggedStudentAccount = studentAccountService.getLoggedStudentAccount();
             model.addAttribute("loggedStudentAccount", loggedStudentAccount);
             model.addAttribute("isLoggedStandardAcc", "false");

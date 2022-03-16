@@ -23,7 +23,7 @@ public class CamineLoader implements CommandLineRunner {
     public void run(String... args) throws Exception {
         logger.info("Loading data from CamineLoader...");
 
-        List <Camin> camineDB = Camin.hardcodedCamine;
+        List<Camin> camineDB = Camin.hardcodedCamine;
 
         caminRepository.saveAll(camineDB);
     }

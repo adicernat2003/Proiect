@@ -1,12 +1,10 @@
 package com.example.licentaBackendSB.others.randomizers;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 public class DoBandCNPandGenderRandomizer {
 
-    public static String getDoB()
-    {
+    public static String getDoB() {
         Random rand = new Random();
         String result = null;
 
@@ -34,8 +32,7 @@ public class DoBandCNPandGenderRandomizer {
         return result;
     }
 
-    public static String getGender()
-    {
+    public static String getGender() {
         List<String> genders = new ArrayList<>();
         genders.add("Masculin");
         genders.add("Feminin");
@@ -51,8 +48,7 @@ public class DoBandCNPandGenderRandomizer {
         return result;
     }
 
-    public static String getCNP(String tmp, String gender)
-    {
+    public static String getCNP(String tmp, String gender) {
         Map<Integer, String> months = getMonths();
         Random rand = new Random();
         String result = null;
@@ -64,15 +60,15 @@ public class DoBandCNPandGenderRandomizer {
 
         //Preluarea indexului lunii stiind valoarea din map si extragerea ultimelor 2 cifre din an
         Integer keyofMonth = getFirstKeyByValue(months, month);
-        String last2DigitsFromYear = year.substring(2,4);
+        String last2DigitsFromYear = year.substring(2, 4);
 
         //In functie de sex si de an
         int genderIndicator;
-        if(gender.equals("Masculin") && Integer.parseInt(year) < 2000)
+        if (gender.equals("Masculin") && Integer.parseInt(year) < 2000)
             genderIndicator = 1;
-        else if(gender.equals("Masculin") && Integer.parseInt(year) >= 2000)
+        else if (gender.equals("Masculin") && Integer.parseInt(year) >= 2000)
             genderIndicator = 5;
-        else if(gender.equals("Feminin") && Integer.parseInt(year) < 2000)
+        else if (gender.equals("Feminin") && Integer.parseInt(year) < 2000)
             genderIndicator = 2;
         else
             genderIndicator = 6;
@@ -81,8 +77,7 @@ public class DoBandCNPandGenderRandomizer {
         int startCountyCode = 1;
         int endCountyCode = 52;
         int randomCountyCode = 48;  //oricare din 47, 48, 49, 50
-        while(!DoBandCNPandGenderRandomizer.checkCountyCode(randomCountyCode))
-        {
+        while (!DoBandCNPandGenderRandomizer.checkCountyCode(randomCountyCode)) {
             randomCountyCode = rand.nextInt(endCountyCode - startCountyCode) + startCountyCode;
         }
 
@@ -96,7 +91,7 @@ public class DoBandCNPandGenderRandomizer {
 
         //Concatenarea rezultatului
         result = genderIndicator + ""
-                +  last2DigitsFromYear + ""
+                + last2DigitsFromYear + ""
                 + (keyofMonth < 10 ? "0" + keyofMonth : keyofMonth) + ""
                 + day + ""
                 + (randomCountyCode < 10 ? "0" + randomCountyCode : randomCountyCode) + ""
@@ -108,13 +103,11 @@ public class DoBandCNPandGenderRandomizer {
         return result;
     }
 
-    public static Boolean checkCountyCode(int tmp)
-    {
+    public static Boolean checkCountyCode(int tmp) {
         return tmp != 47 && tmp != 48 && tmp != 49 && tmp != 50;
     }
 
-    public static String splitDoBbyDot(String tmp)
-    {
+    public static String splitDoBbyDot(String tmp) {
         Map<Integer, String> months = getMonths();
         String result;
 
@@ -128,8 +121,7 @@ public class DoBandCNPandGenderRandomizer {
         return result;
     }
 
-    public static Map<Integer, String> getMonths()
-    {
+    public static Map<Integer, String> getMonths() {
         Map<Integer, String> months = new HashMap<>();
 
         months.putIfAbsent(1, "Ianuarie");

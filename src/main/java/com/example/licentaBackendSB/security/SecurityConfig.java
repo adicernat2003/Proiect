@@ -8,7 +8,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -49,27 +48,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .formLogin()
-                    .loginPage("/login").permitAll()
-                    .passwordParameter("password")      //asta tre sa dea match cu "name" din login.html
-                    .usernameParameter("username")
-                    .defaultSuccessUrl("/menu", true)
+                .loginPage("/login").permitAll()
+                .passwordParameter("password")      //asta tre sa dea match cu "name" din login.html
+                .usernameParameter("username")
+                .defaultSuccessUrl("/menu", true)
 
 
                 .and()
                 .rememberMe()
-                    .tokenValiditySeconds((int)TimeUnit.DAYS.toSeconds(21))    //defaults to 2 weeks
-                    .key("somethingVerySecured")   //cheia de criptare pt sessionId si expiration date, deobicei e md5
-                    .rememberMeParameter("remember-me")
+                .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(21))    //defaults to 2 weeks
+                .key("somethingVerySecured")   //cheia de criptare pt sessionId si expiration date, deobicei e md5
+                .rememberMeParameter("remember-me")
 
                 .and()
 
                 .logout()
-                    .logoutUrl("/logout")
-                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))      //doar fiindca CSRF e disabled, daca va fi enabled, musai tre sa fie POST
-                    .clearAuthentication(true)
-                    .invalidateHttpSession(true)
-                    .deleteCookies("JSESSIONID", "remember-me")
-                    .logoutSuccessUrl("/login");
+                .logoutUrl("/logout")
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))      //doar fiindca CSRF e disabled, daca va fi enabled, musai tre sa fie POST
+                .clearAuthentication(true)
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID", "remember-me")
+                .logoutSuccessUrl("/login");
     }
 
     @Override
@@ -102,7 +101,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         accounts.add(assistantUser);
 
         //Prelucram tabelul cu conturi pt studenti astfel incat sa cream conturi pt toti studentii
-        List <StudentAccount> studentAccountList = StudentAccount.studentAccountsList;
+        List<StudentAccount> studentAccountList = StudentAccount.studentAccountsList;
         for (StudentAccount studentAccount : studentAccountList) {
             accounts.add(
                     User.builder()

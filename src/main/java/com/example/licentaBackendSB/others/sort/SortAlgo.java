@@ -6,7 +6,8 @@ public class SortAlgo {
     private String sortingAlgoName;
     private long duration;
 
-    public SortAlgo() { }
+    public SortAlgo() {
+    }
 
     public SortAlgo(String sortingAlgoName, long duration) {
         this.sortingAlgoName = sortingAlgoName;
