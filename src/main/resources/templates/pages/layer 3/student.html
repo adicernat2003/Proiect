@@ -1,0 +1,75 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="layouts/header :: myheader"></div>
+
+<style>
+    #tipCont{
+        padding-left: 575px;
+        font-size: larger;
+    }
+
+    #navi ul{
+        display: flex;
+    }
+
+    #navi ul{
+        list-style: none;
+        padding: 5px;
+    }
+
+    #navi li{
+        margin:0 10px;
+    }
+</style>
+
+<!-- ------------------------------------ ABOVE IS STYLING, DOWN IS INFO ------------------------------------ -->
+
+<html>
+
+    <head>
+
+        <nav class="fixed-top navbar navbar-dark bg-dark navbar-expand" id="navi">
+            <a class="navbar-brand" href="https://curs.upb.ro/">
+                <span class="fa fa-university"></span> E-Learning Platform
+            </a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">Acasa<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/menu">Meniu</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/student/students">Lista tuturor studentilor</a>
+                    </li>
+                    <div th:switch="${isDevAcc}" id="tipCont">
+                        <li th:case="'true'" class="nav-item" id="dev-page">
+                            <a class="nav-link fas fa-code" aria-current="page" href="/student/devStudentPage">
+                                <span> Dev Account :: STUDENT </span>
+                            </a>
+                        </li>
+
+                        <li th:case="'false'" class="nav-item" id="personal-page">
+                            <a class="nav-link fas fa-user-secret" aria-current="page" href="/student/mypage">
+                                Student Account :: <span th:text="${loggedUsername}"></span>
+                            </a>
+                        </li>
+                    </div>
+                </ul>
+            </div>
+        </nav>
+
+    </head>
+
+    <body>
+
+    </body>
+
+</html>
+

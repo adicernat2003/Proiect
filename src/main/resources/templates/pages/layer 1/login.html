@@ -1,0 +1,106 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="layouts/header :: myheader"></div>
+
+<style>
+    img{
+        opacity: 0.5;
+    }
+
+    img:hover{
+        opacity: 1.0;
+    }
+
+    #navi ul{
+        display: flex;
+    }
+
+    #navi ul{
+        list-style: none;
+        padding: 5px;
+    }
+
+    #navi li{
+        margin:0 10px;
+    }
+</style>
+
+<!-- ------------------------------------ ABOVE IS STYLING, DOWN IS INFO ------------------------------------ -->
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <nav class="fixed-top navbar navbar-dark bg-dark navbar-expand" aria-label="Index navigation" id="navi">
+        <a class="navbar-brand" href="https://curs.upb.ro/">
+            <span class="fa fa-university"></span> E-Learning Platform
+        </a>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/"> Acasa </a>
+                </li>
+            </ul>
+
+        </div>
+
+    </nav>
+
+</head>
+
+<body>
+    <div class="row" style="padding-top: 150px">
+        <aside class="col-sm-4" style="padding-left: 200px; padding-right: 200px;">
+            <a href="http://www.electronica.pub.ro/">
+                <img src="https://bit.ly/3cwAO09" style="width: 400px; height: 400px;">
+            </a>
+        </aside>
+
+        <aside class="col-sm-7" style="padding-left: 350px; padding-right: 100px; padding-top: 23px;">
+            <div class="card">
+                <article class="card-body" style="max-height: 350px; width: auto; align-content: center">
+                    <h4 class="card-title text-center mb-4 mt-1">Sign in</h4>
+                    <hr>
+                    <form class="form-signin" method="post" action="/login">
+                        <h2 class="form-signin-heading"></h2>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-user"></i></span>
+                                </div>
+                                <input class="form-control" type="text" id="username" name="username" placeholder="Username" required="" autofocus="">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend" style="padding-bottom: 10px">
+                                    <span class="input-group-text"><i class="fa fa-lock"></i></span>
+                                </div>
+                                <input class="form-control" type="password" id="password" name="password" placeholder="Password" required="">
+                            </div>
+                        </div>
+
+                            <!--todo pune checkboxul in dreptul label-ului cumva-->
+<!--                        <form id="rememberMe-form">-->
+<!--                            <div class="checkboxes">-->
+<!--                                <label><input type="checkbox" id="remember-me" name="remember-me" class="form-control"><span>Remember me?</span></label>-->
+<!--                            </div>-->
+<!--                        </form>-->
+
+                        <div class="form-group">
+                            <button class="btn btn-lg btn-primary btn-block" type="submit">Log in</button>
+                        </div>
+                    </form>
+                </article>
+            </div>
+        </aside>
+
+        <aside class="col-sm-4" >
+<!--            <img src="https://bit.ly/3iuaS9p" style="width: 325px; height: 325px;">-->
+        </aside>
+    </div>
+</body>
