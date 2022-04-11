@@ -1,6 +1,7 @@
 package com.example.licentaBackendSB.entities;
 
 import com.example.licentaBackendSB.others.randomizers.DoBandCNPandGenderRandomizer;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -8,10 +9,16 @@ import java.util.List;
 
 @Entity
 @Table
+@Getter
+@Setter// for getters/setters
+@AllArgsConstructor // for constructor
+@NoArgsConstructor
+@Builder // for building an instance of StudentAccount
+@ToString
 public class StudentAccount {
 
     @Transient
-    public static List<StudentAccount> studentAccountsList = hardcodeStudentsAccountsDB(Student.hardcodedStudentsList);
+    public static final List<StudentAccount> studentAccountsList = hardcodeStudentsAccountsDB(Student.hardcodedStudentsList);
 
     @Id
     @SequenceGenerator(
@@ -35,103 +42,6 @@ public class StudentAccount {
     private String password;
     private String autoritate;
 
-    //Constructor ------------------------------------------------------------------------------------------------------
-
-    public StudentAccount(Long id, String nume, String prenume, String zi_de_nastere, String username, String password, String cnp, String autoritate) {
-        this.id = id;
-        this.nume = nume;
-        this.prenume = prenume;
-        this.zi_de_nastere = zi_de_nastere;
-        this.username = username;
-        this.password = password;
-        this.cnp = cnp;
-        this.autoritate = autoritate;
-    }
-
-    public StudentAccount() {
-    }
-
-    //GETTERs && SETTERs -----------------------------------------------------------------------------------------------
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNume() {
-        return nume;
-    }
-
-    public String getPrenume() {
-        return prenume;
-    }
-
-    public String getZi_de_nastere() {
-        return zi_de_nastere;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getCnp() {
-        return cnp;
-    }
-
-    public void setCnp(String cnp) {
-        this.cnp = cnp;
-    }
-
-    public String getAutoritate() {
-        return autoritate;
-    }
-
-    public void setAutoritate(String autoritate) {
-        this.autoritate = autoritate;
-    }
-
-    public void setNume(String nume) {
-        this.nume = nume;
-    }
-
-    public void setPrenume(String prenume) {
-        this.prenume = prenume;
-    }
-
-    public void setZi_de_nastere(String zi_de_nastere) {
-        this.zi_de_nastere = zi_de_nastere;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    //toString ---------------------------------------------------------------------------------------------------------
-
-    @Override
-    public String toString() {
-        return "StudentAccount{" +
-                "id=" + id +
-                ", nume='" + nume + '\'' +
-                ", prenume='" + prenume + '\'' +
-                ", zi_de_nastere='" + zi_de_nastere + '\'' +
-                ", cnp='" + cnp + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", autoritate='" + autoritate + '\'' +
-                '}';
-    }
-
     //Methods ----------------------------------------------------------------------------------------------------------
     public static List<StudentAccount> hardcodeStudentsAccountsDB(List<Student> tmp) {
         List<StudentAccount> studentAccounts = new ArrayList<>();
@@ -140,18 +50,17 @@ public class StudentAccount {
             String username = tmp.get((int) i).getCnp();
             String password = DoBandCNPandGenderRandomizer.splitDoBbyDot(tmp.get((int) i).getZi_de_nastere());
 
-            studentAccounts.add(new StudentAccount(
-                    (i + 1),
-                    tmp.get((int) i).getNume(),
-                    tmp.get((int) i).getPrenume(),
-                    tmp.get((int) i).getZi_de_nastere(),
-                    username,
-                    password,
-                    tmp.get((int) i).getCnp(),
-                    "STUDENT"
-            ));
+            studentAccounts.add(StudentAccount.builder()
+                    .id(i + 1)
+                    .nume(tmp.get((int) i).getNume())
+                    .prenume(tmp.get((int) i).getPrenume())
+                    .zi_de_nastere(tmp.get((int) i).getZi_de_nastere())
+                    .username(username)
+                    .password(password)
+                    .cnp(tmp.get((int) i).getCnp())
+                    .autoritate("STUDENT")
+                    .build());
         }
-
         return studentAccounts;
     }
 }

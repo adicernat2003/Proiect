@@ -5,6 +5,7 @@ import com.example.licentaBackendSB.others.randomizers.DoBandCNPandGenderRandomi
 import com.example.licentaBackendSB.others.randomizers.nameRandomizer;
 import com.example.licentaBackendSB.others.randomizers.ygsRandomizer;
 import com.example.licentaBackendSB.others.sort.sortingAlgorithms.*;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.*;
@@ -12,16 +13,22 @@ import java.util.stream.Collectors;
 
 @Entity //for hibernate framework
 @Table  //for database
+@Getter
+@Setter// for getters/setters
+@AllArgsConstructor // for constructor
+@NoArgsConstructor
+@Builder // for building an instance of Student
+@ToString
 public class Student {
 
     @Transient
-    public static List<Student> hardcodedStudentsList = hardcodeStudents();
+    public static final List<Student> hardcodedStudentsList = hardcodeStudents();
 
     //De aici modifici limitele referitoare la numarul de studenti
     @Transient
-    public static long startIndexing = 1;
+    public static final long startIndexing = 1;
     @Transient
-    public static long endIndexing = 10;
+    public static final long endIndexing = 10;
 
     @Id
     @SequenceGenerator(
@@ -51,164 +58,7 @@ public class Student {
     private String friendToken;
     private String camin_preferat;
     private String flagCazSpecial;
-
-    //Constructor ------------------------------------------------------------------------------------------------------
-
-    public Student(Long id,
-                   String nume,
-                   String prenume,
-                   String grupa,
-                   String serie,
-                   Integer an,
-                   Double medie,
-                   String myToken,
-                   String zi_de_nastere,
-                   String cnp,
-                   String genSexual,
-                   String judet,
-                   String friendToken,
-                   String camin_preferat,
-                   String flagCazSpecial) {
-        this.id = id;
-        this.nume = nume;
-        this.prenume = prenume;
-        this.grupa = grupa;
-        this.serie = serie;
-        this.an = an;
-        this.medie = medie;
-        this.myToken = myToken;
-        this.zi_de_nastere = zi_de_nastere;
-        this.cnp = cnp;
-        this.genSexual = genSexual;
-        this.judet = judet;
-        this.friendToken = friendToken;
-        this.camin_preferat = camin_preferat;
-        this.flagCazSpecial = flagCazSpecial;
-    }
-
-    public Student() {
-    }
-
-    //GETTERs && SETTERs -----------------------------------------------------------------------------------------------
-    public String getNume() {
-        return nume;
-    }
-
-    public void setNume(String nume) {
-        this.nume = nume;
-    }
-
-    public String getPrenume() {
-        return prenume;
-    }
-
-    public void setPrenume(String prenume) {
-        this.prenume = prenume;
-    }
-
-    public String getGrupa() {
-        return grupa;
-    }
-
-    public void setGrupa(String grupa) {
-        this.grupa = grupa;
-    }
-
-    public String getSerie() {
-        return serie;
-    }
-
-    public void setSerie(String serie) {
-        this.serie = serie;
-    }
-
-    public Integer getAn() {
-        return an;
-    }
-
-    public void setAn(Integer an) {
-        this.an = an;
-    }
-
-    public Double getMedie() {
-        return medie;
-    }
-
-    public void setMedie(Double medie) {
-        this.medie = medie;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getMyToken() {
-        return myToken;
-    }
-
-    public void setMyToken(String myToken) {
-        this.myToken = myToken;
-    }
-
-    public String getZi_de_nastere() {
-        return zi_de_nastere;
-    }
-
-    public void setZi_de_nastere(String zi_de_nastere) {
-        this.zi_de_nastere = zi_de_nastere;
-    }
-
-    public String getCnp() {
-        return cnp;
-    }
-
-    public void setCnp(String cnp) {
-        this.cnp = cnp;
-    }
-
-    public String getGenSexual() {
-        return genSexual;
-    }
-
-    public void setGenSexual(String genSexual) {
-        this.genSexual = genSexual;
-    }
-
-    public String getJudet() {
-        return judet;
-    }
-
-    public void setJudet(String judet) {
-        this.judet = judet;
-    }
-
-    public String getFriendToken() {
-        return friendToken;
-    }
-
-    public void setFriendToken(String friendToken) {
-        this.friendToken = friendToken;
-    }
-
-    public String getCaminPreferat() {
-        return camin_preferat;
-    }
-
-    public void setCaminPreferat(String camin_preferat) {
-        this.camin_preferat = camin_preferat;
-    }
-
-    public String getFlagCazSpecial() {
-        return flagCazSpecial;
-    }
-
-    public void setFlagCazSpecial(String flagCazSpecial) {
-        this.flagCazSpecial = flagCazSpecial;
-    }
+    private Integer anUniversitar;
 
     public static Map<String, Integer> sortByValue(Map<String, Integer> unsortMap, final boolean order) {
         List<Map.Entry<String, Integer>> list = new LinkedList<>(unsortMap.entrySet());
@@ -220,7 +70,6 @@ public class Student {
                 ? o2.getKey().compareTo(o1.getKey())
                 : o2.getValue().compareTo(o1.getValue()));
         return list.stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> b, LinkedHashMap::new));
-
     }
 
     //Methods for Statistics -------------------------------------------------------------------------------------------
@@ -246,23 +95,24 @@ public class Student {
 
         //manual harcode to test search query => check StudentRepository
         hardcodedListOfStudents.add(
-                new Student(
-                        1L,
-                        "Iancu",
-                        "Jianu",
-                        "445",
-                        "E",
-                        4,
-                        10D,
-                        shuffleString("iancu" + "jianu"),
-                        "14.Martie.1998",
-                        "1980314170059",
-                        "Masculin",
-                        "Galati",
-                        "null",
-                        "null",
-                        "Nu"
-                ));
+                Student.builder()
+                        .id(1L)
+                        .nume("Cernat")
+                        .prenume("Adrian")
+                        .grupa("442")
+                        .serie("B")
+                        .an(4)
+                        .medie(10D)
+                        .myToken(shuffleString("cernat" + "adrian"))
+                        .zi_de_nastere("23.Ianuarie.1999")
+                        .cnp("1990123410036")
+                        .genSexual("Masculin")
+                        .judet("Bucuresti")
+                        .friendToken("null")
+                        .camin_preferat("null")
+                        .flagCazSpecial("Nu")
+                        .anUniversitar(2021)
+                        .build());
 
         for (long i = 1; i < 10; i++) {
             String group = ygsRandomizer.getRandomGroup();
@@ -280,25 +130,25 @@ public class Student {
             String countyCode = randomCNP.substring(7, 9);
             String randomCounty = CountyManager.getCountyFromTwoDigitCode(countyCode);
 
-            hardcodedListOfStudents.add(new Student(
-                    (i + 1),
-                    randomNume,                                                //nume
-                    randomPrenume,                                              //prenume
-                    group,                                                      //grupa, old way: RandomAlphaNumericString.getAlphaNumericString(3)
-                    series,                                                     //serie, old way : RandomAlphaNumericString.getAlphaNumericString(1)
-                    year,                                                       //an, old way: ((int) (Math.random() * (5 - 1)) + 1)
-                    (1D + (10D - 1D) * rand.nextDouble()),                      //medie
-                    shuffleString(randomNume + randomPrenume),
-                    randomDoB,
-                    randomCNP,
-                    randomGender,
-                    randomCounty,
-                    "null",
-                    "null",
-                    "Nu"
-            ));
+            hardcodedListOfStudents.add(Student.builder()
+                    .id(i + 1)
+                    .nume(randomNume)
+                    .prenume(randomPrenume)
+                    .grupa(group)
+                    .serie(series)
+                    .an(year)
+                    .medie((1D + (10D - 1D) * rand.nextDouble()))
+                    .myToken(shuffleString(randomNume + randomPrenume))
+                    .zi_de_nastere(randomDoB)
+                    .cnp(randomCNP)
+                    .genSexual(randomGender)
+                    .judet(randomCounty)
+                    .friendToken("null")
+                    .camin_preferat("null")
+                    .flagCazSpecial("Nu")
+                    .anUniversitar(2021)
+                    .build());
         }
-
         return hardcodedListOfStudents;
     }
 
@@ -316,11 +166,11 @@ public class Student {
     public static String shuffleString(String string) {
         List<String> letters = Arrays.asList(string.split(""));
         Collections.shuffle(letters);
-        String shuffled = "";
+        StringBuilder shuffled = new StringBuilder();
         for (String letter : letters) {
-            shuffled += letter;
+            shuffled.append(letter);
         }
-        return shuffled;
+        return shuffled.toString();
     }
 
     public static long collectionSort(List<Student> tmp) {
@@ -413,19 +263,6 @@ public class Student {
         timeEnded = System.nanoTime();
         //System.out.println("BubbleSort: sorting time => " + (timeEnded - timeStarted) + " ns");
         return (timeEnded - timeStarted);
-    }
-
-    //toString ---------------------------------------------------------------------------------------------------------
-    @Override
-    public String toString() {
-        return ("id = " + id +
-                "nume = '" + nume +
-                ", prenume = '" + prenume +
-                ", an = " + an +
-                ", grupa = '" + grupa +
-                ", serie = '" + serie +
-                ", medie = " + medie +
-                "\r\n");
     }
 }
 

@@ -5,22 +5,17 @@ import com.example.licentaBackendSB.entities.StudentAccount;
 import com.example.licentaBackendSB.others.LoggedAccount;
 import com.example.licentaBackendSB.others.randomizers.DoBandCNPandGenderRandomizer;
 import com.example.licentaBackendSB.repositories.StudentAccountsDBRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class StudentAccountService {
 
     //Field
     private final StudentAccountsDBRepository studentAccountsDBRepository;
-
-    //Constructor
-    @Autowired
-    public StudentAccountService(StudentAccountsDBRepository studentAccountsDBRepository) {
-        this.studentAccountsDBRepository = studentAccountsDBRepository;
-    }
 
     /*  ~~~~~~~~~~~ Get Logged Account from Current Session ~~~~~~~~~~~ */
     public StudentAccount getLoggedStudentAccount() {

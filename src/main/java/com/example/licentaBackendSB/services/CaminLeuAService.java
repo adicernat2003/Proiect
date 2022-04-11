@@ -2,7 +2,7 @@ package com.example.licentaBackendSB.services;
 
 import com.example.licentaBackendSB.entities.CaminLeuA;
 import com.example.licentaBackendSB.repositories.CaminLeuARepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -10,16 +10,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CaminLeuAService {
 
     //Fields
     private final CaminLeuARepository caminLeuARepository;
-
-    //Constructor
-    @Autowired
-    public CaminLeuAService(CaminLeuARepository caminLeuARepository) {
-        this.caminLeuARepository = caminLeuARepository;
-    }
 
     //Methods
     /*  ~~~~~~~~~~~ Get List of Leu A Students ~~~~~~~~~~~ */

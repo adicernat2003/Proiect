@@ -2,22 +2,17 @@ package com.example.licentaBackendSB.services;
 
 import com.example.licentaBackendSB.entities.Camin;
 import com.example.licentaBackendSB.repositories.CaminRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class CaminService {
     //Fields
     private final CaminRepository caminRepository;
-
-    //Constructor
-    @Autowired
-    public CaminService(CaminRepository caminRepository) {
-        this.caminRepository = caminRepository;
-    }
 
     //Methods
     /* Get all Camine */

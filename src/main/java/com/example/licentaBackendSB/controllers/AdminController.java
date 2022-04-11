@@ -4,7 +4,7 @@ import com.example.licentaBackendSB.entities.Student;
 import com.example.licentaBackendSB.others.LoggedAccount;
 import com.example.licentaBackendSB.services.StudentAccountService;
 import com.example.licentaBackendSB.services.StudentService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,18 +17,12 @@ import java.util.List;
 
 @Controller
 @RequestMapping(path = "admin")
+@RequiredArgsConstructor
 public class AdminController {
 
     //Field
     private final StudentService studentService;
     private final StudentAccountService studentAccountService;
-
-    //Constructor
-    @Autowired
-    public AdminController(StudentService studentService, StudentAccountService studentAccountService) {
-        this.studentService = studentService;
-        this.studentAccountService = studentAccountService;
-    }
 
     /* ~~~~~~~~~~~ AdminView ~~~~~~~~~~~ */
     @GetMapping
@@ -90,9 +84,7 @@ public class AdminController {
     /* ~~~~~~~~~~~ Get Student knowing ID ~~~~~~~~~~~ */
     @GetMapping(path = "/students/edit/{studentId}")
     @PreAuthorize("hasAuthority('student:write')")
-    public String editStudent(
-            @PathVariable("studentId") Long studentId,
-            Model model) {
+    public String editStudent(@PathVariable("studentId") Long studentId, Model model) {
         Student selectedStudent = studentService.editStudent(studentId);        //getting student by id
         model.addAttribute("selectedStudentById", selectedStudent);
 
@@ -102,9 +94,7 @@ public class AdminController {
     /* ~~~~~~~~~~~ Update Student and Redirect to Student List ~~~~~~~~~~~ */
     @PostMapping(path = "/students/update/{studentId}")
     @PreAuthorize("hasAuthority('student:write')")
-    public String updateStudent(
-            @PathVariable("studentId") Long studentId,
-            Student newStudent) {
+    public String updateStudent(@PathVariable("studentId") Long studentId, Student newStudent) {
         //campuri comune modificabile: nume, prenume
         //campuri comune nemodificabile: cnp, zi_de_nastere
         //campuri necomune student: an, grupa, serie, judet
@@ -117,8 +107,7 @@ public class AdminController {
     /* ~~~~~~~~~~~ Update Student and Redirect to Student List ~~~~~~~~~~~ */
     @RequestMapping(path = "/students/setFlag/{studentId}")
     @PreAuthorize("hasAuthority('student:write')")
-    public String updateFlag(
-            @PathVariable("studentId") Long studentId) {
+    public String updateFlag(@PathVariable("studentId") Long studentId) {
         studentService.updateFlag(studentId);
 
         return "redirect:/admin/students";

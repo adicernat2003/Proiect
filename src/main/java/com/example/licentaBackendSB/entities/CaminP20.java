@@ -1,9 +1,16 @@
 package com.example.licentaBackendSB.entities;
 
+import lombok.*;
+
 import javax.persistence.*;
 
 @Entity
 @Table
+@Getter
+@Setter// for getters/setters
+@AllArgsConstructor // for constructor
+@NoArgsConstructor
+@Builder // for building an instance of CaminP20
 public class CaminP20 {
 
     @Id
@@ -27,106 +34,17 @@ public class CaminP20 {
     private String myToken;
     private String friendToken;
 
-    //Constructor
-    public CaminP20(Long id,
-                    String nume,
-                    String prenume,
-                    String cnp,
-                    Double medie,
-                    Integer an,
-                    String myToken,
-                    String friendToken) {
-        this.id = id;
-        this.nume = nume;
-        this.prenume = prenume;
-        this.cnp = cnp;
-        this.medie = medie;
-        this.an = an;
-        this.myToken = myToken;
-        this.friendToken = friendToken;
-    }
-
-    public CaminP20() {
-    }
-
-    //Getters and Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNume() {
-        return nume;
-    }
-
-    public void setNume(String nume) {
-        this.nume = nume;
-    }
-
-    public String getPrenume() {
-        return prenume;
-    }
-
-    public void setPrenume(String prenume) {
-        this.prenume = prenume;
-    }
-
-    public String getCnp() {
-        return cnp;
-    }
-
-    public void setCnp(String cnp) {
-        this.cnp = cnp;
-    }
-
-    public Double getMedie() {
-        return medie;
-    }
-
-    public void setMedie(Double medie) {
-        this.medie = medie;
-    }
-
-    public Integer getAn() {
-        return an;
-    }
-
-    public void setAn(Integer an) {
-        this.an = an;
-    }
-
-    public String getMyToken() {
-        return myToken;
-    }
-
-    public void setMyToken(String myToken) {
-        this.myToken = myToken;
-    }
-
-    public String getFriendToken() {
-        return friendToken;
-    }
-
-    public void setFriendToken(String friendToken) {
-        this.friendToken = friendToken;
-    }
-
     //Others methods
-    public static CaminP20 convertStudentToCaminP20(Student tmp) {
-        CaminP20 result = new CaminP20();
-
-        result.setId(tmp.getId());
-        result.setNume(tmp.getNume());
-        result.setPrenume(tmp.getPrenume());
-        result.setCnp(tmp.getCnp());
-        result.setMedie(tmp.getMedie());
-        result.setAn(tmp.getAn());
-        result.setFriendToken(tmp.getFriendToken());
-        result.setMyToken(tmp.getMyToken());
-
-        return result;
+    public static CaminP20 convertStudentToCaminP20(Student student) {
+        return CaminP20.builder()
+                .id(student.getId())
+                .nume(student.getNume())
+                .prenume(student.getPrenume())
+                .cnp(student.getCnp())
+                .medie(student.getMedie())
+                .an(student.getAn())
+                .friendToken(student.getFriendToken())
+                .myToken(student.getMyToken())
+                .build();
     }
 }

@@ -2,9 +2,8 @@ package com.example.licentaBackendSB.controllers;
 
 import com.example.licentaBackendSB.entities.Student;
 import com.example.licentaBackendSB.others.LoggedAccount;
-import com.example.licentaBackendSB.services.StudentAccountService;
 import com.example.licentaBackendSB.services.StudentService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,18 +14,11 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/student")
+@RequiredArgsConstructor
 public class StudentController {
 
     //Field
     private final StudentService studentService;
-    private final StudentAccountService studentAccountService;
-
-    //Constructor
-    @Autowired
-    public StudentController(StudentService studentService, StudentAccountService studentAccountService) {
-        this.studentService = studentService;
-        this.studentAccountService = studentAccountService;
-    }
 
     /* ~~~~~~~~~~~ StudentView ~~~~~~~~~~~ */
     @GetMapping

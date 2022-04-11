@@ -4,7 +4,7 @@ import com.example.licentaBackendSB.entities.*;
 import com.example.licentaBackendSB.others.LoggedAccount;
 import com.example.licentaBackendSB.others.Validator;
 import com.example.licentaBackendSB.services.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +17,7 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping(path = "/student/mypage")
+@RequiredArgsConstructor
 public class MyPageController {
 
     //Fields
@@ -26,22 +27,6 @@ public class MyPageController {
     private final CaminLeuCService caminLeuCService;
     private final CaminP20Service caminP20Service;
     private final CaminP23Service caminP23Service;
-
-    //Constructor
-    @Autowired
-    public MyPageController(StudentService studentService,
-                            StudentAccountService studentAccountService,
-                            CaminLeuAService caminLeuAService,
-                            CaminLeuCService caminLeuCService,
-                            CaminP20Service caminP20Service,
-                            CaminP23Service caminP23Service) {
-        this.studentService = studentService;
-        this.studentAccountService = studentAccountService;
-        this.caminLeuAService = caminLeuAService;
-        this.caminLeuCService = caminLeuCService;
-        this.caminP20Service = caminP20Service;
-        this.caminP23Service = caminP23Service;
-    }
 
     /* ~~~~~~~~~~~ Get MyPage View ~~~~~~~~~~~ */
     @GetMapping
@@ -73,24 +58,20 @@ public class MyPageController {
 
     /* ~~~~~~~~~~~ Get Student knowing the ID for setting the Friend Token ~~~~~~~~~~~ */
     @GetMapping(path = "/ft-edit/{studentId}")
-    public String editFriendToken(
-            @PathVariable("studentId") Long studentId,
-            Model model) {
+    public String editFriendToken(@PathVariable("studentId") Long studentId, Model model) {
         Student selectedStudent = studentService.editStudent(studentId);
         model.addAttribute("selectedStudentById", selectedStudent);
 
-        if (selectedStudent.getFriendToken().equals("null"))
+        if (selectedStudent.getFriendToken().equals("null")) {
             return "pages/layer 4/info pages/student/crud mypage/update_friendToken";
+        }
 
         return "redirect:/student/mypage";
     }
 
     /* ~~~~~~~~~~~ Update Student Friend Token and Redirect to MyPage ~~~~~~~~~~~ */
     @PostMapping(path = "/ft-update/{studentId}")
-    public String updateFriendToken(
-            @PathVariable("studentId") Long studentId,
-            Student newStudent,
-            Model model) {
+    public String updateFriendToken(@PathVariable("studentId") Long studentId, Student newStudent, Model model) {
         String isError = studentService.validateFriendToken(newStudent);
         if (isError.equals("All good!")) {
             //Kid#1 preia friendTokenul introdus in frontend
@@ -99,21 +80,13 @@ public class MyPageController {
             Student firstStudent = studentService.editStudent(studentId);
 
             //Verificam daca camin e !null
-            if (!firstStudent.getCaminPreferat().equals("null")) {
+            if (!firstStudent.getCamin_preferat().equals("null")) {
                 //daca nu e null, dam update in tabelul pt caminul respectiv
-                switch (firstStudent.getCaminPreferat()) {
-                    case "Leu A":
-                        caminLeuAService.updateFriendTokenOfStudentInCaminLeuA(CaminLeuA.convertStudentToCaminLeuA(firstStudent));
-                        break;
-                    case "Leu C":
-                        caminLeuCService.updateFriendTokenOfStudentInCaminLeuC(CaminLeuC.convertStudentToCaminLeuC(firstStudent));
-                        break;
-                    case "P20":
-                        caminP20Service.updateFriendTokenOfStudentInCaminP20(CaminP20.convertStudentToCaminP20(firstStudent));
-                        break;
-                    case "P23":
-                        caminP23Service.updateFriendTokenOfStudentInCaminP23(CaminP23.convertStudentToCaminP23(firstStudent));
-                        break;
+                switch (firstStudent.getCamin_preferat()) {
+                    case "Leu A" -> caminLeuAService.updateFriendTokenOfStudentInCaminLeuA(CaminLeuA.convertStudentToCaminLeuA(firstStudent));
+                    case "Leu C" -> caminLeuCService.updateFriendTokenOfStudentInCaminLeuC(CaminLeuC.convertStudentToCaminLeuC(firstStudent));
+                    case "P20" -> caminP20Service.updateFriendTokenOfStudentInCaminP20(CaminP20.convertStudentToCaminP20(firstStudent));
+                    case "P23" -> caminP23Service.updateFriendTokenOfStudentInCaminP23(CaminP23.convertStudentToCaminP23(firstStudent));
                 }
             }
         }
@@ -123,8 +96,7 @@ public class MyPageController {
 
     /* ~~~~~~~~~~~ Clear FriendToken and Update with null and Redirect to MyPage ~~~~~~~~~~~ */
     @RequestMapping(path = "/ft-clear/{studentId}")
-    public String clearFriendToken(
-            @PathVariable("studentId") Long studentId) {
+    public String clearFriendToken(@PathVariable("studentId") Long studentId) {
         //Preluam studentul actual adica Kid#1 stiind Id-ul
         Student firstStudent = studentService.editStudent(studentId);
 
@@ -135,21 +107,13 @@ public class MyPageController {
             studentService.clearFriendToken(firstStudent.getId(), firstStudent);
 
             //Verificam daca camin e !null
-            if (!firstStudent.getCaminPreferat().equals("null")) {
+            if (!firstStudent.getCamin_preferat().equals("null")) {
                 //daca nu e null, dam update in tabelul pt caminul respectiv
-                switch (firstStudent.getCaminPreferat()) {
-                    case "Leu A":
-                        caminLeuAService.updateFriendTokenOfStudentInCaminLeuA(CaminLeuA.convertStudentToCaminLeuA(firstStudent));
-                        break;
-                    case "Leu C":
-                        caminLeuCService.updateFriendTokenOfStudentInCaminLeuC(CaminLeuC.convertStudentToCaminLeuC(firstStudent));
-                        break;
-                    case "P20":
-                        caminP20Service.updateFriendTokenOfStudentInCaminP20(CaminP20.convertStudentToCaminP20(firstStudent));
-                        break;
-                    case "P23":
-                        caminP23Service.updateFriendTokenOfStudentInCaminP23(CaminP23.convertStudentToCaminP23(firstStudent));
-                        break;
+                switch (firstStudent.getCamin_preferat()) {
+                    case "Leu A" -> caminLeuAService.updateFriendTokenOfStudentInCaminLeuA(CaminLeuA.convertStudentToCaminLeuA(firstStudent));
+                    case "Leu C" -> caminLeuCService.updateFriendTokenOfStudentInCaminLeuC(CaminLeuC.convertStudentToCaminLeuC(firstStudent));
+                    case "P20" -> caminP20Service.updateFriendTokenOfStudentInCaminP20(CaminP20.convertStudentToCaminP20(firstStudent));
+                    case "P23" -> caminP23Service.updateFriendTokenOfStudentInCaminP23(CaminP23.convertStudentToCaminP23(firstStudent));
                 }
             }
         }
@@ -159,13 +123,11 @@ public class MyPageController {
 
     /* ~~~~~~~~~~~ Get Student knowing the ID for setting the Camin ~~~~~~~~~~~ */
     @GetMapping(path = "/camin-edit/{studentId}")
-    public String editCamin(
-            @PathVariable("studentId") Long studentId,
-            Model model) {
+    public String editCamin(@PathVariable("studentId") Long studentId, Model model) {
         Student selectedStudent = studentService.editStudent(studentId);
         model.addAttribute("selectedStudentById", selectedStudent);
 
-        if (selectedStudent.getCaminPreferat().equals("null")) {
+        if (selectedStudent.getCamin_preferat().equals("null")) {
             return "pages/layer 4/info pages/student/crud mypage/update_camin";
         }
 
@@ -174,32 +136,21 @@ public class MyPageController {
 
     /* ~~~~~~~~~~~ Update Student Camin and Redirect to MyPage ~~~~~~~~~~~ */
     @PostMapping(path = "/camin-update/{studentId}")
-    public String updateCamin(
-            @PathVariable("studentId") Long studentId,
-            Student newStudent,
-            Model model) {
-        if (Validator.checkCaminSpelling(newStudent.getCaminPreferat())) {
+    public String updateCamin(@PathVariable("studentId") Long studentId, Student newStudent, Model model) {
+        if (Validator.checkCaminSpelling(newStudent.getCamin_preferat())) {
             studentService.updateCamin(studentId, newStudent);
 
             //Preluam studentul care isi adauga camin
             Student selectedStudent = studentService.editStudent(studentId);
             //Modificam local din ce avea la camin cu ce a ales
-            selectedStudent.setCaminPreferat(newStudent.getCaminPreferat());
+            selectedStudent.setCamin_preferat(newStudent.getCamin_preferat());
 
             //Introducem studentul local cu caminul modificat in tabelul corespunzator
-            switch (selectedStudent.getCaminPreferat()) {
-                case "Leu A":
-                    caminLeuAService.introduceNewStudentCaminLeuA(CaminLeuA.convertStudentToCaminLeuA(selectedStudent));
-                    break;
-                case "Leu C":
-                    caminLeuCService.introduceNewStudentCaminLeuC(CaminLeuC.convertStudentToCaminLeuC(selectedStudent));
-                    break;
-                case "P20":
-                    caminP20Service.introduceNewStudentCaminP20(CaminP20.convertStudentToCaminP20(selectedStudent));
-                    break;
-                case "P23":
-                    caminP23Service.introduceNewStudentCaminP23(CaminP23.convertStudentToCaminP23(selectedStudent));
-                    break;
+            switch (selectedStudent.getCamin_preferat()) {
+                case "Leu A" -> caminLeuAService.introduceNewStudentCaminLeuA(CaminLeuA.convertStudentToCaminLeuA(selectedStudent));
+                case "Leu C" -> caminLeuCService.introduceNewStudentCaminLeuC(CaminLeuC.convertStudentToCaminLeuC(selectedStudent));
+                case "P20" -> caminP20Service.introduceNewStudentCaminP20(CaminP20.convertStudentToCaminP20(selectedStudent));
+                case "P23" -> caminP23Service.introduceNewStudentCaminP23(CaminP23.convertStudentToCaminP23(selectedStudent));
             }
         }
 
@@ -208,27 +159,18 @@ public class MyPageController {
 
     /* ~~~~~~~~~~~ Clear Camin and Update with null and Redirect to MyPage ~~~~~~~~~~~ */
     @RequestMapping(path = "/camin-clear/{studentId}")
-    public String clearCamin(
-            @PathVariable("studentId") Long studentId) {
+    public String clearCamin(@PathVariable("studentId") Long studentId) {
         Student selectedStudent = studentService.editStudent(studentId);
-        if (!selectedStudent.getCaminPreferat().equals("null")) {
-            switch (selectedStudent.getCaminPreferat()) {
-                case "Leu A":
-                    caminLeuAService.deleteStudentInCaminLeuA(CaminLeuA.convertStudentToCaminLeuA(selectedStudent));
-                    break;
-                case "Leu C":
-                    caminLeuCService.deleteStudentInCaminLeuC(CaminLeuC.convertStudentToCaminLeuC(selectedStudent));
-                    break;
-                case "P20":
-                    caminP20Service.deleteStudentInCaminP20(CaminP20.convertStudentToCaminP20(selectedStudent));
-                    break;
-                case "P23":
-                    caminP23Service.deleteStudentInCaminP23(CaminP23.convertStudentToCaminP23(selectedStudent));
-                    break;
+        if (!selectedStudent.getCamin_preferat().equals("null")) {
+            switch (selectedStudent.getCamin_preferat()) {
+                case "Leu A" -> caminLeuAService.deleteStudentInCaminLeuA(CaminLeuA.convertStudentToCaminLeuA(selectedStudent));
+                case "Leu C" -> caminLeuCService.deleteStudentInCaminLeuC(CaminLeuC.convertStudentToCaminLeuC(selectedStudent));
+                case "P20" -> caminP20Service.deleteStudentInCaminP20(CaminP20.convertStudentToCaminP20(selectedStudent));
+                case "P23" -> caminP23Service.deleteStudentInCaminP23(CaminP23.convertStudentToCaminP23(selectedStudent));
             }
 
             //Intai stergem din tabel persoana respectiva si dupa ii stergem optiunea aleasa
-            selectedStudent.setCaminPreferat("null");
+            selectedStudent.setCamin_preferat("null");
             studentService.clearCamin(selectedStudent.getId(), selectedStudent);
         }
 

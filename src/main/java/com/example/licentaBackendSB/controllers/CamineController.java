@@ -2,7 +2,7 @@ package com.example.licentaBackendSB.controllers;
 
 import com.example.licentaBackendSB.entities.*;
 import com.example.licentaBackendSB.services.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +15,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping(path = "/admin/camine")
+@RequiredArgsConstructor
 public class CamineController {
 
     //Fields
@@ -23,16 +24,6 @@ public class CamineController {
     private final CaminP20Service caminP20Service;
     private final CaminP23Service caminP23Service;
     private final CaminService caminService;
-
-    //Constructor
-    @Autowired
-    public CamineController(CaminLeuAService caminLeuAService, CaminLeuCService caminLeuCService, CaminP20Service caminP20Service, CaminP23Service caminP23Service, CaminService caminService) {
-        this.caminLeuAService = caminLeuAService;
-        this.caminLeuCService = caminLeuCService;
-        this.caminP20Service = caminP20Service;
-        this.caminP23Service = caminP23Service;
-        this.caminService = caminService;
-    }
 
     /* ~~~~~~~~~~~ Get Camine View ~~~~~~~~~~~ */
     @GetMapping
@@ -47,18 +38,10 @@ public class CamineController {
 
         for (Camin it : camineList) {
             switch (it.getNumeCamin()) {
-                case "Leu A":
-                    leuA = it;
-                    break;
-                case "Leu C":
-                    leuC = it;
-                    break;
-                case "P20":
-                    p20 = it;
-                    break;
-                case "P23":
-                    p23 = it;
-                    break;
+                case "Leu A" -> leuA = it;
+                case "Leu C" -> leuC = it;
+                case "P20" -> p20 = it;
+                case "P23" -> p23 = it;
             }
         }
 
@@ -114,9 +97,7 @@ public class CamineController {
     /* ~~~~~~~~~~~ Get Camin knowing ID ~~~~~~~~~~~ */
     @GetMapping(path = "/edit/{caminId}")
     @PreAuthorize("hasAuthority('student:write')")
-    public String editCamin(
-            @PathVariable("caminId") Long caminId,
-            Model model) {
+    public String editCamin(@PathVariable("caminId") Long caminId, Model model) {
 
         Camin selectedCamin = caminService.editCamin(caminId);
         model.addAttribute("selectedCamintById", selectedCamin);
@@ -127,9 +108,7 @@ public class CamineController {
     /* ~~~~~~~~~~~ Update Camin and Redirect to Camine Page ~~~~~~~~~~~ */
     @PostMapping(path = "/update/{caminId}")
     @PreAuthorize("hasAuthority('student:write')")
-    public String updateCamin(
-            @PathVariable("caminId") Long caminId,
-            Camin newCamin) {
+    public String updateCamin(@PathVariable("caminId") Long caminId, Camin newCamin) {
         caminService.updateCamin(caminId, newCamin);
 
         return "redirect:/admin/camine";
@@ -137,8 +116,7 @@ public class CamineController {
 
     /* ~~~~~~~~~~~ Clear Fields and Update with 0 and Redirect to Camine Page ~~~~~~~~~~~ */
     @RequestMapping(path = "/clear/{caminId}")
-    public String clearCamin(
-            @PathVariable("caminId") Long caminId) {
+    public String clearCamin(@PathVariable("caminId") Long caminId) {
         //Preluam caminul actual stiind Id-ul
         Camin selectedCamin = caminService.editCamin(caminId);
 

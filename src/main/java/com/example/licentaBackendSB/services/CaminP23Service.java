@@ -2,7 +2,7 @@ package com.example.licentaBackendSB.services;
 
 import com.example.licentaBackendSB.entities.CaminP23;
 import com.example.licentaBackendSB.repositories.CaminP23Repository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -10,24 +10,18 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CaminP23Service {
 
     //Fields
     private final CaminP23Repository caminP23Repository;
 
-    //Constructor
-    @Autowired
-    public CaminP23Service(CaminP23Repository caminP23Repository) {
-        this.caminP23Repository = caminP23Repository;
-    }
-
     //Methods
     /*  ~~~~~~~~~~~ Get List of P23 Students ~~~~~~~~~~~ */
     public List<CaminP23> getP23Students() {
         //select * from caminP23 (query in DB)
-        List<CaminP23> caminP23List = caminP23Repository.findAll();
 
-        return caminP23List;
+        return caminP23Repository.findAll();
     }
 
     /*  ~~~~~~~~~~~ Introduce Student in the Camin Table Corespunzator ~~~~~~~~~~~ */

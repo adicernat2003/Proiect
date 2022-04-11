@@ -1,7 +1,7 @@
 package com.example.licentaBackendSB.security;
 
 import com.example.licentaBackendSB.entities.StudentAccount;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -24,14 +24,10 @@ import static com.example.licentaBackendSB.security.UserRole.*;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PasswordEncoder passwordEncoder;
-
-    @Autowired
-    public SecurityConfig(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -95,10 +91,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .build();
 
         //Introducem conturile intr-o lista de conturi pe care o vom trimite spre securitate
-        List<UserDetails> accounts = new ArrayList<>();
-        accounts.add(userUser);
-        accounts.add(adminUser);
-        accounts.add(assistantUser);
+        List<UserDetails> accounts = new ArrayList<>(List.of(userUser, adminUser, assistantUser));
 
         //Prelucram tabelul cu conturi pt studenti astfel incat sa cream conturi pt toti studentii
         List<StudentAccount> studentAccountList = StudentAccount.studentAccountsList;
@@ -114,8 +107,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         //todo: va trebui sa avem inca 2 tabele pt admini si asistenti
 
-        return new InMemoryUserDetailsManager(
-                accounts
-        );
+        return new InMemoryUserDetailsManager(accounts);
     }
 }

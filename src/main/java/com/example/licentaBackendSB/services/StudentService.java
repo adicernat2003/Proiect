@@ -3,51 +3,39 @@ package com.example.licentaBackendSB.services;
 import com.example.licentaBackendSB.entities.Student;
 import com.example.licentaBackendSB.entities.StudentAccount;
 import com.example.licentaBackendSB.repositories.StudentRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class StudentService {
 
     //Fields
     private final StudentRepository studentRepository;
 
-    //Constructor
-    @Autowired
-    public StudentService(StudentRepository studentRepository) {
-        this.studentRepository = studentRepository;
-    }
-
     //Methods
     /*  ~~~~~~~~~~~ Get List of Students ~~~~~~~~~~~ */
     public List<Student> getStudents() {
         //select * from student (query in DB)
-        List<Student> studentsDB = studentRepository.findAll();
-
         //sortam lista care vine din DB
-        Student.sortStudents(studentsDB);
-
-        return studentsDB;
+        return studentRepository.findAll().stream()
+                .sorted(Comparator.comparing(Student::getMedie).reversed()).toList();
     }
 
     /*  ~~~~~~~~~~~ Find Student by Name and Surname ~~~~~~~~~~~ */
     public Student findStudentByNameAndSurname(StudentAccount studentAccount) {
         Optional<Student> foundStudent = studentRepository.findStudentByNameAndSurname(studentAccount.getNume(), studentAccount.getPrenume());
 
-        if (foundStudent.isPresent()) {
-            return foundStudent.get();
-        } else {
-            throw new IllegalStateException("Student doens't exist!");
-        }
+        return foundStudent.orElseThrow(() -> new IllegalStateException("Student doesn't exist!"));
     }
 
     /*  ~~~~~~~~~~~ Add new Student ~~~~~~~~~~~ */
     public void addNewStudent(Student student) {
-
         Optional<Student> studentOptional = studentRepository.findStudentByNameAndSurname(student.getNume(), student.getPrenume());
 
         //daca studentul cu exista cu numele respectiv, aruncam exceptie
@@ -70,7 +58,6 @@ public class StudentService {
 
     /*  ~~~~~~~~~~~ Get Id of Student to update Student && FriendToken ~~~~~~~~~~~ */
     public Student editStudent(Long studentId) {
-
         return studentRepository.findById(studentId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid student Id:" + studentId));
     }
@@ -208,10 +195,10 @@ public class StudentService {
                     //Validari si Verificari
 
                     /** update nume*/
-                    if (newStudent.getCaminPreferat() != null
-                            && newStudent.getCaminPreferat().length() > 0
-                            && !foundStudent.getCaminPreferat().equals(newStudent.getCaminPreferat())) {
-                        foundStudent.setCaminPreferat(newStudent.getCaminPreferat());
+                    if (newStudent.getCamin_preferat() != null
+                            && newStudent.getCamin_preferat().length() > 0
+                            && !foundStudent.getCamin_preferat().equals(newStudent.getCamin_preferat())) {
+                        foundStudent.setCamin_preferat(newStudent.getCamin_preferat());
                     }
 
                     return studentRepository.save(foundStudent);
@@ -229,8 +216,8 @@ public class StudentService {
                     //Validari si Verificari
 
                     /** clear camin and replace with null*/
-                    if (!foundStudent.getCaminPreferat().equals("null")) {
-                        foundStudent.setCaminPreferat(selectedStudent.getCaminPreferat());
+                    if (!foundStudent.getCamin_preferat().equals("null")) {
+                        foundStudent.setCamin_preferat(selectedStudent.getCamin_preferat());
                     }
 
                     return studentRepository.save(foundStudent);

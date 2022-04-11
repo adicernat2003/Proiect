@@ -3,7 +3,7 @@ package com.example.licentaBackendSB.controllers;
 import com.example.licentaBackendSB.entities.StudentAccount;
 import com.example.licentaBackendSB.others.LoggedAccount;
 import com.example.licentaBackendSB.services.StudentAccountService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,16 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/")
+@RequiredArgsConstructor
 public class IndexPageController {
 
     //Fields
     private final StudentAccountService studentAccountService;
-
-    //Constructor
-    @Autowired
-    public IndexPageController(StudentAccountService studentAccountService) {
-        this.studentAccountService = studentAccountService;
-    }
 
     @GetMapping("login")
     public String getLoginView() {
