@@ -68,8 +68,7 @@ public class Student {
                    String judet,
                    String friendToken,
                    String camin_preferat,
-                   String flagCazSpecial)
-    {
+                   String flagCazSpecial) {
         this.id = id;
         this.nume = nume;
         this.prenume = prenume;
@@ -87,7 +86,8 @@ public class Student {
         this.flagCazSpecial = flagCazSpecial;
     }
 
-    public Student() {}
+    public Student() {
+    }
 
     //GETTERs && SETTERs -----------------------------------------------------------------------------------------------
     public String getNume() {
@@ -210,23 +210,7 @@ public class Student {
         this.flagCazSpecial = flagCazSpecial;
     }
 
-    //toString ---------------------------------------------------------------------------------------------------------
-    @Override
-    public String toString() {
-        return  ("id = " + id +
-                "nume = '" + nume +
-                ", prenume = '" + prenume +
-                ", an = " + an +
-                ", grupa = '" + grupa +
-                ", serie = '" + serie +
-                ", medie = " + medie +
-                "\r\n");
-    }
-
-    //Methods for Statistics -------------------------------------------------------------------------------------------
-
-    public static Map<String, Integer> sortByValue(Map<String, Integer> unsortMap, final boolean order)
-    {
+    public static Map<String, Integer> sortByValue(Map<String, Integer> unsortMap, final boolean order) {
         List<Map.Entry<String, Integer>> list = new LinkedList<>(unsortMap.entrySet());
 
         // Sorting the list based on values
@@ -239,8 +223,9 @@ public class Student {
 
     }
 
-    public static Map <String, Integer> fillInSortAlgorithmStatistics()
-    {
+    //Methods for Statistics -------------------------------------------------------------------------------------------
+
+    public static Map<String, Integer> fillInSortAlgorithmStatistics() {
         Map<String, Integer> performanceStatiticsOfSortAlgorithms = new HashMap<>();
 
         performanceStatiticsOfSortAlgorithms.put("Collection.sort", 0);
@@ -255,11 +240,8 @@ public class Student {
         return performanceStatiticsOfSortAlgorithms;
     }
 
-    //Methods for Students ---------------------------------------------------------------------------------------------
-
-    public static List <Student> hardcodeStudents()
-    {
-        List <Student> hardcodedListOfStudents = new ArrayList<>();
+    public static List<Student> hardcodeStudents() {
+        List<Student> hardcodedListOfStudents = new ArrayList<>();
         Random rand = new Random();
 
         //manual harcode to test search query => check StudentRepository
@@ -272,7 +254,7 @@ public class Student {
                         "E",
                         4,
                         10D,
-                        shuffleString("iancu"+"jianu"),
+                        shuffleString("iancu" + "jianu"),
                         "14.Martie.1998",
                         "1980314170059",
                         "Masculin",
@@ -282,8 +264,7 @@ public class Student {
                         "Nu"
                 ));
 
-        for(long i = 1; i < 10; i++)
-        {
+        for (long i = 1; i < 10; i++) {
             String group = ygsRandomizer.getRandomGroup();
             String series = ygsRandomizer.getRandomSeries();
 
@@ -296,18 +277,18 @@ public class Student {
             String randomGender = DoBandCNPandGenderRandomizer.getGender();
             String randomCNP = DoBandCNPandGenderRandomizer.getCNP(randomDoB, randomGender);
 
-            String countyCode = randomCNP.substring(7,9);
+            String countyCode = randomCNP.substring(7, 9);
             String randomCounty = CountyManager.getCountyFromTwoDigitCode(countyCode);
 
             hardcodedListOfStudents.add(new Student(
                     (i + 1),
-                    randomNume ,                                                //nume
+                    randomNume,                                                //nume
                     randomPrenume,                                              //prenume
                     group,                                                      //grupa, old way: RandomAlphaNumericString.getAlphaNumericString(3)
                     series,                                                     //serie, old way : RandomAlphaNumericString.getAlphaNumericString(1)
                     year,                                                       //an, old way: ((int) (Math.random() * (5 - 1)) + 1)
                     (1D + (10D - 1D) * rand.nextDouble()),                      //medie
-                    shuffleString(randomNume+randomPrenume),
+                    shuffleString(randomNume + randomPrenume),
                     randomDoB,
                     randomCNP,
                     randomGender,
@@ -321,18 +302,18 @@ public class Student {
         return hardcodedListOfStudents;
     }
 
-    public static void sortStudents(List <Student> tmp)     //todo : modifica comparatorul pt mai multe reguli
+    //Methods for Students ---------------------------------------------------------------------------------------------
+
+    public static void sortStudents(List<Student> tmp)     //todo : modifica comparatorul pt mai multe reguli
     {
         tmp.sort((o1, o2) -> o2.getMedie().compareTo(o1.getMedie()));
     }
 
-    public static void printStudents(List <Student> tmp)
-    {
+    public static void printStudents(List<Student> tmp) {
         System.out.println(Arrays.toString(tmp.toArray()));
     }
 
-    public static String shuffleString(String string)
-    {
+    public static String shuffleString(String string) {
         List<String> letters = Arrays.asList(string.split(""));
         Collections.shuffle(letters);
         String shuffled = "";
@@ -342,10 +323,7 @@ public class Student {
         return shuffled;
     }
 
-    //Sorting Algorithms returning execution time ----------------------------------------------------------------------
-
-    public static long collectionSort(List <Student> tmp)
-    {
+    public static long collectionSort(List<Student> tmp) {
         long timeStarted, timeEnded;
 
         timeStarted = System.nanoTime();
@@ -360,8 +338,9 @@ public class Student {
         return (timeEnded - timeStarted);
     }
 
-    public static long listSort(List <Student> tmp)
-    {
+    //Sorting Algorithms returning execution time ----------------------------------------------------------------------
+
+    public static long listSort(List<Student> tmp) {
         long timeStarted, timeEnded;
 
         timeStarted = System.nanoTime();
@@ -376,8 +355,7 @@ public class Student {
         return (timeEnded - timeStarted);
     }
 
-    public static long quickSort(List <Student> tmp)
-    {
+    public static long quickSort(List<Student> tmp) {
         long timeStarted, timeEnded;
 
         timeStarted = System.nanoTime();
@@ -387,8 +365,7 @@ public class Student {
         return (timeEnded - timeStarted);
     }
 
-    public static long heapSort(List <Student> tmp)
-    {
+    public static long heapSort(List<Student> tmp) {
         long timeStarted, timeEnded;
 
         timeStarted = System.nanoTime();
@@ -398,8 +375,7 @@ public class Student {
         return (timeEnded - timeStarted);
     }
 
-    public static long mergeSort(List <Student> tmp)
-    {
+    public static long mergeSort(List<Student> tmp) {
         long timeStarted, timeEnded;
 
         timeStarted = System.nanoTime();
@@ -409,8 +385,7 @@ public class Student {
         return (timeEnded - timeStarted);
     }
 
-    public static long selectionSort(List <Student> tmp)
-    {
+    public static long selectionSort(List<Student> tmp) {
         long timeStarted, timeEnded;
 
         timeStarted = System.nanoTime();
@@ -420,8 +395,7 @@ public class Student {
         return (timeEnded - timeStarted);
     }
 
-    public static long insertionSort(List <Student> tmp)
-    {
+    public static long insertionSort(List<Student> tmp) {
         long timeStarted, timeEnded;
 
         timeStarted = System.nanoTime();
@@ -431,8 +405,7 @@ public class Student {
         return (timeEnded - timeStarted);
     }
 
-    public static long bubbleSort(List <Student> tmp)
-    {
+    public static long bubbleSort(List<Student> tmp) {
         long timeStarted, timeEnded;
 
         timeStarted = System.nanoTime();
@@ -440,6 +413,19 @@ public class Student {
         timeEnded = System.nanoTime();
         //System.out.println("BubbleSort: sorting time => " + (timeEnded - timeStarted) + " ns");
         return (timeEnded - timeStarted);
+    }
+
+    //toString ---------------------------------------------------------------------------------------------------------
+    @Override
+    public String toString() {
+        return ("id = " + id +
+                "nume = '" + nume +
+                ", prenume = '" + prenume +
+                ", an = " + an +
+                ", grupa = '" + grupa +
+                ", serie = '" + serie +
+                ", medie = " + medie +
+                "\r\n");
     }
 }
 

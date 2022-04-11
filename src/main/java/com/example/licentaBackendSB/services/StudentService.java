@@ -196,9 +196,8 @@ public class StudentService {
 
     /* ~~~~~~~~~~~ Get second Student knowing his token ~~~~~~~~~~~ */
     public Optional<Student> findStudentByMyToken(String hisToken) {
-        Optional<Student> selectedStudent = studentRepository.findStudentByMyToken(hisToken);
 
-        return selectedStudent;
+        return studentRepository.findStudentByMyToken(hisToken);
     }
 
     /*  ~~~~~~~~~~~ Update Student Camin ~~~~~~~~~~~ */
