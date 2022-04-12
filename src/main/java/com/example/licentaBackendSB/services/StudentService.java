@@ -125,10 +125,8 @@ public class StudentService {
                     }
 
                     return studentRepository.save(foundStudent);
-                }).
-                orElseThrow(
-                        () -> new IllegalStateException("student with id " + studentId + " does not exist")
-                );
+                })
+                .orElseThrow(() -> new IllegalStateException("student with id " + studentId + " does not exist"));
     }
 
     /*  ~~~~~~~~~~~ Update (THIS) with FriendToken ~~~~~~~~~~~ */
@@ -147,10 +145,8 @@ public class StudentService {
                     }
 
                     return studentRepository.save(foundStudent);
-                }).
-                orElseThrow(
-                        () -> new IllegalStateException("student with id " + studentId + " does not exist")
-                );
+                })
+                .orElseThrow(() -> new IllegalStateException("student with id " + studentId + " does not exist"));
     }
 
     /*  ~~~~~~~~~~~ Clear FriendToken ~~~~~~~~~~~ */
@@ -166,24 +162,20 @@ public class StudentService {
                     }
 
                     return studentRepository.save(foundStudent);
-                }).
-                orElseThrow(
-                        () -> new IllegalStateException("student with id " + studentId + " does not exist")
-                );
+                })
+                .orElseThrow(() -> new IllegalStateException("student with id " + studentId + " does not exist"));
     }
 
     /* ~~~~~~~~~~~ Validate if friend token exists in db ~~~~~~~~~~~ */
     public String validateFriendToken(Student selectedStudent) {
         if (studentRepository.validateFriendTokenExists(selectedStudent.getFriendToken())) {
             return "All good!";
-        } else {
-            return "Friend Token doesn't exist in database!";
         }
+        return "Friend Token doesn't exist in database!";
     }
 
     /* ~~~~~~~~~~~ Get second Student knowing his token ~~~~~~~~~~~ */
     public Optional<Student> findStudentByMyToken(String hisToken) {
-
         return studentRepository.findStudentByMyToken(hisToken);
     }
 
@@ -202,10 +194,8 @@ public class StudentService {
                     }
 
                     return studentRepository.save(foundStudent);
-                }).
-                orElseThrow(
-                        () -> new IllegalStateException("student with id " + studentId + " does not exist")
-                );
+                })
+                .orElseThrow(() -> new IllegalStateException("student with id " + studentId + " does not exist"));
     }
 
     /*  ~~~~~~~~~~~ Clear Camin ~~~~~~~~~~~ */
@@ -221,10 +211,8 @@ public class StudentService {
                     }
 
                     return studentRepository.save(foundStudent);
-                }).
-                orElseThrow(
-                        () -> new IllegalStateException("student with id " + studentId + " does not exist")
-                );
+                })
+                .orElseThrow(() -> new IllegalStateException("student with id " + studentId + " does not exist"));
     }
 
     /*  ~~~~~~~~~~~ Update Flag from Nu to Da and reverse ~~~~~~~~~~~ */
@@ -235,16 +223,10 @@ public class StudentService {
                     //Validari si Verificari
 
                     /** update flag */
-                    if (foundStudent.getFlagCazSpecial().equals("Nu")) {
-                        foundStudent.setFlagCazSpecial("Da");
-                    } else {
-                        foundStudent.setFlagCazSpecial("Nu");
-                    }
+                    foundStudent.setFlagCazSpecial("Nu".equals(foundStudent.getFlagCazSpecial()) ? "Da" : "Nu");
 
                     return studentRepository.save(foundStudent);
-                }).
-                orElseThrow(
-                        () -> new IllegalStateException("student with id " + studentId + " does not exist")
-                );
+                })
+                .orElseThrow(() -> new IllegalStateException("student with id " + studentId + " does not exist"));
     }
 }

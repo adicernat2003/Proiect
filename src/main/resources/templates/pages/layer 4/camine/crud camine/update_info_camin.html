@@ -2,8 +2,7 @@
 <div th:replace="layouts/header :: myheader"></div>
 
 <style>
-    #update-btn.center, #back-btn.center
-    {
+    #update-btn.center, #back-btn.center {
         margin: 0;
         position: absolute;
         top: 50%;
@@ -12,8 +11,7 @@
         transform: translate(-50%, -50%);
     }
 
-    #edit-image
-    {
+    #edit-image {
         width: 300px;
         height: 300px;
 
@@ -34,52 +32,74 @@
     <h2 class="mb-5">Update Camin</h2>
     <div class="row">
         <div class="col-md-6">
-            <form action="#" th:action="@{/admin/camine/update/{caminId}(caminId=${selectedCamintById.getId()})}" th:object="${selectedCamintById}" method="post">
+            <form action="#" method="post"
+                  th:action="@{/admin/camine/update/{caminId}(caminId=${selectedCaminById.getId()})}"
+                  th:object="${selectedCaminById}">
                 <div class="row">
                     <!-- TEORIE: for = "id_camp_in_frontend" tre sa fie acelasi cu id="id_camp_in_frontend" -->
                     <div class="col-md-6">
                         <!-- update nume -->
-                            <div class="form-group row-md-6">
-                                <label for="capacitate" class="col-form-label"><b>Capacitate maxima de studenti:</b></label>
-                                <input type="text" th:field="*{capacitate}" class="form-control" id="capacitate" placeholder="capacitate">
-                                <span th:if="${#fields.hasErrors('capacitate')}" th:errors="*{capacitate}" class="text-danger"></span>
-                            </div>
+                        <div class="form-group row-md-6">
+                            <label class="col-form-label" for="capacitate"><b>Capacitate maxima de studenti:</b></label>
+                            <input class="form-control" id="capacitate" placeholder="capacitate"
+                                   th:field="*{capacitate}"
+                                   type="text">
+                            <span class="text-danger" th:errors="*{capacitate}"
+                                  th:if="${#fields.hasErrors('capacitate')}"></span>
+                        </div>
 
                         <!-- update nrCamereTotal -->
                         <div class="form-group row-md-6">
                             <label for="nrCamereTotal" class="col-form-label"><b>Nr Camere total:</b></label>
-                            <input type="text" th:field="*{nrCamereTotal}" class="form-control" id="nrCamereTotal" placeholder="nrCamereTotal">
-                            <span th:if="${#fields.hasErrors('nrCamereTotal')}" th:errors="*{nrCamereTotal}" class="text-danger"></span>
+                            <input class="form-control" id="nrCamereTotal" placeholder="nrCamereTotal"
+                                   th:field="*{nrCamereTotal}"
+                                   type="text">
+                            <span class="text-danger" th:errors="*{nrCamereTotal}"
+                                  th:if="${#fields.hasErrors('nrCamereTotal')}"></span>
                         </div>
                     </div>
 
                     <div class="col-md-6">
                         <!-- update nrCamereUnStudent -->
                         <div class="form-group row-md-6">
-                            <label for="nrCamereUnStudent" class="col-form-label"><b>Nr Camere pentru un student:</b></label>
-                            <input type="text" th:field="*{nrCamereUnStudent}" class="form-control" id="nrCamereUnStudent" placeholder="nrCamereUnStudent">
-                            <span th:if="${#fields.hasErrors('nrCamereUnStudent')}" th:errors="*{nrCamereUnStudent}" class="text-danger"></span>
+                            <label class="col-form-label" for="nrCamereUnStudent"><b>Nr Camere pentru un
+                                student:</b></label>
+                            <input class="form-control" id="nrCamereUnStudent" placeholder="nrCamereUnStudent"
+                                   th:field="*{nrCamereUnStudent}" type="text">
+                            <span class="text-danger" th:errors="*{nrCamereUnStudent}"
+                                  th:if="${#fields.hasErrors('nrCamereUnStudent')}"></span>
                         </div>
 
                         <!-- update nrCamereDoiStudenti -->
                         <div class="form-group row-md-6">
-                            <label for="nrCamereDoiStudenti" class="col-form-label"><b>Nr Camere pentru doi studenti:</b></label>
-                            <input type="text" th:field="*{nrCamereDoiStudenti}" class="form-control" id="nrCamereDoiStudenti" placeholder="nrCamereDoiStudenti">
-                            <span th:if="${#fields.hasErrors('nrCamereDoiStudenti')}" th:errors="*{nrCamereDoiStudenti}" class="text-danger"></span>
+                            <label class="col-form-label" for="nrCamereDoiStudenti"><b>Nr Camere pentru doi
+                                studenti:</b></label>
+                            <input class="form-control" id="nrCamereDoiStudenti" placeholder="nrCamereDoiStudenti"
+                                   th:field="*{nrCamereDoiStudenti}" type="text">
+                            <span class="text-danger" th:errors="*{nrCamereDoiStudenti}"
+                                  th:if="${#fields.hasErrors('nrCamereDoiStudenti')}"></span>
                         </div>
 
                         <!-- update nrCamereTreiStudenti -->
                         <div class="form-group row-md-6">
-                            <label for="nrCamereTreiStudenti" class="col-form-label"><b>Nr Camere pentru trei studenti:</b></label>
-                            <input type="text" th:field="*{nrCamereTreiStudenti}" class="form-control" id="nrCamereTreiStudenti" placeholder="nrCamereTreiStudenti">
-                            <span th:if="${#fields.hasErrors('nrCamereTreiStudenti')}" th:errors="*{nrCamereTreiStudenti}" class="text-danger"></span>
+                            <label class="col-form-label" for="nrCamereTreiStudenti"><b>Nr Camere pentru trei
+                                studenti:</b></label>
+                            <input class="form-control" id="nrCamereTreiStudenti" placeholder="nrCamereTreiStudenti"
+                                   th:field="*{nrCamereTreiStudenti}" type="text">
+                            <span class="text-danger"
+                                  th:errors="*{nrCamereTreiStudenti}"
+                                  th:if="${#fields.hasErrors('nrCamereTreiStudenti')}"></span>
                         </div>
 
                         <!-- update nrCamerePatruStudenti -->
                         <div class="form-group row-md-6">
-                            <label for="nrCamerePatruStudenti" class="col-form-label"><b>Nr Camere pentru patru studenti:</b></label>
-                            <input type="text" th:field="*{nrCamerePatruStudenti}" class="form-control" id="nrCamerePatruStudenti" placeholder="nrCamerePatruStudenti">
-                            <span th:if="${#fields.hasErrors('nrCamerePatruStudenti')}" th:errors="*{nrCamerePatruStudenti}" class="text-danger"></span>
+                            <label class="col-form-label" for="nrCamerePatruStudenti"><b>Nr Camere pentru patru
+                                studenti:</b></label>
+                            <input class="form-control" id="nrCamerePatruStudenti" placeholder="nrCamerePatruStudenti"
+                                   th:field="*{nrCamerePatruStudenti}" type="text">
+                            <span class="text-danger"
+                                  th:errors="*{nrCamerePatruStudenti}"
+                                  th:if="${#fields.hasErrors('nrCamerePatruStudenti')}"></span>
                         </div>
                     </div>
                 </div>
@@ -89,7 +109,8 @@
                     </div>
 
                     <div class="col-md-6 mt-5">
-                        <input id="back-btn" type="submit" class="btn btn-warning center" value="Back to camine" href="/camine">
+                        <input class="btn btn-warning center" href="/camine" id="back-btn" type="submit"
+                               value="Back to camine">
                     </div>
                 </div>
 

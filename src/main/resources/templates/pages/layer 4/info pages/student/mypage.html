@@ -4,7 +4,7 @@
 <style>
     .card {
         /* Add shadows to create the "card" effect */
-        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
         transition: 0.3s;
         width: 40%;
         border-radius: 5px;
@@ -12,7 +12,7 @@
 
     /* On mouse-over, add a deeper shadow */
     .card:hover {
-        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
     }
 
     /* Add some padding inside the card container */
@@ -25,86 +25,96 @@
         border-top: 3px solid #bbb;
     }
 
-    #navi ul{
+    #navi ul {
         display: flex;
     }
 
-    #navi ul{
+    #navi ul {
         list-style: none;
         padding: 5px;
     }
 
-    #navi li{
-        margin:0 10px;
+    #navi li {
+        margin: 0 10px;
     }
 </style>
 
 <!-- ------------------------------------ ABOVE IS STYLING, DOWN IS INFO ------------------------------------ -->
 <html>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 
-    <head>
-        <nav class="fixed-top navbar navbar-dark bg-dark navbar-expand" id="navi">
-            <a class="navbar-brand" href="https://curs.upb.ro/">
-                <span class="fa fa-university"></span> E-Learning Platform
-            </a>
+<head>
+    <nav class="fixed-top navbar navbar-dark bg-dark navbar-expand" id="navi">
+        <a class="navbar-brand" href="https://curs.upb.ro/">
+            <span class="fa fa-university"></span> E-Learning Platform
+        </a>
 
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+        <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+                class="navbar-toggler"
+                data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="/">Acasa<span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="/menu">Meniu</a>
-                    </li>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Acasa<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a aria-current="page" class="nav-link" href="/menu">Meniu</a>
+                </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="/student">Pagina principala</a>
-                    </li>
+                <li class="nav-item">
+                    <a aria-current="page" class="nav-link" href="/student">Pagina principala</a>
+                </li>
 
-                </ul>
-            </div>
-        </nav>
-    </head>
+            </ul>
+        </div>
+    </nav>
+</head>
 
-    <body>
-        <div class="card-deck" style="padding-top: 50px">
-            <div class="card bg-light text-left">
-                <div class="card-body">
-                    <p class="card-text">
-                        <h3><b>Nume: </b>           <span th:text="${loggedStudentAccount.getNume()}"></span></h3>
-                        <h3><b>Prenume: </b>        <span th:text="${loggedStudentAccount.getPrenume()}"></span></h3>
-                        <h3><b>Zi de nastere: </b>  <span th:text="${loggedStudentAccount.getZi_de_nastere()}"></span></h3>
-                        <h3><b>CNP: </b>            <span th:text="${loggedStudentAccount.getCnp()}"></span></h3>
-                        <hr class="solid">
-                        <h3><b>Username: </b>       <span th:text="${loggedStudentAccount.getUsername()}"></span></h3>
-                        <h3><b>Password: </b>
-                            <input type="password" th:value="${loggedStudentAccount.getPassword()}" id="myInput" style="width: 150px; background: transparent; border-color: transparent;">
-                            <span onclick="togglePasswordFromCodedToVisibile()"><i class="far fa-eye" id="eyecon"></i></span>
-                        </h3>
-                        <hr class="solid">
-                        <h3><b>Grupa: </b>          <span th:text="${infoStudent.getGrupa()}"></span></h3>
-                        <h3><b>Serie: </b>          <span th:text="${infoStudent.getSerie()}"></span></h3>
-                        <h3><b>An de studiu: </b>   <span th:text="${infoStudent.getAn()}"></span></h3>
-                    </p>
-                </div>
-            </div>
-            <div class="card bg-light text-left">
-                <div class="card-body">
-                    <p class="card-text">
-                        <h3><b>Medie: </b>          <span th:text="${infoStudent.getMedie()}"></span></h3>
-                        <h3><b>My Token: </b>       <span th:text="${infoStudent.getMyToken()}"></span></h3>
+<body>
+<div class="card-deck" style="padding-top: 50px">
+    <div class="card bg-light text-left">
+        <div class="card-body">
+            <p class="card-text">
+            <h3><b>Nume: </b> <span th:text="${loggedStudentAccount.getNume()}"></span></h3>
+            <h3><b>Prenume: </b> <span th:text="${loggedStudentAccount.getPrenume()}"></span></h3>
+            <h3><b>Zi de nastere: </b> <span th:text="${loggedStudentAccount.getZi_de_nastere()}"></span></h3>
+            <h3><b>CNP: </b> <span th:text="${loggedStudentAccount.getCnp()}"></span></h3>
+            <hr class="solid">
+            <h3><b>Username: </b> <span th:text="${loggedStudentAccount.getUsername()}"></span></h3>
+            <h3><b>Password: </b>
+                <input id="myInput" style="width: 150px; background: transparent; border-color: transparent;"
+                       th:value="${loggedStudentAccount.getPassword()}"
+                       type="password">
+                <span onclick="togglePasswordFromCodedToVisibile()"><i class="far fa-eye" id="eyecon"></i></span>
+            </h3>
+            <hr class="solid">
+            <h3><b>Grupa: </b> <span th:text="${infoStudent.getGrupa()}"></span></h3>
+            <h3><b>Serie: </b> <span th:text="${infoStudent.getSerie()}"></span></h3>
+            <h3><b>An de studiu: </b> <span th:text="${infoStudent.getAn()}"></span></h3>
+            </p>
+        </div>
+    </div>
+    <div class="card bg-light text-left">
+        <div class="card-body">
+            <p class="card-text">
+            <h3><b>Medie: </b> <span th:text="${infoStudent.getMedie()}"></span></h3>
+            <h3><b>My Token: </b> <span th:text="${infoStudent.getMyToken()}"></span></h3>
 
-                        <hr class="solid">
-                        <h3><b>Friend Token: </b>   <span id="friendTokenText" th:text="${infoStudent.getFriendToken()}"></span>
-                            <td><a id="update-btn-ft" th:href="@{/student/mypage/ft-edit/{studentId}(studentId=${infoStudent.getId()})}" class="btn btn-outline-primary"><i class="fas fa-user-edit ml-2"></i></a></td>
-                            <td><a id="clear-btn-ft" th:href="@{/student/mypage/ft-clear/{studentId}(studentId=${infoStudent.getId()})}" class="btn btn-outline-danger"><i class="fas fa-user-times ml-2"></i></a></td>
-                        </h3>
-                        <span th:if="${infoStudent.getFriendToken() != 'null'}">
+            <hr class="solid">
+            <h3><b>Friend Token: </b> <span id="friendTokenText" th:text="${infoStudent.getFriendToken()}"></span>
+                <td><a class="btn btn-outline-primary"
+                       id="update-btn-ft"
+                       th:href="@{/student/mypage/ft-edit/{studentId}(studentId=${infoStudent.getId()})}"><i
+                        class="fas fa-user-edit ml-2"></i></a></td>
+                <td><a class="btn btn-outline-danger"
+                       id="clear-btn-ft"
+                       th:href="@{/student/mypage/ft-clear/{studentId}(studentId=${infoStudent.getId()})}"><i
+                        class="fas fa-user-times ml-2"></i></a></td>
+            </h3>
+            <span th:if="${infoStudent.getFriendToken() != 'null'}">
                             <h4>
                                 <b>Nume: </b><td th:text="${yourFriend.get().getNume()}"></td>
                             </h4>
@@ -112,85 +122,87 @@
                                 <b>Prenume: </b><td th:text="${yourFriend.get().getPrenume()}"></td>
                             </h4>
                         </span>
-                        <hr class="solid">
-                        <h3>
-                            <b>Eligibil pentru caz special: </b><span th:text="${infoStudent.getFlagCazSpecial()}"></span>
-                        </h3>
-                        <h3><b>Camin ales: </b>       <span th:text="${infoStudent.getCaminPreferat()}"></span>
-                            <td><a th:href="@{/student/mypage/camin-edit/{studentId}(studentId=${infoStudent.getId()})}" class="btn btn-outline-success"><i class="fas fa-user-edit ml-2"></i></a></td>
-                            <td><a th:href="@{/student/mypage/camin-clear/{studentId}(studentId=${infoStudent.getId()})}" class="btn btn-outline-warning"><i class="fas fa-user-times ml-2"></i></a></td>
-                        </h3>
-                        <h3>
-                            <b>Camin repartizat: - </b> <!-- todo: pune caminul repartizat aici, adica faci call in db in tabelul cu caminul corespunzator -->
-                        </h3>
-<!--                        <span th:if="${infoStudent.getCaminPreferat() != 'null'}">-->
-<!--                            <div th:switch="${infoStudent.getCaminPreferat()}">-->
-<!--                                <div th:case="${'Leu A'}">-->
-<!--                                    <h4>-->
-<!--                                        <b>Locatie: </b> Complex Studentesc Leu-->
-<!--                                    </h4>-->
-<!--                                    <h4>-->
-<!--                                        <b>Bloc: </b><td th:text="${infoStudent.getCaminPreferat()}"></td>-->
-<!--                                    </h4>-->
-<!--                                    <h4>-->
-<!--                                        <b>Statie de metrou: </b> Politehnica-->
-<!--                                    </h4>-->
-<!--                                </div>-->
-<!--                                <div th:case="${'Leu C'}">-->
-<!--                                    <h4>-->
-<!--                                        <b>Locatie: </b> Complex Studentesc Leu-->
-<!--                                    </h4>-->
-<!--                                    <h4>-->
-<!--                                        <b>Bloc: </b><td th:text="${infoStudent.getCaminPreferat()}"></td>-->
-<!--                                    </h4>-->
-<!--                                    <h4>-->
-<!--                                        <b>Statie de metrou: </b> Politehnica-->
-<!--                                    </h4>-->
-<!--                                </div>-->
-<!--                                <div th:case="${'P20'}">-->
-<!--                                    <h4>-->
-<!--                                        <b>Locatie: </b> Complex Studentesc Regie-->
-<!--                                    </h4>-->
-<!--                                    <h4>-->
-<!--                                        <b>Bloc: </b><td th:text="${infoStudent.getCaminPreferat()}"></td>-->
-<!--                                    </h4>-->
-<!--                                    <h4>-->
-<!--                                        <b>Statie de metrou: </b> Grozavesti sau Petrache Poenaru-->
-<!--                                    </h4>-->
-<!--                                </div>-->
-<!--                                <div th:case="${'P23'}">-->
-<!--                                    <h4>-->
-<!--                                        <b>Locatie: </b> Complex Studentesc Regie-->
-<!--                                    </h4>-->
-<!--                                    <h4>-->
-<!--                                        <b>Bloc: </b><td th:text="${infoStudent.getCaminPreferat()}"></td>-->
-<!--                                    </h4>-->
-<!--                                    <h4>-->
-<!--                                        <b>Statie de metrou: </b> Grozavesti sau Petrache Poenaru-->
-<!--                                    </h4>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </span>-->
-                    </p>
-                </div>
-            </div>
+            <hr class="solid">
+            <h3>
+                <b>Eligibil pentru caz special: </b><span th:text="${infoStudent.getFlagCazSpecial()}"></span>
+            </h3>
+            <h3><b>Camin ales: </b> <span th:text="${infoStudent.getCamin_preferat()}"></span>
+                <td><a class="btn btn-outline-success"
+                       th:href="@{/student/mypage/camin-edit/{studentId}(studentId=${infoStudent.getId()})}"><i
+                        class="fas fa-user-edit ml-2"></i></a></td>
+                <td><a class="btn btn-outline-warning"
+                       th:href="@{/student/mypage/camin-clear/{studentId}(studentId=${infoStudent.getId()})}"><i
+                        class="fas fa-user-times ml-2"></i></a></td>
+            </h3>
+            <h3>
+                <b>Camin repartizat: - </b>
+                <!-- todo: pune caminul repartizat aici, adica faci call in db in tabelul cu caminul corespunzator -->
+            </h3>
+            <!--                        <span th:if="${infoStudent.getCaminPreferat() != 'null'}">-->
+            <!--                            <div th:switch="${infoStudent.getCaminPreferat()}">-->
+            <!--                                <div th:case="${'Leu A'}">-->
+            <!--                                    <h4>-->
+            <!--                                        <b>Locatie: </b> Complex Studentesc Leu-->
+            <!--                                    </h4>-->
+            <!--                                    <h4>-->
+            <!--                                        <b>Bloc: </b><td th:text="${infoStudent.getCaminPreferat()}"></td>-->
+            <!--                                    </h4>-->
+            <!--                                    <h4>-->
+            <!--                                        <b>Statie de metrou: </b> Politehnica-->
+            <!--                                    </h4>-->
+            <!--                                </div>-->
+            <!--                                <div th:case="${'Leu C'}">-->
+            <!--                                    <h4>-->
+            <!--                                        <b>Locatie: </b> Complex Studentesc Leu-->
+            <!--                                    </h4>-->
+            <!--                                    <h4>-->
+            <!--                                        <b>Bloc: </b><td th:text="${infoStudent.getCaminPreferat()}"></td>-->
+            <!--                                    </h4>-->
+            <!--                                    <h4>-->
+            <!--                                        <b>Statie de metrou: </b> Politehnica-->
+            <!--                                    </h4>-->
+            <!--                                </div>-->
+            <!--                                <div th:case="${'P20'}">-->
+            <!--                                    <h4>-->
+            <!--                                        <b>Locatie: </b> Complex Studentesc Regie-->
+            <!--                                    </h4>-->
+            <!--                                    <h4>-->
+            <!--                                        <b>Bloc: </b><td th:text="${infoStudent.getCaminPreferat()}"></td>-->
+            <!--                                    </h4>-->
+            <!--                                    <h4>-->
+            <!--                                        <b>Statie de metrou: </b> Grozavesti sau Petrache Poenaru-->
+            <!--                                    </h4>-->
+            <!--                                </div>-->
+            <!--                                <div th:case="${'P23'}">-->
+            <!--                                    <h4>-->
+            <!--                                        <b>Locatie: </b> Complex Studentesc Regie-->
+            <!--                                    </h4>-->
+            <!--                                    <h4>-->
+            <!--                                        <b>Bloc: </b><td th:text="${infoStudent.getCaminPreferat()}"></td>-->
+            <!--                                    </h4>-->
+            <!--                                    <h4>-->
+            <!--                                        <b>Statie de metrou: </b> Grozavesti sau Petrache Poenaru-->
+            <!--                                    </h4>-->
+            <!--                                </div>-->
+            <!--                            </div>-->
+            <!--                        </span>-->
+            </p>
         </div>
-    </body>
+    </div>
+</div>
+</body>
 </html>
 
 <!-- SCRIPTURI JS -->
 <script>
-    function togglePasswordFromCodedToVisibile()
-    {
+    function togglePasswordFromCodedToVisibile() {
         $('#eyecon').toggleClass("fa-eye fa-eye-slash");
         const x = document.getElementById("myInput");
 
         if (x.type === "password") //in loc de a defini o variabila poti folosi jquery ul : $('#myInput')
         {
             x.type = "text";
-        }
-        else
-        {
+        } else {
             x.type = "password";
         }
     }

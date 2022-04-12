@@ -1,23 +1,23 @@
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
 <div th:replace="layouts/header :: myheader"></div>
 
 <style>
-    #welcome-message{
-        font-family: "Times New Roman",serif;
+    #welcome-message {
+        font-family: "Times New Roman", serif;
         font-weight: bolder;
     }
 
-    #navi ul{
+    #navi ul {
         display: flex;
     }
 
-    #navi ul{
+    #navi ul {
         list-style: none;
         padding: 5px;
     }
 
-    #navi li{
-        margin:0 10px;
+    #navi li {
+        margin: 0 10px;
     }
 </style>
 
@@ -34,7 +34,9 @@
             <span class="fa fa-university"></span> E-Learning Platform
         </a>
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+                class="navbar-toggler"
+                data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -51,11 +53,11 @@
                     </li>
 
                     <li th:case="'ADMIN'" class="nav-item">
-                        <a class="nav-link"  href="/admin">Pagina principala</a>
+                        <a class="nav-link" href="/admin">Pagina principala</a>
                     </li>
 
                     <li th:case="'ASSISTANT'" class="nav-item">
-                        <a class="nav-link"  href="/admin">Pagina principala</a>
+                        <a class="nav-link" href="/admin">Pagina principala</a>
                     </li>
                 </div>
 
@@ -67,10 +69,13 @@
         <h1>
 
             <p th:case="'true'">
-                Salutare drag coleg, <td th:text="${loggedStudentAccount}"></td>
+                Salutare drag coleg,
+            <td th:text="${loggedStudentAccount}"></td>
             </p>
             <p th:case="'false'">
-                Salutare drag student, <td th:text="${loggedStudentAccount.getNume()}"></td> <td th:text="${loggedStudentAccount.getPrenume()}"></td>
+                Salutare drag student,
+            <td th:text="${loggedStudentAccount.getNume()}"></td>
+            <td th:text="${loggedStudentAccount.getPrenume()}"></td>
             </p>
         </h1>
     </div>
@@ -79,11 +84,11 @@
 
 <body>
 
-    <div style="padding-top: 20px" class="container align-bottom">
-        <form class="form-signin" method="get" action="/logout">
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Logout</button>
-        </form>
-    </div>
+<div class="container align-bottom" style="padding-top: 20px">
+    <form action="/logout" class="form-signin" method="get">
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Logout</button>
+    </form>
+</div>
 
 </body>
 

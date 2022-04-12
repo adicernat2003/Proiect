@@ -2,25 +2,25 @@
 <div th:replace="layouts/header :: myheader"></div>
 
 <style>
-    img{
+    img {
         opacity: 0.5;
     }
 
-    img:hover{
+    img:hover {
         opacity: 1.0;
     }
 
-    #navi ul{
+    #navi ul {
         display: flex;
     }
 
-    #navi ul{
+    #navi ul {
         list-style: none;
         padding: 5px;
     }
 
-    #navi li{
-        margin:0 10px;
+    #navi li {
+        margin: 0 10px;
     }
 </style>
 
@@ -52,55 +52,58 @@
 </head>
 
 <body>
-    <div class="row" style="padding-top: 150px">
-        <aside class="col-sm-4" style="padding-left: 200px; padding-right: 200px;">
-            <a href="http://www.electronica.pub.ro/">
-                <img src="https://bit.ly/3cwAO09" style="width: 400px; height: 400px;">
-            </a>
-        </aside>
+<div class="row" style="padding-top: 150px">
+    <aside class="col-sm-4" style="padding-left: 200px; padding-right: 200px;">
+        <a href="http://www.electronica.pub.ro/">
+            <img src="https://bit.ly/3cwAO09" style="width: 400px; height: 400px;">
+        </a>
+    </aside>
 
-        <aside class="col-sm-7" style="padding-left: 350px; padding-right: 100px; padding-top: 23px;">
-            <div class="card">
-                <article class="card-body" style="max-height: 350px; width: auto; align-content: center">
-                    <h4 class="card-title text-center mb-4 mt-1">Sign in</h4>
-                    <hr>
-                    <form class="form-signin" method="post" action="/login">
-                        <h2 class="form-signin-heading"></h2>
-                        <div class="form-group">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fa fa-user"></i></span>
-                                </div>
-                                <input class="form-control" type="text" id="username" name="username" placeholder="Username" required="" autofocus="">
+    <aside class="col-sm-7" style="padding-left: 350px; padding-right: 100px; padding-top: 23px;">
+        <div class="card">
+            <article class="card-body" style="max-height: 350px; width: auto; align-content: center">
+                <h4 class="card-title text-center mb-4 mt-1">Sign in</h4>
+                <hr>
+                <form action="/login" class="form-signin" method="post">
+                    <h2 class="form-signin-heading"></h2>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-user"></i></span>
                             </div>
+                            <input autofocus="" class="form-control" id="username" name="username"
+                                   placeholder="Username"
+                                   required="" type="text">
                         </div>
+                    </div>
 
-                        <div class="form-group">
-                            <div class="input-group">
-                                <div class="input-group-prepend" style="padding-bottom: 10px">
-                                    <span class="input-group-text"><i class="fa fa-lock"></i></span>
-                                </div>
-                                <input class="form-control" type="password" id="password" name="password" placeholder="Password" required="">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend" style="padding-bottom: 10px">
+                                <span class="input-group-text"><i class="fa fa-lock"></i></span>
                             </div>
+                            <input class="form-control" id="password" name="password" placeholder="Password"
+                                   required="" type="password">
                         </div>
+                    </div>
 
-                            <!--todo pune checkboxul in dreptul label-ului cumva-->
-<!--                        <form id="rememberMe-form">-->
-<!--                            <div class="checkboxes">-->
-<!--                                <label><input type="checkbox" id="remember-me" name="remember-me" class="form-control"><span>Remember me?</span></label>-->
-<!--                            </div>-->
-<!--                        </form>-->
+                    <!--todo pune checkboxul in dreptul label-ului cumva-->
+                    <!--                        <form id="rememberMe-form">-->
+                    <!--                            <div class="checkboxes">-->
+                    <!--                                <label><input type="checkbox" id="remember-me" name="remember-me" class="form-control"><span>Remember me?</span></label>-->
+                    <!--                            </div>-->
+                    <!--                        </form>-->
 
-                        <div class="form-group">
-                            <button class="btn btn-lg btn-primary btn-block" type="submit">Log in</button>
-                        </div>
-                    </form>
-                </article>
-            </div>
-        </aside>
+                    <div class="form-group">
+                        <button class="btn btn-lg btn-primary btn-block" type="submit">Log in</button>
+                    </div>
+                </form>
+            </article>
+        </div>
+    </aside>
 
-        <aside class="col-sm-4" >
-<!--            <img src="https://bit.ly/3iuaS9p" style="width: 325px; height: 325px;">-->
-        </aside>
-    </div>
+    <aside class="col-sm-4">
+        <!--            <img src="https://bit.ly/3iuaS9p" style="width: 325px; height: 325px;">-->
+    </aside>
+</div>
 </body>

@@ -20,6 +20,10 @@ public class CaminService {
         return caminRepository.findAll();
     }
 
+    public Camin getCaminByNumeCamin(String numeCamin) {
+        return caminRepository.getCaminByNumeCamin(numeCamin);
+    }
+
     /* Get Id of Camin to update Fields */
     public Camin editCamin(Long caminId) {
         return caminRepository.findById(caminId)

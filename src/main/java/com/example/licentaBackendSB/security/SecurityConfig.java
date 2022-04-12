@@ -1,6 +1,8 @@
 package com.example.licentaBackendSB.security;
 
 import com.example.licentaBackendSB.entities.StudentAccount;
+import com.example.licentaBackendSB.repositories.StudentAccountsDBRepository;
+import com.example.licentaBackendSB.repositories.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static com.example.licentaBackendSB.loaders.StudentAccountsLoader.hardcodeStudentsAccountsDB;
+import static com.example.licentaBackendSB.loaders.StudentAccountsLoader.studentAccountsDB;
+import static com.example.licentaBackendSB.loaders.StudentsLoader.hardcodeStudents;
+import static com.example.licentaBackendSB.loaders.StudentsLoader.studentsDB;
 import static com.example.licentaBackendSB.security.UserRole.*;
 
 @Configuration
@@ -28,6 +34,8 @@ import static com.example.licentaBackendSB.security.UserRole.*;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PasswordEncoder passwordEncoder;
+    private final StudentAccountsDBRepository studentAccountsDBRepository;
+    private final StudentRepository studentRepository;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -94,8 +102,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         List<UserDetails> accounts = new ArrayList<>(List.of(userUser, adminUser, assistantUser));
 
         //Prelucram tabelul cu conturi pt studenti astfel incat sa cream conturi pt toti studentii
-        List<StudentAccount> studentAccountList = StudentAccount.studentAccountsList;
-        for (StudentAccount studentAccount : studentAccountList) {
+
+        studentsDB = studentRepository.findAll();
+        studentAccountsDB = studentAccountsDBRepository.findAll();
+
+        if (studentsDB.isEmpty()) {
+            studentsDB = hardcodeStudents();
+        }
+
+        if (studentAccountsDB.isEmpty()) {
+            studentAccountsDB = hardcodeStudentsAccountsDB(studentsDB);
+        }
+
+        for (StudentAccount studentAccount : studentAccountsDB) {
             accounts.add(
                     User.builder()
                             .username(studentAccount.getUsername())

@@ -2,8 +2,7 @@
 <div th:replace="layouts/header :: myheader"></div>
 
 <style>
-    #update-btn.center, #back-btn.center
-    {
+    #update-btn.center, #back-btn.center {
         margin: 0;
         position: absolute;
         top: 50%;
@@ -27,26 +26,33 @@
     <h2 class="mb-5">Update Friend Token</h2>
     <div class="row">
         <div class="col-md-6">
-            <form action="#" th:action="@{/student/mypage/ft-update/{studentId}(studentId=${selectedStudentById.getId()})}" th:object="${selectedStudentById}" method="post">
+            <form action="#"
+                  method="post"
+                  th:action="@{/student/mypage/ft-update/{studentId}(studentId=${selectedStudentById.getId()})}"
+                  th:object="${selectedStudentById}">
                 <div class="row">
                     <!-- TEORIE: for = "id_camp_in_frontend" tre sa fie acelasi cu id="id_camp_in_frontend" -->
                     <div class="col-md-6">
                         <!-- update friendToken -->
                         <div class="form-group row-md-6">
                             <label for="friendToken" class="col-form-label"><h4><b>FriendToken: </b></h4></label>
-                            <input type="text" th:field="*{friendToken}" onkeyup="successTypeFriendToken()" class="form-control" id="friendToken" placeholder="friendToken">
-                            <span th:if="${#fields.hasErrors('friendToken')}" th:errors="*{friendToken}" class="text-danger"></span>
+                            <input class="form-control" id="friendToken" onkeyup="successTypeFriendToken()"
+                                   placeholder="friendToken" th:field="*{friendToken}" type="text">
+                            <span class="text-danger" th:errors="*{friendToken}"
+                                  th:if="${#fields.hasErrors('friendToken')}"></span>
                         </div>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-6 mt-5">
-                        <input id="update-btn" disabled type="submit" class="btn btn-primary center" value="Update Friend Token">
+                        <input class="btn btn-primary center" disabled id="update-btn" type="submit"
+                               value="Update Friend Token">
                     </div>
 
                     <div class="col-md-6 mt-5">
-                        <input id="back-btn" type="submit" class="btn btn-danger center" value="Back to myPage" href="/mypage">
+                        <input class="btn btn-danger center" href="/mypage" id="back-btn" type="submit"
+                               value="Back to myPage">
                     </div>
                 </div>
                 <br>
@@ -65,13 +71,10 @@
     //daca introduci friendToken diferit de null, poti da update, daca nu, nu
     //daca campul e null, te poti intoarce la mypage, daca nu, nu
     function successTypeFriendToken() {
-        if(document.getElementById("friendToken").value === "null")
-        {
+        if (document.getElementById("friendToken").value === "null") {
             document.getElementById('update-btn').disabled = true;
             document.getElementById('back-btn').disabled = false;
-        }
-        else
-        {
+        } else {
             document.getElementById('update-btn').disabled = false;
             document.getElementById('back-btn').disabled = true;
         }

@@ -1,7 +1,8 @@
 package com.example.licentaBackendSB.controllers;
 
-import com.example.licentaBackendSB.entities.*;
-import com.example.licentaBackendSB.services.*;
+import com.example.licentaBackendSB.entities.Camin;
+import com.example.licentaBackendSB.services.CaminService;
+import com.example.licentaBackendSB.services.StudentCaminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.List;
+import static com.example.licentaBackendSB.constants.Constants.*;
 
 @Controller
 @RequestMapping(path = "/admin/camine")
@@ -19,88 +20,35 @@ import java.util.List;
 public class CamineController {
 
     //Fields
-    private final CaminLeuAService caminLeuAService;
-    private final CaminLeuCService caminLeuCService;
-    private final CaminP20Service caminP20Service;
-    private final CaminP23Service caminP23Service;
     private final CaminService caminService;
+    private final StudentCaminService studentCaminService;
 
     /* ~~~~~~~~~~~ Get Camine View ~~~~~~~~~~~ */
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
     public String getCaminePage(Model model) {
-        Camin leuA = new Camin();
-        Camin leuC = new Camin();
-        Camin p20 = new Camin();
-        Camin p23 = new Camin();
-
-        List<Camin> camineList = caminService.getCamine();
-
-        for (Camin it : camineList) {
-            switch (it.getNumeCamin()) {
-                case "Leu A" -> leuA = it;
-                case "Leu C" -> leuC = it;
-                case "P20" -> p20 = it;
-                case "P23" -> p23 = it;
-            }
-        }
-
-        model.addAttribute("listOfCamine", camineList);
-        model.addAttribute("leuA", leuA);
-        model.addAttribute("leuC", leuC);
-        model.addAttribute("p20", p20);
-        model.addAttribute("p23", p23);
+        model.addAttribute("listOfCamine", caminService.getCamine());
+        model.addAttribute("leuA", caminService.getCaminByNumeCamin(LEU_A));
+        model.addAttribute("leuC", caminService.getCaminByNumeCamin(LEU_C));
+        model.addAttribute("p20", caminService.getCaminByNumeCamin(P20));
+        model.addAttribute("p23", caminService.getCaminByNumeCamin(P23));
 
         return "pages/layer 4/camine/camine_page";
     }
 
-    /* ~~~~~~~~~~~ LeuA List ~~~~~~~~~~~ */
-    @GetMapping("leuAlist")
+    @GetMapping("/{numeCamin}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
-    public String getLeuAStudents(Model model) {
-        List<CaminLeuA> caminLeuAList = caminLeuAService.getLeuAStudents();
-        model.addAttribute("listOfLeuAStudents", caminLeuAList);
+    public String getStudents(@PathVariable String numeCamin, Model model) {
+        model.addAttribute("listOfStudents", studentCaminService.getStudents(numeCamin));
 
-        return "pages/layer 4/camine/tables/leuAlist";
-    }
-
-    /* ~~~~~~~~~~~ LeuC List ~~~~~~~~~~~ */
-    @GetMapping("leuClist")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
-    public String getLeuCStudents(Model model) {
-        List<CaminLeuC> caminLeuCList = caminLeuCService.getLeuCStudents();
-        model.addAttribute("listOfLeuCStudents", caminLeuCList);
-
-        return "pages/layer 4/camine/tables/leuClist";
-    }
-
-    /* ~~~~~~~~~~~ LeuC List ~~~~~~~~~~~ */
-    @GetMapping("P20list")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
-    public String getP20Students(Model model) {
-        List<CaminP20> caminP20List = caminP20Service.getP20Students();
-        model.addAttribute("listOfP20Students", caminP20List);
-
-        return "pages/layer 4/camine/tables/P20list";
-    }
-
-    /* ~~~~~~~~~~~ LeuA List ~~~~~~~~~~~ */
-    @GetMapping("P23list")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
-    public String getP23Students(Model model) {
-        List<CaminP23> caminP23List = caminP23Service.getP23Students();
-        model.addAttribute("listOfP23Students", caminP23List);
-
-        return "pages/layer 4/camine/tables/P23list";
+        return "pages/layer 4/camine/tables/studentCaminList";
     }
 
     /* ~~~~~~~~~~~ Get Camin knowing ID ~~~~~~~~~~~ */
     @GetMapping(path = "/edit/{caminId}")
     @PreAuthorize("hasAuthority('student:write')")
     public String editCamin(@PathVariable("caminId") Long caminId, Model model) {
-
-        Camin selectedCamin = caminService.editCamin(caminId);
-        model.addAttribute("selectedCamintById", selectedCamin);
+        model.addAttribute("selectedCaminById", caminService.editCamin(caminId));
 
         return "pages/layer 4/camine/crud camine/update_info_camin";
     }

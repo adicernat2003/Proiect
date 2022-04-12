@@ -2,17 +2,17 @@
 <div th:replace="layouts/header :: myheader"></div>
 
 <style>
-    #navi ul{
+    #navi ul {
         display: flex;
     }
 
-    #navi ul{
+    #navi ul {
         list-style: none;
         padding: 5px;
     }
 
-    #navi li{
-        margin:0 10px;
+    #navi li {
+        margin: 0 10px;
     }
 
     .center {
@@ -20,6 +20,7 @@
         margin-right: auto;
     }
 </style>
+
 
 <!-- ------------------------------------ ABOVE IS STYLING, DOWN IS INFO ------------------------------------ -->
 <html>
@@ -30,7 +31,9 @@
             <span class="fa fa-university"></span> E-Learning Platform
         </a>
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+                class="navbar-toggler"
+                data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -40,11 +43,11 @@
                     <a class="nav-link" href="/">Acasa<span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="/menu">Meniu</a>
+                    <a aria-current="page" class="nav-link" href="/menu">Meniu</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="/admin/camine">Lista caminelor</a>
+                    <a aria-current="page" class="nav-link" href="/admin/camine">Lista caminelor</a>
                 </li>
             </ul>
         </div>
@@ -66,15 +69,15 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="tempStudentfromLeuC:${listOfLeuCStudents}">
-        <td th:text="${tempStudentfromLeuC.getId()}"></td>
-        <td th:text="${tempStudentfromLeuC.getNume()}"></td>
-        <td th:text="${tempStudentfromLeuC.getPrenume()}"></td>
-        <td th:text="${tempStudentfromLeuC.getCnp()}"></td>
-        <td th:text="${tempStudentfromLeuC.getMedie()}"></td>
-        <td th:text="${tempStudentfromLeuC.getAn()}"></td>
-        <td th:text="${tempStudentfromLeuC.getMyToken()}"></td>
-        <td th:text="${tempStudentfromLeuC.getFriendToken()}"></td>
+    <tr th:each="student:${listOfStudents}">
+        <td th:text="${student.getId()}"></td>
+        <td th:text="${student.getNume()}"></td>
+        <td th:text="${student.getPrenume()}"></td>
+        <td th:text="${student.getCnp()}"></td>
+        <td th:text="${student.getMedie()}"></td>
+        <td th:text="${student.getAn()}"></td>
+        <td th:text="${student.getMyToken()}"></td>
+        <td th:text="${student.getFriendToken()}"></td>
     </tbody>
 </table>
 

@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.List;
-
 @Controller
 @RequestMapping(path = "admin")
 @RequiredArgsConstructor
@@ -39,8 +37,7 @@ public class AdminController {
     @GetMapping("students")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
     public String getStudents(Model model) {
-        List<Student> studentsDB = studentService.getStudents();
-        model.addAttribute("listOfStudents", studentsDB);
+        model.addAttribute("listOfStudents", studentService.getStudents());
         model.addAttribute("isAdmin", "admin");
 
         return "pages/layer 4/students table/students_list";
@@ -78,6 +75,7 @@ public class AdminController {
     public String deleteStudent(@PathVariable("studentId") Long id) {
         studentService.deleteStudent(id);
         studentAccountService.deleteStudent(id);
+
         return "redirect:/admin/students";
     }
 
@@ -85,8 +83,7 @@ public class AdminController {
     @GetMapping(path = "/students/edit/{studentId}")
     @PreAuthorize("hasAuthority('student:write')")
     public String editStudent(@PathVariable("studentId") Long studentId, Model model) {
-        Student selectedStudent = studentService.editStudent(studentId);        //getting student by id
-        model.addAttribute("selectedStudentById", selectedStudent);
+        model.addAttribute("selectedStudentById", studentService.editStudent(studentId));
 
         return "pages/layer 4/students table/crud students/update_student";
     }

@@ -1,6 +1,5 @@
 package com.example.licentaBackendSB.controllers;
 
-import com.example.licentaBackendSB.entities.Student;
 import com.example.licentaBackendSB.others.LoggedAccount;
 import com.example.licentaBackendSB.services.StudentService;
 import lombok.RequiredArgsConstructor;
@@ -9,8 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/student")
@@ -36,8 +33,7 @@ public class StudentController {
     @GetMapping("/students")
     @PreAuthorize("hasRole('ROLE_STUDENT')")
     public String getStudents(Model model) {
-        List<Student> studentsDB = studentService.getStudents();
-        model.addAttribute("listOfStudents", studentsDB);
+        model.addAttribute("listOfStudents", studentService.getStudents());
         model.addAttribute("isAdmin", "student");
 
         return "pages/layer 4/students table/students_list";

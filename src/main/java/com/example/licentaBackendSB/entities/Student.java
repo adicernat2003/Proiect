@@ -1,13 +1,12 @@
 package com.example.licentaBackendSB.entities;
 
-import com.example.licentaBackendSB.others.randomizers.CountyManager;
-import com.example.licentaBackendSB.others.randomizers.DoBandCNPandGenderRandomizer;
-import com.example.licentaBackendSB.others.randomizers.nameRandomizer;
-import com.example.licentaBackendSB.others.randomizers.ygsRandomizer;
 import com.example.licentaBackendSB.others.sort.sortingAlgorithms.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -17,12 +16,9 @@ import java.util.stream.Collectors;
 @Setter// for getters/setters
 @AllArgsConstructor // for constructor
 @NoArgsConstructor
-@Builder // for building an instance of Student
+@SuperBuilder // for building an instance of Student
 @ToString
-public class Student {
-
-    @Transient
-    public static final List<Student> hardcodedStudentsList = hardcodeStudents();
+public class Student extends BaseEntity {
 
     //De aici modifici limitele referitoare la numarul de studenti
     @Transient
@@ -30,20 +26,6 @@ public class Student {
     @Transient
     public static final long endIndexing = 10;
 
-    @Id
-    @SequenceGenerator(
-            name = "student_sequence",
-            sequenceName = "student_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "student_sequence"
-    )
-    //needed for Statistics && Main sources
-
-    //Fields -----------------------------------------------------------------------------------------------------------
-    private Long id;
     private String nume;
     private String prenume;
     private String grupa;
@@ -58,7 +40,6 @@ public class Student {
     private String friendToken;
     private String camin_preferat;
     private String flagCazSpecial;
-    private Integer anUniversitar;
 
     public static Map<String, Integer> sortByValue(Map<String, Integer> unsortMap, final boolean order) {
         List<Map.Entry<String, Integer>> list = new LinkedList<>(unsortMap.entrySet());
@@ -89,69 +70,6 @@ public class Student {
         return performanceStatiticsOfSortAlgorithms;
     }
 
-    public static List<Student> hardcodeStudents() {
-        List<Student> hardcodedListOfStudents = new ArrayList<>();
-        Random rand = new Random();
-
-        //manual harcode to test search query => check StudentRepository
-        hardcodedListOfStudents.add(
-                Student.builder()
-                        .id(1L)
-                        .nume("Cernat")
-                        .prenume("Adrian")
-                        .grupa("442")
-                        .serie("B")
-                        .an(4)
-                        .medie(10D)
-                        .myToken(shuffleString("cernat" + "adrian"))
-                        .zi_de_nastere("23.Ianuarie.1999")
-                        .cnp("1990123410036")
-                        .genSexual("Masculin")
-                        .judet("Bucuresti")
-                        .friendToken("null")
-                        .camin_preferat("null")
-                        .flagCazSpecial("Nu")
-                        .anUniversitar(2021)
-                        .build());
-
-        for (long i = 1; i < 10; i++) {
-            String group = ygsRandomizer.getRandomGroup();
-            String series = ygsRandomizer.getRandomSeries();
-
-            int year = Character.getNumericValue(group.charAt(1));
-
-            String randomNume = nameRandomizer.getAlphaNumericString(5);
-            String randomPrenume = nameRandomizer.getAlphaNumericString(5);
-
-            String randomDoB = DoBandCNPandGenderRandomizer.getDoB();
-            String randomGender = DoBandCNPandGenderRandomizer.getGender();
-            String randomCNP = DoBandCNPandGenderRandomizer.getCNP(randomDoB, randomGender);
-
-            String countyCode = randomCNP.substring(7, 9);
-            String randomCounty = CountyManager.getCountyFromTwoDigitCode(countyCode);
-
-            hardcodedListOfStudents.add(Student.builder()
-                    .id(i + 1)
-                    .nume(randomNume)
-                    .prenume(randomPrenume)
-                    .grupa(group)
-                    .serie(series)
-                    .an(year)
-                    .medie((1D + (10D - 1D) * rand.nextDouble()))
-                    .myToken(shuffleString(randomNume + randomPrenume))
-                    .zi_de_nastere(randomDoB)
-                    .cnp(randomCNP)
-                    .genSexual(randomGender)
-                    .judet(randomCounty)
-                    .friendToken("null")
-                    .camin_preferat("null")
-                    .flagCazSpecial("Nu")
-                    .anUniversitar(2021)
-                    .build());
-        }
-        return hardcodedListOfStudents;
-    }
-
     //Methods for Students ---------------------------------------------------------------------------------------------
 
     public static void sortStudents(List<Student> tmp)     //todo : modifica comparatorul pt mai multe reguli
@@ -161,16 +79,6 @@ public class Student {
 
     public static void printStudents(List<Student> tmp) {
         System.out.println(Arrays.toString(tmp.toArray()));
-    }
-
-    public static String shuffleString(String string) {
-        List<String> letters = Arrays.asList(string.split(""));
-        Collections.shuffle(letters);
-        StringBuilder shuffled = new StringBuilder();
-        for (String letter : letters) {
-            shuffled.append(letter);
-        }
-        return shuffled.toString();
     }
 
     public static long collectionSort(List<Student> tmp) {

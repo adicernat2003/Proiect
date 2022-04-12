@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CaminRepository extends JpaRepository<Camin, Long> {
 
+    Camin getCaminByNumeCamin(String numeCamin);
 }
