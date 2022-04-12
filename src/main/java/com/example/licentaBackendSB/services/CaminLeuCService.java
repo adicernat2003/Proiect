@@ -20,7 +20,6 @@ public class CaminLeuCService {
     /*  ~~~~~~~~~~~ Get List of Leu C Students ~~~~~~~~~~~ */
     public List<CaminLeuC> getLeuCStudents() {
         //select * from caminLeuC (query in DB)
-
         return caminLeuCRepository.findAll();
     }
 

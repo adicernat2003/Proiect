@@ -1,6 +1,6 @@
 package com.example.licentaBackendSB.others.randomizers;
 
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 public class nameRandomizer {
@@ -12,16 +12,13 @@ public class nameRandomizer {
         byte[] array = new byte[256];
         new Random().nextBytes(array);
 
-        String randomString
-                = new String(array, Charset.forName("UTF-8"));
+        String randomString = new String(array, StandardCharsets.UTF_8);
 
-        // Create a StringBuffer to store the result
-        StringBuffer r = new StringBuffer();
+        // Create a StringBuilder to store the result
+        StringBuilder r = new StringBuilder();
 
         // remove all spacial char
-        String AlphaNumericString
-                = randomString
-                .replaceAll("[^A-Za-z0-9]", "");
+        String AlphaNumericString = randomString.replaceAll("[^A-Za-z0-9]", "");
 
         // Append first 20 alphanumeric characters
         // from the generated random String into the result

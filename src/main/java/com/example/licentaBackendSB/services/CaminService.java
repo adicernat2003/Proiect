@@ -71,10 +71,8 @@ public class CaminService {
                     }
 
                     return caminRepository.save(foundCamin);
-                }).
-                orElseThrow(
-                        () -> new IllegalStateException("Camin with id " + caminId + " does not exist")
-                );
+                })
+                .orElseThrow(() -> new IllegalStateException("Camin with id " + caminId + " does not exist"));
     }
 
     /* Clear Camin Fields and update them with 0 */
@@ -115,9 +113,7 @@ public class CaminService {
                     }
 
                     return caminRepository.save(foundCamin);
-                }).
-                orElseThrow(
-                        () -> new IllegalStateException("Camin with id " + caminId + " does not exist")
-                );
+                })
+                .orElseThrow(() -> new IllegalStateException("Camin with id " + caminId + " does not exist"));
     }
 }

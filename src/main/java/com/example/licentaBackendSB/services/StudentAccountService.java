@@ -80,9 +80,7 @@ public class StudentAccountService {
                     }
 
                     return studentAccountsDBRepository.save(foundStudent);
-                }).
-                orElseThrow(
-                        () -> new IllegalStateException("student with id " + studentId + " does not exist")
-                );
+                })
+                .orElseThrow(() -> new IllegalStateException("student with id " + studentId + " does not exist"));
     }
 }

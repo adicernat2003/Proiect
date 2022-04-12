@@ -1,15 +1,16 @@
 package com.example.licentaBackendSB.others;
 
+import lombok.Getter;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 //Aceasta este dedicata preluarii si prelucarii informatiilor din sesiunea de logare actuala
+@Getter
 public class LoggedAccount {
 
     //Fields
-    private String loggedUsername;
+    private final String loggedUsername;
 
     //Constructor
-
     public LoggedAccount() {
         this.loggedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
     }
@@ -17,10 +18,6 @@ public class LoggedAccount {
     //Getter and Setters
     public String getLoggedUsername() {
         return loggedUsername;
-    }
-
-    public void setLoggedUsername(String loggedUsername) {
-        this.loggedUsername = loggedUsername;
     }
 
     //Methods
@@ -31,11 +28,10 @@ public class LoggedAccount {
     }
 
     public String getAuthorityOfStandardAcc() {
-        if (this.loggedUsername.equals("checu"))
-            return "STUDENT";
-        else if (this.loggedUsername.equals("iancu"))
-            return "ADMIN";
-        else
-            return "ASSISTANT";
+        return switch (this.loggedUsername) {
+            case ("checu") -> "STUDENT";
+            case ("iancu") -> "ADMIN";
+            default -> "ASSISTANT";
+        };
     }
 }

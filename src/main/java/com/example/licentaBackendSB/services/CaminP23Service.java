@@ -20,7 +20,6 @@ public class CaminP23Service {
     /*  ~~~~~~~~~~~ Get List of P23 Students ~~~~~~~~~~~ */
     public List<CaminP23> getP23Students() {
         //select * from caminP23 (query in DB)
-
         return caminP23Repository.findAll();
     }
 

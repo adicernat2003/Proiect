@@ -6,12 +6,10 @@ import java.util.Map;
 public class CountyManager {
     public static String getCountyFromTwoDigitCode(String countyCode) {
         Map<Integer, String> counties = getCounties();
-        String result = null;
 
         int countyIndex = Integer.parseInt(countyCode);
 
-        result = counties.get(countyIndex);
-        return result;
+        return counties.get(countyIndex);
     }
 
     public static Map<Integer, String> getCounties() {

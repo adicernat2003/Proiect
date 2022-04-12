@@ -16,11 +16,7 @@ public class ygsRandomizer {
     }
 
     public static String getRandomGroup() {
-        List<String> groups = new ArrayList<>();
-        int randomPos = (int) (Math.random() * 20);
-        groups = getHarcodedGroups();
-
-        return groups.get(randomPos);
+        return getHarcodedGroups().get((int) (Math.random() * 20));
     }
 
     private static List<String> getHarcodedGroups() {

@@ -6,7 +6,6 @@ public class DoBandCNPandGenderRandomizer {
 
     public static String getDoB() {
         Random rand = new Random();
-        String result = null;
 
         //ziua
         int firstDayOfMonth = 1;
@@ -25,11 +24,9 @@ public class DoBandCNPandGenderRandomizer {
         int randomYear = rand.nextInt(lastYear - firstYear) + firstYear;
 
         //concatenare
-        result = (randomDay < 10 ? "0" + randomDay : randomDay)
+        return (randomDay < 10 ? "0" + randomDay : randomDay)
                 + "." + months.get(randomMonth)
                 + "." + randomYear;
-
-        return result;
     }
 
     public static String getGender() {
@@ -37,21 +34,18 @@ public class DoBandCNPandGenderRandomizer {
         genders.add("Masculin");
         genders.add("Feminin");
 
-        String result = null;
         Random rand = new Random();
         int startIndex = 1;
         int endIndex = 100;
 
         int randomGenderIndex = rand.nextInt(endIndex - startIndex) + startIndex;
-        result = genders.get(randomGenderIndex % 2);
 
-        return result;
+        return genders.get(randomGenderIndex % 2);
     }
 
     public static String getCNP(String tmp, String gender) {
         Map<Integer, String> months = getMonths();
         Random rand = new Random();
-        String result = null;
 
         //Split zi de nastere dupa caracterul punct "."
         String day = tmp.split("\\.")[0];
@@ -90,17 +84,15 @@ public class DoBandCNPandGenderRandomizer {
         int randomFourthLetter = rand.nextInt(endLetter - startLetter) + startLetter;
 
         //Concatenarea rezultatului
-        result = genderIndicator + ""
+        return genderIndicator + ""
                 + last2DigitsFromYear + ""
-                + (keyofMonth < 10 ? "0" + keyofMonth : keyofMonth) + ""
+                + (Integer.valueOf(10).compareTo(Objects.requireNonNull(keyofMonth)) > 0 ? "0" + keyofMonth : keyofMonth) + ""
                 + day + ""
                 + (randomCountyCode < 10 ? "0" + randomCountyCode : randomCountyCode) + ""
                 + randomFirstLetter
                 + randomSecondLetter
                 + randomThirdLetter
                 + randomFourthLetter;
-
-        return result;
     }
 
     public static Boolean checkCountyCode(int tmp) {
@@ -109,16 +101,13 @@ public class DoBandCNPandGenderRandomizer {
 
     public static String splitDoBbyDot(String tmp) {
         Map<Integer, String> months = getMonths();
-        String result;
 
         String day = tmp.split("\\.")[0];
         String month = tmp.split("\\.")[1];
         String year = tmp.split("\\.")[2];
         Integer keyofMonth = getFirstKeyByValue(months, month);
 
-        result = day + (keyofMonth < 10 ? "0" + keyofMonth : keyofMonth) + year;
-
-        return result;
+        return day + (Integer.valueOf(10).compareTo(Objects.requireNonNull(keyofMonth)) > 0 ? "0" + keyofMonth : keyofMonth) + year;
     }
 
     public static Map<Integer, String> getMonths() {
