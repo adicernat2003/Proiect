@@ -1,7 +1,10 @@
 package com.example.licentaBackendSB.services;
 
-import com.example.licentaBackendSB.entities.Student;
-import com.example.licentaBackendSB.entities.StudentAccount;
+import com.example.licentaBackendSB.converters.StudentConverter;
+import com.example.licentaBackendSB.model.dtos.StudentDto;
+import com.example.licentaBackendSB.model.entities.Student;
+import com.example.licentaBackendSB.model.entities.StudentAccount;
+import com.example.licentaBackendSB.repositories.StudentAccountRepository;
 import com.example.licentaBackendSB.repositories.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,30 +16,37 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(Transactional.TxType.REQUIRED)
 public class StudentService {
 
     //Fields
     private final StudentRepository studentRepository;
+    private final StudentAccountRepository studentAccountRepository;
+    private final StudentConverter studentConverter;
+    private final StudentAccountService studentAccountService;
 
     //Methods
     /*  ~~~~~~~~~~~ Get List of Students ~~~~~~~~~~~ */
-    public List<Student> getStudents() {
+    public List<StudentDto> getStudentsByAnUniversitar(Integer anUniversitar) {
         //select * from student (query in DB)
         //sortam lista care vine din DB
-        return studentRepository.findAll().stream()
-                .sorted(Comparator.comparing(Student::getMedie).reversed()).toList();
+        return studentRepository.findAllByAnUniversitar(anUniversitar)
+                .stream()
+                .map(studentConverter::mapStudentEntityToDto)
+                .sorted(Comparator.comparing(StudentDto::getMedie).reversed())
+                .toList();
     }
 
     /*  ~~~~~~~~~~~ Find Student by Name and Surname ~~~~~~~~~~~ */
     public Student findStudentByNameAndSurname(StudentAccount studentAccount) {
-        Optional<Student> foundStudent = studentRepository.findStudentByNameAndSurname(studentAccount.getNume(), studentAccount.getPrenume());
+        Optional<Student> foundStudent = studentRepository.getStudentByNumeAndPrenume(studentAccount.getNume(), studentAccount.getPrenume());
 
         return foundStudent.orElseThrow(() -> new IllegalStateException("Student doesn't exist!"));
     }
 
     /*  ~~~~~~~~~~~ Add new Student ~~~~~~~~~~~ */
     public void addNewStudent(Student student) {
-        Optional<Student> studentOptional = studentRepository.findStudentByNameAndSurname(student.getNume(), student.getPrenume());
+        Optional<Student> studentOptional = studentRepository.getStudentByNumeAndPrenume(student.getNume(), student.getPrenume());
 
         //daca studentul cu exista cu numele respectiv, aruncam exceptie
         if (studentOptional.isPresent()) {
@@ -48,90 +58,107 @@ public class StudentService {
 
     /*  ~~~~~~~~~~~ Delete Student from Student Table ~~~~~~~~~~~ */
     public void deleteStudent(long studentId) {
-        boolean exists = studentRepository.existsById(studentId);
-        if (!exists) {
+        Optional<Student> studentOptional = studentRepository.findById(studentId);
+        if (studentOptional.isPresent()) {
+            int numberOfStudentsWithGivenCnp = studentRepository.countAllByCnp(studentOptional.get().getCnp());
+            if (numberOfStudentsWithGivenCnp > 1) {
+                studentRepository.deleteById(studentId);
+            } else {
+                Optional<StudentAccount> studentAccountOptional = studentAccountRepository.findByCnp(studentOptional.get().getCnp());
+                if (studentAccountOptional.isPresent()) {
+                    StudentAccount studentAccount = studentAccountOptional.get();
+                    studentAccount.setIsActive(Boolean.FALSE);
+                    studentAccountRepository.save(studentAccount);
+                    studentRepository.deleteById(studentId);
+                } else {
+                    throw new IllegalStateException("StudentAccount with id " + studentId + " doesn't exist");
+                }
+            }
+        } else {
             throw new IllegalStateException("Student with id " + studentId + " doesn't exist");
         }
-
-        studentRepository.deleteById(studentId);
     }
 
     /*  ~~~~~~~~~~~ Get Id of Student to update Student && FriendToken ~~~~~~~~~~~ */
-    public Student editStudent(Long studentId) {
-        return studentRepository.findById(studentId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid student Id:" + studentId));
+    public Student getStudentById(Long studentId) {
+        Optional<Student> studentOptional = studentRepository.findById(studentId);
+        if (studentOptional.isPresent()) {
+            return studentOptional.get();
+        } else {
+            throw new IllegalArgumentException("Invalid student Id:" + studentId);
+        }
     }
 
     /*  ~~~~~~~~~~~ Update Student ~~~~~~~~~~~ */
-    @Transactional
-    public void updateStudent(Long studentId, Student newStudent) {
-        studentRepository.findById(studentId)
-                .map(foundStudent -> {
-                    //Validari si Verificari
+    public void updateStudent(Long studentId, StudentDto newStudent) {
+        Optional<Student> studentOptional = studentRepository.findById(studentId);
+        if (studentOptional.isPresent()) {
+            Student foundStudent = studentOptional.get();
+            String studentCnpBeforeUpdate = foundStudent.getCnp();
+            /** update nume*/
+            if (newStudent.getNume() != null
+                    && newStudent.getNume().length() > 0
+                    && !foundStudent.getNume().equals(newStudent.getNume())) {
+                foundStudent.setNume(newStudent.getNume());
+            }
 
-                    /** update nume*/
-                    if (newStudent.getNume() != null
-                            && newStudent.getNume().length() > 0
-                            && !foundStudent.getNume().equals(newStudent.getNume())) {
-                        foundStudent.setNume(newStudent.getNume());
-                    }
+            /** update prenume*/
+            if (newStudent.getPrenume() != null
+                    && newStudent.getPrenume().length() > 0
+                    && !foundStudent.getPrenume().equals(newStudent.getPrenume())) {
+                foundStudent.setPrenume(newStudent.getPrenume());
+            }
 
-                    /** update prenume*/
-                    if (newStudent.getPrenume() != null
-                            && newStudent.getPrenume().length() > 0
-                            && !foundStudent.getPrenume().equals(newStudent.getPrenume())) {
-                        foundStudent.setPrenume(newStudent.getPrenume());
-                    }
+            /** update cnp*/
+            if (newStudent.getCnp() != null
+                    && newStudent.getCnp().length() > 0
+                    && !foundStudent.getCnp().equals(newStudent.getCnp())) {
+                foundStudent.setCnp(newStudent.getCnp());
+            }
 
-                    /** update cnp*/
-                    if (newStudent.getCnp() != null
-                            && newStudent.getCnp().length() > 0
-                            && !foundStudent.getCnp().equals(newStudent.getCnp())) {
-                        foundStudent.setCnp(newStudent.getCnp());
-                    }
+            /** update zi_de_nastere*/
+            if (newStudent.getZi_de_nastere() != null
+                    && newStudent.getZi_de_nastere().length() > 0
+                    && !foundStudent.getZi_de_nastere().equals(newStudent.getZi_de_nastere())) {
+                foundStudent.setZi_de_nastere(newStudent.getZi_de_nastere());
+            }
 
-                    /** update zi_de_nastere*/
-                    if (newStudent.getZi_de_nastere() != null
-                            && newStudent.getZi_de_nastere().length() > 0
-                            && !foundStudent.getZi_de_nastere().equals(newStudent.getZi_de_nastere())) {
-                        foundStudent.setZi_de_nastere(newStudent.getZi_de_nastere());
-                    }
+            /** update an*/
+            if (newStudent.getAn() != null
+                    && !foundStudent.getAn().equals(newStudent.getAn())) {
+                foundStudent.setAn(newStudent.getAn());
+            }
 
-                    /** update an*/
-                    if (newStudent.getAn() != null
-                            && !foundStudent.getAn().equals(newStudent.getAn())) {
-                        foundStudent.setAn(newStudent.getAn());
-                    }
+            /** update grupa*/
+            if (newStudent.getGrupa() != null
+                    && newStudent.getGrupa().length() > 0
+                    && !foundStudent.getGrupa().equals(newStudent.getGrupa())) {
+                foundStudent.setGrupa(newStudent.getGrupa());
+            }
 
-                    /** update grupa*/
-                    if (newStudent.getGrupa() != null
-                            && newStudent.getGrupa().length() > 0
-                            && !foundStudent.getGrupa().equals(newStudent.getGrupa())) {
-                        foundStudent.setGrupa(newStudent.getGrupa());
-                    }
+            /** update serie*/
+            if (newStudent.getSerie() != null
+                    && newStudent.getSerie().length() > 0
+                    && !foundStudent.getSerie().equals(newStudent.getSerie())) {
+                foundStudent.setSerie(newStudent.getSerie());
+            }
 
-                    /** update serie*/
-                    if (newStudent.getSerie() != null
-                            && newStudent.getSerie().length() > 0
-                            && !foundStudent.getSerie().equals(newStudent.getSerie())) {
-                        foundStudent.setSerie(newStudent.getSerie());
-                    }
+            /** update judet*/
+            if (newStudent.getJudet() != null
+                    && newStudent.getJudet().length() > 0
+                    && !foundStudent.getJudet().equals(newStudent.getJudet())) {
+                foundStudent.setJudet(newStudent.getJudet());
+            }
 
-                    /** update judet*/
-                    if (newStudent.getJudet() != null
-                            && newStudent.getJudet().length() > 0
-                            && !foundStudent.getJudet().equals(newStudent.getJudet())) {
-                        foundStudent.setJudet(newStudent.getJudet());
-                    }
-
-                    return studentRepository.save(foundStudent);
-                })
-                .orElseThrow(() -> new IllegalStateException("student with id " + studentId + " does not exist"));
+            studentAccountService.updateStudent(studentCnpBeforeUpdate, newStudent);
+            studentRepository.save(foundStudent);
+        } else {
+            throw new IllegalStateException("Student with id " + studentId + " does not exist");
+        }
     }
 
     /*  ~~~~~~~~~~~ Update (THIS) with FriendToken ~~~~~~~~~~~ */
-    @Transactional
-    public void updateFriendToken(Long studentId, Student newStudent) {
+    public void updateFriendToken(Long studentId, StudentDto newStudent) {
         studentRepository.findById(studentId)
                 .map(foundStudent -> {
                     //Validari si Verificari
@@ -150,7 +177,6 @@ public class StudentService {
     }
 
     /*  ~~~~~~~~~~~ Clear FriendToken ~~~~~~~~~~~ */
-    @Transactional
     public void clearFriendToken(Long studentId, Student selectedStudent) {
         studentRepository.findById(studentId)
                 .map(foundStudent -> {
@@ -167,7 +193,7 @@ public class StudentService {
     }
 
     /* ~~~~~~~~~~~ Validate if friend token exists in db ~~~~~~~~~~~ */
-    public String validateFriendToken(Student selectedStudent) {
+    public String validateFriendToken(StudentDto selectedStudent) {
         if (studentRepository.validateFriendTokenExists(selectedStudent.getFriendToken())) {
             return "All good!";
         }
@@ -176,12 +202,11 @@ public class StudentService {
 
     /* ~~~~~~~~~~~ Get second Student knowing his token ~~~~~~~~~~~ */
     public Optional<Student> findStudentByMyToken(String hisToken) {
-        return studentRepository.findStudentByMyToken(hisToken);
+        return studentRepository.getStudentByMyToken(hisToken);
     }
 
     /*  ~~~~~~~~~~~ Update Student Camin ~~~~~~~~~~~ */
-    @Transactional
-    public void updateCamin(Long studentId, Student newStudent) {
+    public void updateCamin(Long studentId, StudentDto newStudent) {
         studentRepository.findById(studentId)
                 .map(foundStudent -> {
                     //Validari si Verificari
@@ -199,7 +224,6 @@ public class StudentService {
     }
 
     /*  ~~~~~~~~~~~ Clear Camin ~~~~~~~~~~~ */
-    @Transactional
     public void clearCamin(Long studentId, Student selectedStudent) {
         studentRepository.findById(studentId)
                 .map(foundStudent -> {
@@ -216,7 +240,6 @@ public class StudentService {
     }
 
     /*  ~~~~~~~~~~~ Update Flag from Nu to Da and reverse ~~~~~~~~~~~ */
-    @Transactional
     public void updateFlag(Long studentId) {
         studentRepository.findById(studentId)
                 .map(foundStudent -> {
@@ -229,4 +252,5 @@ public class StudentService {
                 })
                 .orElseThrow(() -> new IllegalStateException("student with id " + studentId + " does not exist"));
     }
+
 }

@@ -1,9 +1,9 @@
 package com.example.licentaBackendSB.loaders;
 
-import com.example.licentaBackendSB.entities.Student;
-import com.example.licentaBackendSB.entities.StudentAccount;
+import com.example.licentaBackendSB.model.entities.Student;
+import com.example.licentaBackendSB.model.entities.StudentAccount;
 import com.example.licentaBackendSB.others.randomizers.DoBandCNPandGenderRandomizer;
-import com.example.licentaBackendSB.repositories.StudentAccountsDBRepository;
+import com.example.licentaBackendSB.repositories.StudentAccountRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -19,16 +19,9 @@ import java.util.List;
 @Order(2)
 public class StudentAccountsLoader implements CommandLineRunner {
 
-    private final StudentAccountsDBRepository studentAccountsDBRepository;
+    private final StudentAccountRepository studentAccountRepository;
 
     public static List<StudentAccount> studentAccountsDB;
-
-    @Override
-    public void run(String... args) {
-        log.info("Loading data from StudentAccountsLoader...");
-
-        studentAccountsDBRepository.saveAll(studentAccountsDB);
-    }
 
     public static List<StudentAccount> hardcodeStudentsAccountsDB(List<Student> students) {
         List<StudentAccount> studentAccounts = new ArrayList<>();
@@ -38,7 +31,6 @@ public class StudentAccountsLoader implements CommandLineRunner {
             String password = DoBandCNPandGenderRandomizer.splitDoBbyDot(students.get((int) i).getZi_de_nastere());
 
             studentAccounts.add(StudentAccount.builder()
-                    .id(i + 1)
                     .nume(students.get((int) i).getNume())
                     .prenume(students.get((int) i).getPrenume())
                     .zi_de_nastere(students.get((int) i).getZi_de_nastere())
@@ -46,10 +38,17 @@ public class StudentAccountsLoader implements CommandLineRunner {
                     .password(password)
                     .cnp(students.get((int) i).getCnp())
                     .autoritate("STUDENT")
-                    .anUniversitar(students.get((int) i).getAnUniversitar())
+                    .isActive(Boolean.TRUE)
                     .build());
         }
         return studentAccounts;
+    }
+
+    @Override
+    public void run(String... args) {
+        log.info("Loading data from StudentAccountsLoader...");
+
+        studentAccountRepository.saveAll(studentAccountsDB);
     }
 
 }

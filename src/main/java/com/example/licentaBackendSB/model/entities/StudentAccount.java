@@ -1,10 +1,8 @@
-package com.example.licentaBackendSB.entities;
+package com.example.licentaBackendSB.model.entities;
 
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table
@@ -12,10 +10,13 @@ import javax.persistence.Table;
 @Setter// for getters/setters
 @AllArgsConstructor // for constructor
 @NoArgsConstructor
-@SuperBuilder // for building an instance of StudentAccount
+@Builder
 @ToString
-public class StudentAccount extends BaseEntity {
+public class StudentAccount {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private String nume;
     private String prenume;
     private String zi_de_nastere;
@@ -23,4 +24,5 @@ public class StudentAccount extends BaseEntity {
     private String username;
     private String password;
     private String autoritate;
+    private Boolean isActive;
 }

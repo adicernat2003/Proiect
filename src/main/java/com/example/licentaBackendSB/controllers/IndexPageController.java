@@ -1,6 +1,6 @@
 package com.example.licentaBackendSB.controllers;
 
-import com.example.licentaBackendSB.entities.StudentAccount;
+import com.example.licentaBackendSB.model.entities.StudentAccount;
 import com.example.licentaBackendSB.others.LoggedAccount;
 import com.example.licentaBackendSB.services.StudentAccountService;
 import lombok.RequiredArgsConstructor;

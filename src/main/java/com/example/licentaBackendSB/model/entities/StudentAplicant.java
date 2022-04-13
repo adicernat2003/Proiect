@@ -1,4 +1,4 @@
-package com.example.licentaBackendSB.entities;
+package com.example.licentaBackendSB.model.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +16,7 @@ import javax.persistence.Table;
 @AllArgsConstructor // for constructor
 @NoArgsConstructor
 @SuperBuilder // for building an instance of CaminP20
-public class StudentCamin extends BaseEntity {
+public class StudentAplicant extends BaseEntity {
 
     private String nume;
     private String prenume;

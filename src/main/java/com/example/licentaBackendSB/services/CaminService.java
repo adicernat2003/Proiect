@@ -1,39 +1,54 @@
 package com.example.licentaBackendSB.services;
 
-import com.example.licentaBackendSB.entities.Camin;
+import com.example.licentaBackendSB.converters.CaminConverter;
+import com.example.licentaBackendSB.model.dtos.CaminDto;
+import com.example.licentaBackendSB.model.entities.Camin;
 import com.example.licentaBackendSB.repositories.CaminRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(Transactional.TxType.REQUIRED)
 public class CaminService {
     //Fields
     private final CaminRepository caminRepository;
+    private final CaminConverter caminConverter;
 
     //Methods
     /* Get all Camine */
-    public List<Camin> getCamine() {
-        return caminRepository.findAll();
+    public List<CaminDto> getCamineByAnUniversitar(Integer anUniversitar) {
+        return caminRepository.findAllByAnUniversitar(anUniversitar)
+                .stream()
+                .map(caminConverter::convertCaminEntityToDto)
+                .toList();
     }
 
-    public Camin getCaminByNumeCamin(String numeCamin) {
-        return caminRepository.getCaminByNumeCamin(numeCamin);
+    public CaminDto getCaminByNumeCaminAndAnUniversitar(String numeCamin, Integer anUniversitar) {
+        Optional<Camin> caminOptional = caminRepository.findCaminByNumeCaminAndAnUniversitar(numeCamin, anUniversitar);
+        if (caminOptional.isPresent()) {
+            return caminConverter.convertCaminEntityToDto(caminOptional.get());
+        } else {
+            throw new IllegalArgumentException("Invalid camin numeCamin: " + numeCamin + " and anUniversitar: " + anUniversitar);
+        }
     }
 
     /* Get Id of Camin to update Fields */
-    public Camin editCamin(Long caminId) {
-        return caminRepository.findById(caminId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid camin Id:" + caminId));
+    public Camin getCaminById(Long caminId) {
+        Optional<Camin> caminOptional = caminRepository.findById(caminId);
+        if (caminOptional.isPresent()) {
+            return caminOptional.get();
+        } else {
+            throw new IllegalArgumentException("Invalid camin Id:" + caminId);
+        }
     }
 
     /* Update Camin Fields */
-    @Transactional
-    public void updateCamin(Long caminId, Camin newCamin) {
-
+    public void updateCamin(Long caminId, CaminDto newCamin) {
         caminRepository.findById(caminId)
                 .map(foundCamin -> {
                     //Validari si Verificari
@@ -80,7 +95,6 @@ public class CaminService {
     }
 
     /* Clear Camin Fields and update them with 0 */
-    @Transactional
     public void clearCamin(Long caminId, Camin newCamin) {
         caminRepository.findById(caminId)
                 .map(foundCamin -> {

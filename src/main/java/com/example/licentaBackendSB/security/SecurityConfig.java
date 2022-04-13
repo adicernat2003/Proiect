@@ -1,7 +1,7 @@
 package com.example.licentaBackendSB.security;
 
-import com.example.licentaBackendSB.entities.StudentAccount;
-import com.example.licentaBackendSB.repositories.StudentAccountsDBRepository;
+import com.example.licentaBackendSB.model.entities.StudentAccount;
+import com.example.licentaBackendSB.repositories.StudentAccountRepository;
 import com.example.licentaBackendSB.repositories.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -34,7 +34,7 @@ import static com.example.licentaBackendSB.security.UserRole.*;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PasswordEncoder passwordEncoder;
-    private final StudentAccountsDBRepository studentAccountsDBRepository;
+    private final StudentAccountRepository studentAccountRepository;
     private final StudentRepository studentRepository;
 
     @Override
@@ -104,7 +104,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //Prelucram tabelul cu conturi pt studenti astfel incat sa cream conturi pt toti studentii
 
         studentsDB = studentRepository.findAll();
-        studentAccountsDB = studentAccountsDBRepository.findAll();
+        studentAccountsDB = studentAccountRepository.findAll();
 
         if (studentsDB.isEmpty()) {
             studentsDB = hardcodeStudents();
@@ -115,13 +115,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         }
 
         for (StudentAccount studentAccount : studentAccountsDB) {
-            accounts.add(
-                    User.builder()
-                            .username(studentAccount.getUsername())
-                            .password(passwordEncoder.encode(studentAccount.getPassword()))
-                            .authorities(STUDENT.getGrantedAuthorities())
-                            .build()
-            );
+            if (Boolean.TRUE.equals(studentAccount.getIsActive())) {
+                accounts.add(User.builder()
+                        .username(studentAccount.getUsername())
+                        .password(passwordEncoder.encode(studentAccount.getPassword()))
+                        .authorities(STUDENT.getGrantedAuthorities())
+                        .build());
+            }
         }
 
         //todo: va trebui sa avem inca 2 tabele pt admini si asistenti

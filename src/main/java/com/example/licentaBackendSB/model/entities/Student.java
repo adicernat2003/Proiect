@@ -1,4 +1,4 @@
-package com.example.licentaBackendSB.entities;
+package com.example.licentaBackendSB.model.entities;
 
 import com.example.licentaBackendSB.others.sort.sortingAlgorithms.*;
 import lombok.*;

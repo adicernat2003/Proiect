@@ -95,7 +95,7 @@
                 <li style="font-size: 19px">
                                 <span>
                                     <b id="textLeuA" style="font-size: 25px">Lista aplicantilor: </b>
-                                    <a href="/admin/camine/LEU_A">
+                                    <a th:href="@{/admin/camine/{anUniversitar}/students/LEU_A(anUniversitar = ${leuA.getAnUniversitar()})}">
                                         <i class="fas fa-list-ol ml-2 fa-lg" style="color: indigo"></i>
                                     </a>
                                 </span>
@@ -137,7 +137,7 @@
                 <li style="font-size: 19px">
                                     <span>
                                         <b id="textLeuC" style="font-size: 25px">Lista aplicantilor: </b>
-                                        <a href="/admin/camine/LEU_C">
+                                        <a th:href="@{/admin/camine/{anUniversitar}/students/LEU_C(anUniversitar = ${leuC.getAnUniversitar()})}">
                                             <i class="fas fa-list-ol ml-2 fa-lg" style="color: indigo"></i>
                                         </a>
                                     </span>
@@ -179,7 +179,7 @@
                 <li style="font-size: 19px">
                                 <span>
                                     <b id="textP20" style="font-size: 25px">Lista aplicantilor: </b>
-                                    <a href="/admin/camine/P20">
+                                        <a th:href="@{/admin/camine/{anUniversitar}/students/P20(anUniversitar = ${p20.getAnUniversitar()})}">
                                         <i class="fas fa-list-ol ml-2 fa-lg" style="color: indigo"></i>
                                     </a>
                                 </span>
@@ -222,7 +222,7 @@
                 <li style="font-size: 19px">
                                 <span>
                                     <b id="textP23" style="font-size: 25px">Lista aplicantilor: </b>
-                                    <a href="/admin/camine/P23">
+                                        <a th:href="@{/admin/camine/{anUniversitar}/students/P23(anUniversitar = ${p23.getAnUniversitar()})}">
                                         <i class="fas fa-list-ol ml-2 fa-lg" style="color: indigo"></i>
                                     </a>
                                 </span>

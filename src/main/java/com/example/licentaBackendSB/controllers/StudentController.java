@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -30,10 +31,10 @@ public class StudentController {
 
     /* ~~~~~~~~~~~ Get list of Students ~~~~~~~~~~~ */
     //Metoda pentru a afisa toti studentii din baza de date
-    @GetMapping("/students")
+    @GetMapping("/students/{anUniversitar}")
     @PreAuthorize("hasRole('ROLE_STUDENT')")
-    public String getStudents(Model model) {
-        model.addAttribute("listOfStudents", studentService.getStudents());
+    public String getStudents(@PathVariable Integer anUniversitar, Model model) {
+        model.addAttribute("listOfStudents", studentService.getStudentsByAnUniversitar(anUniversitar));
         model.addAttribute("isAdmin", "student");
 
         return "pages/layer 4/students table/students_list";

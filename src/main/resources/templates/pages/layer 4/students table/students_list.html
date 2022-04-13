@@ -114,19 +114,19 @@
             <td th:text="${tempStudent.getFlagCazSpecial()}"></td>
             <td th:if="${tempStudent.getFlagCazSpecial() == 'Nu'}">
                 <a class="btn btn-outline-success"
-                   th:href="@{/admin/students/setFlag/{studentId}(studentId=${tempStudent.getId()})}"><i
+                   th:href="@{/admin/students/{anUniversitar}/setFlag/{studentId}(studentId=${tempStudent.getId()}, anUniversitar=${tempStudent.getAnUniversitar()})}"><i
                         class="fas fa-toggle-on"></i></a>
             </td>
             <td th:if="${tempStudent.getFlagCazSpecial() == 'Da'}">
                 <a class="btn btn-outline-danger"
-                   th:href="@{/admin/students/setFlag/{studentId}(studentId=${tempStudent.getId()})}"><i
+                   th:href="@{/admin/students/{anUniversitar}/setFlag/{studentId}(studentId=${tempStudent.getId()}, anUniversitar=${tempStudent.getAnUniversitar()})}"><i
                         class="fas fa-toggle-off"></i></a>
             </td>
             <td><a class="btn btn-primary"
-                   th:href="@{/admin/students/edit/{studentId}(studentId=${tempStudent.getId()})}"><i
+                   th:href="@{/admin/students/{anUniversitar}/edit/{studentId}(studentId=${tempStudent.getId()}, anUniversitar=${tempStudent.getAnUniversitar()})}"><i
                     class="fas fa-user-edit ml-2"></i></a></td>
             <td><a class="btn btn-primary"
-                   th:href="@{/admin/students/delete/{studentId}(studentId=${tempStudent.getId()})}"><i
+                   th:href="@{/admin/students/{anUniversitar}/delete/{studentId}(studentId=${tempStudent.getId()}, anUniversitar=${tempStudent.getAnUniversitar()})}"><i
                     class="fas fa-user-times ml-2"></i></a></td>
             </p>
         </div>

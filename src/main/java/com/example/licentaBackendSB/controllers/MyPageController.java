@@ -1,8 +1,9 @@
 package com.example.licentaBackendSB.controllers;
 
-import com.example.licentaBackendSB.entities.Student;
-import com.example.licentaBackendSB.entities.StudentAccount;
-import com.example.licentaBackendSB.entities.StudentCamin;
+import com.example.licentaBackendSB.converters.StudentConverter;
+import com.example.licentaBackendSB.model.dtos.StudentDto;
+import com.example.licentaBackendSB.model.entities.Student;
+import com.example.licentaBackendSB.model.entities.StudentAccount;
 import com.example.licentaBackendSB.others.LoggedAccount;
 import com.example.licentaBackendSB.others.Validator;
 import com.example.licentaBackendSB.services.StudentAccountService;
@@ -28,6 +29,7 @@ public class MyPageController {
     private final StudentService studentService;
     private final StudentAccountService studentAccountService;
     private final StudentCaminService studentCaminService;
+    private final StudentConverter studentConverter;
 
     /* ~~~~~~~~~~~ Get MyPage View ~~~~~~~~~~~ */
     @GetMapping
@@ -59,8 +61,9 @@ public class MyPageController {
     /* ~~~~~~~~~~~ Get Student knowing the ID for setting the Friend Token ~~~~~~~~~~~ */
     @GetMapping(path = "/ft-edit/{studentId}")
     public String editFriendToken(@PathVariable("studentId") Long studentId, Model model) {
-        Student selectedStudent = studentService.editStudent(studentId);
-        model.addAttribute("selectedStudentById", selectedStudent);
+        Student selectedStudent = studentService.getStudentById(studentId);
+        StudentDto studentDto = studentConverter.mapStudentEntityToDto(selectedStudent);
+        model.addAttribute("selectedStudentById", studentDto);
 
         if (selectedStudent.getFriendToken().equals("null")) {
             return "pages/layer 4/info pages/student/crud mypage/update_friendToken";
@@ -70,18 +73,20 @@ public class MyPageController {
 
     /* ~~~~~~~~~~~ Update Student Friend Token and Redirect to MyPage ~~~~~~~~~~~ */
     @PostMapping(path = "/ft-update/{studentId}")
-    public String updateFriendToken(@PathVariable("studentId") Long studentId, Student newStudent, Model model) {
+    public String updateFriendToken(@PathVariable("studentId") Long studentId,
+                                    StudentDto newStudent,
+                                    Model model) {
         String isError = studentService.validateFriendToken(newStudent);
         if (isError.equals("All good!")) {
             //Kid#1 preia friendTokenul introdus in frontend
             studentService.updateFriendToken(studentId, newStudent);
             //Cautam Kid#1 dupa id
-            Student firstStudent = studentService.editStudent(studentId);
+            Student firstStudent = studentService.getStudentById(studentId);
 
             //Verificam daca camin e !null
             if (!firstStudent.getCamin_preferat().equals("null")) {
                 //daca nu e null, dam update in tabelul pt caminul respectiv
-                studentCaminService.updateFriendTokenOfStudentInCamin(this.convertStudentToStudentCamin(firstStudent,
+                studentCaminService.updateFriendTokenOfStudentInCamin(studentConverter.convertStudentToStudentCamin(firstStudent,
                         firstStudent.getCamin_preferat()), firstStudent.getCamin_preferat());
             }
         }
@@ -92,7 +97,7 @@ public class MyPageController {
     @RequestMapping(path = "/ft-clear/{studentId}")
     public String clearFriendToken(@PathVariable("studentId") Long studentId) {
         //Preluam studentul actual adica Kid#1 stiind Id-ul
-        Student firstStudent = studentService.editStudent(studentId);
+        Student firstStudent = studentService.getStudentById(studentId);
         if (!firstStudent.getFriendToken().equals("null") /*&& !secondStudent.get().getFriendToken().equals("null")*/) {
             //Setam local "null" la Kid#1
             firstStudent.setFriendToken("null");
@@ -102,7 +107,7 @@ public class MyPageController {
             //Verificam daca camin e !null
             if (!firstStudent.getCamin_preferat().equals("null")) {
                 //daca nu e null, dam update in tabelul pt caminul respectiv
-                studentCaminService.updateFriendTokenOfStudentInCamin(this.convertStudentToStudentCamin(firstStudent,
+                studentCaminService.updateFriendTokenOfStudentInCamin(studentConverter.convertStudentToStudentCamin(firstStudent,
                         firstStudent.getCamin_preferat()), firstStudent.getCamin_preferat());
             }
         }
@@ -112,8 +117,9 @@ public class MyPageController {
     /* ~~~~~~~~~~~ Get Student knowing the ID for setting the Camin ~~~~~~~~~~~ */
     @GetMapping(path = "/camin-edit/{studentId}")
     public String editCamin(@PathVariable("studentId") Long studentId, Model model) {
-        Student selectedStudent = studentService.editStudent(studentId);
-        model.addAttribute("selectedStudentById", selectedStudent);
+        Student selectedStudent = studentService.getStudentById(studentId);
+        StudentDto studentDto = studentConverter.mapStudentEntityToDto(selectedStudent);
+        model.addAttribute("selectedStudentById", studentDto);
 
         if (selectedStudent.getCamin_preferat().equals("null")) {
             return "pages/layer 4/info pages/student/crud mypage/update_camin";
@@ -123,16 +129,18 @@ public class MyPageController {
 
     /* ~~~~~~~~~~~ Update Student Camin and Redirect to MyPage ~~~~~~~~~~~ */
     @PostMapping(path = "/camin-update/{studentId}")
-    public String updateCamin(@PathVariable("studentId") Long studentId, Student newStudent, Model model) {
+    public String updateCamin(@PathVariable("studentId") Long studentId,
+                              StudentDto newStudent,
+                              Model model) {
         if (Validator.checkCaminSpelling(newStudent.getCamin_preferat())) {
             studentService.updateCamin(studentId, newStudent);
 
             //Preluam studentul care isi adauga camin
-            Student selectedStudent = studentService.editStudent(studentId);
+            Student selectedStudent = studentService.getStudentById(studentId);
             //Modificam local din ce avea la camin cu ce a ales
             selectedStudent.setCamin_preferat(newStudent.getCamin_preferat());
             //Introducem studentul local cu caminul modificat in tabelul corespunzator
-            studentCaminService.introduceNewStudentCamin(this.convertStudentToStudentCamin(selectedStudent, selectedStudent.getCamin_preferat()));
+            studentCaminService.introduceNewStudentCamin(studentConverter.convertStudentToStudentCamin(selectedStudent, selectedStudent.getCamin_preferat()));
         }
         return "redirect:/student/mypage";
     }
@@ -140,28 +148,14 @@ public class MyPageController {
     /* ~~~~~~~~~~~ Clear Camin and Update with null and Redirect to MyPage ~~~~~~~~~~~ */
     @RequestMapping(path = "/camin-clear/{studentId}")
     public String clearCamin(@PathVariable("studentId") Long studentId) {
-        Student selectedStudent = studentService.editStudent(studentId);
+        Student selectedStudent = studentService.getStudentById(studentId);
         if (!selectedStudent.getCamin_preferat().equals("null")) {
-            studentCaminService.deleteStudentInCamin(this.convertStudentToStudentCamin(selectedStudent,
+            studentCaminService.deleteStudentInCamin(studentConverter.convertStudentToStudentCamin(selectedStudent,
                     selectedStudent.getCamin_preferat()), selectedStudent.getCamin_preferat());
             //Intai stergem din tabel persoana respectiva si dupa ii stergem optiunea aleasa
             selectedStudent.setCamin_preferat("null");
             studentService.clearCamin(selectedStudent.getId(), selectedStudent);
         }
         return "redirect:/student/mypage";
-    }
-
-    private StudentCamin convertStudentToStudentCamin(Student student, String numeCamin) {
-        return StudentCamin.builder()
-                .an(student.getAn())
-                .cnp(student.getCnp())
-                .friendToken(student.getFriendToken())
-                .myToken(student.getMyToken())
-                .medie(student.getMedie())
-                .nume(student.getNume())
-                .prenume(student.getPrenume())
-                .numeCamin(numeCamin)
-                .anUniversitar(student.getAnUniversitar())
-                .build();
     }
 }

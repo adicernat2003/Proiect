@@ -1,6 +1,7 @@
 package com.example.licentaBackendSB.others.sort.sortingAlgorithms;
 
-import com.example.licentaBackendSB.entities.Student;
+import com.example.licentaBackendSB.model.entities.Student;
+
 import java.util.ArrayList;
 import java.util.List;
 

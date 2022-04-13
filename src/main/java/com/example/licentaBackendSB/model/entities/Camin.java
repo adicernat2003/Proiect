@@ -1,4 +1,4 @@
-package com.example.licentaBackendSB.entities;
+package com.example.licentaBackendSB.model.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

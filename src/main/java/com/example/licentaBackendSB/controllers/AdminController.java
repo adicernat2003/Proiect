@@ -1,6 +1,8 @@
 package com.example.licentaBackendSB.controllers;
 
-import com.example.licentaBackendSB.entities.Student;
+import com.example.licentaBackendSB.converters.StudentConverter;
+import com.example.licentaBackendSB.model.dtos.StudentDto;
+import com.example.licentaBackendSB.model.entities.Student;
 import com.example.licentaBackendSB.others.LoggedAccount;
 import com.example.licentaBackendSB.services.StudentAccountService;
 import com.example.licentaBackendSB.services.StudentService;
@@ -14,13 +16,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping(path = "admin")
+@RequestMapping(path = "/admin")
 @RequiredArgsConstructor
 public class AdminController {
 
     //Field
     private final StudentService studentService;
     private final StudentAccountService studentAccountService;
+    private final StudentConverter studentConverter;
 
     /* ~~~~~~~~~~~ AdminView ~~~~~~~~~~~ */
     @GetMapping
@@ -34,10 +37,10 @@ public class AdminController {
     }
 
     /* ~~~~~~~~~~~ Student List ~~~~~~~~~~~ */
-    @GetMapping("students")
+    @GetMapping("/students/{anUniversitar}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
-    public String getStudents(Model model) {
-        model.addAttribute("listOfStudents", studentService.getStudents());
+    public String getStudents(@PathVariable String anUniversitar, Model model) {
+        model.addAttribute("listOfStudents", studentService.getStudentsByAnUniversitar(Integer.parseInt(anUniversitar)));
         model.addAttribute("isAdmin", "admin");
 
         return "pages/layer 4/students table/students_list";
@@ -70,43 +73,49 @@ public class AdminController {
 //    }
 
     /* ~~~~~~~~~~~ DELETE Student ~~~~~~~~~~~ */
-    @GetMapping(path = "/students/delete/{studentId}")
+    @GetMapping(path = "/students/{anUniversitar}/delete/{studentId}")
     @PreAuthorize("hasAuthority('student:write')")
-    public String deleteStudent(@PathVariable("studentId") Long id) {
+    public String deleteStudent(@PathVariable(value = "anUniversitar") String anUniversitar,
+                                @PathVariable(value = "studentId") Long id) {
         studentService.deleteStudent(id);
-        studentAccountService.deleteStudent(id);
 
-        return "redirect:/admin/students";
+        return "redirect:/admin/students/" + anUniversitar;
     }
 
     /* ~~~~~~~~~~~ Get Student knowing ID ~~~~~~~~~~~ */
-    @GetMapping(path = "/students/edit/{studentId}")
+    @GetMapping(path = "/students/{anUniversitar}/edit/{studentId}")
     @PreAuthorize("hasAuthority('student:write')")
-    public String editStudent(@PathVariable("studentId") Long studentId, Model model) {
-        model.addAttribute("selectedStudentById", studentService.editStudent(studentId));
+    public String editStudent(@PathVariable(value = "anUniversitar") String anUniversitar,
+                              @PathVariable("studentId") Long studentId, Model model) {
+        Student student = studentService.getStudentById(studentId);
+        StudentDto studentDto = studentConverter.mapStudentEntityToDto(student);
+        model.addAttribute("selectedStudentById", studentDto);
 
         return "pages/layer 4/students table/crud students/update_student";
     }
 
+    //TODO: sa nu updatezi chiar orice
     /* ~~~~~~~~~~~ Update Student and Redirect to Student List ~~~~~~~~~~~ */
-    @PostMapping(path = "/students/update/{studentId}")
+    @PostMapping(path = "/students/{anUniversitar}/update/{studentId}")
     @PreAuthorize("hasAuthority('student:write')")
-    public String updateStudent(@PathVariable("studentId") Long studentId, Student newStudent) {
+    public String updateStudent(@PathVariable(value = "anUniversitar") String anUniversitar,
+                                @PathVariable("studentId") Long studentId,
+                                StudentDto newStudent) {
         //campuri comune modificabile: nume, prenume
         //campuri comune nemodificabile: cnp, zi_de_nastere
         //campuri necomune student: an, grupa, serie, judet
         studentService.updateStudent(studentId, newStudent);
-        studentAccountService.updateStudent(studentId, newStudent);
 
-        return "redirect:/admin/students";
+        return "redirect:/admin/students/" + anUniversitar;
     }
 
     /* ~~~~~~~~~~~ Update Student and Redirect to Student List ~~~~~~~~~~~ */
-    @RequestMapping(path = "/students/setFlag/{studentId}")
+    @RequestMapping(path = "/students/{anUniversitar}/setFlag/{studentId}")
     @PreAuthorize("hasAuthority('student:write')")
-    public String updateFlag(@PathVariable("studentId") Long studentId) {
+    public String updateFlag(@PathVariable(value = "anUniversitar") String anUniversitar,
+                             @PathVariable("studentId") Long studentId) {
         studentService.updateFlag(studentId);
 
-        return "redirect:/admin/students";
+        return "redirect:/admin/students/" + anUniversitar;
     }
 }

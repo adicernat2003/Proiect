@@ -1,6 +1,6 @@
 package com.example.licentaBackendSB.loaders;
 
-import com.example.licentaBackendSB.entities.Camin;
+import com.example.licentaBackendSB.model.entities.Camin;
 import com.example.licentaBackendSB.repositories.CaminRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +21,18 @@ public class CamineLoader implements CommandLineRunner {
 
     public static List<Camin> camineDB;
 
+    @Override
+    public void run(String... args) {
+        log.info("Loading data from CamineLoader...");
+
+        camineDB = caminRepository.findAll();
+        if (camineDB.isEmpty()) {
+            camineDB = hardcodeCamine();
+        }
+
+        caminRepository.saveAll(camineDB);
+    }
+
     private static List<Camin> hardcodeCamine() {
         List<Camin> hardcodedListOfCamine = new ArrayList<>();
 
@@ -36,7 +48,6 @@ public class CamineLoader implements CommandLineRunner {
                 .build());
 
         hardcodedListOfCamine.add(Camin.builder()
-                .id(2L)
                 .numeCamin("Leu C")
                 .capacitate(0)
                 .nrCamereTotal(0)
@@ -48,7 +59,6 @@ public class CamineLoader implements CommandLineRunner {
                 .build());
 
         hardcodedListOfCamine.add(Camin.builder()
-                .id(3L)
                 .numeCamin("P20")
                 .capacitate(0)
                 .nrCamereTotal(0)
@@ -60,7 +70,6 @@ public class CamineLoader implements CommandLineRunner {
                 .build());
 
         hardcodedListOfCamine.add(Camin.builder()
-                .id(4L)
                 .numeCamin("P23")
                 .capacitate(0)
                 .nrCamereTotal(0)
@@ -72,17 +81,5 @@ public class CamineLoader implements CommandLineRunner {
                 .build());
 
         return hardcodedListOfCamine;
-    }
-
-    @Override
-    public void run(String... args) {
-        log.info("Loading data from CamineLoader...");
-
-        camineDB = caminRepository.findAll();
-        if (camineDB.isEmpty()) {
-            camineDB = hardcodeCamine();
-        }
-
-        caminRepository.saveAll(camineDB);
     }
 }

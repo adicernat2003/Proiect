@@ -1,6 +1,6 @@
 package com.example.licentaBackendSB.loaders;
 
-import com.example.licentaBackendSB.entities.Student;
+import com.example.licentaBackendSB.model.entities.Student;
 import com.example.licentaBackendSB.others.randomizers.CountyManager;
 import com.example.licentaBackendSB.others.randomizers.DoBandCNPandGenderRandomizer;
 import com.example.licentaBackendSB.others.randomizers.nameRandomizer;
@@ -37,7 +37,6 @@ public class StudentsLoader implements CommandLineRunner {
         //manual harcode to test search query => check StudentRepository
         hardcodedListOfStudents.add(
                 Student.builder()
-                        .id(1L)
                         .nume("Cernat")
                         .prenume("Adrian")
                         .grupa("442")
@@ -72,7 +71,6 @@ public class StudentsLoader implements CommandLineRunner {
             String randomCounty = CountyManager.getCountyFromTwoDigitCode(countyCode);
 
             hardcodedListOfStudents.add(Student.builder()
-                    .id(i + 1)
                     .nume(randomNume)
                     .prenume(randomPrenume)
                     .grupa(group)
