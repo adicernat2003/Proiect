@@ -1,10 +1,13 @@
 package com.example.licentaBackendSB.others.randomizers;
 
+import org.springframework.stereotype.Component;
+
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
 public class CountyManager {
-    public static String getCountyFromTwoDigitCode(String countyCode) {
+    public String getCountyFromTwoDigitCode(String countyCode) {
         Map<Integer, String> counties = getCounties();
 
         int countyIndex = Integer.parseInt(countyCode);
@@ -12,7 +15,7 @@ public class CountyManager {
         return counties.get(countyIndex);
     }
 
-    public static Map<Integer, String> getCounties() {
+    public Map<Integer, String> getCounties() {
         Map<Integer, String> counties = new HashMap<>();
 
         counties.putIfAbsent(1, "Alba");

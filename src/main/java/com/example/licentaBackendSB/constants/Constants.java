@@ -6,4 +6,5 @@ public interface Constants {
     String P20 = "P20";
     String P23 = "P23";
     Integer ZERO = 0;
+
 }

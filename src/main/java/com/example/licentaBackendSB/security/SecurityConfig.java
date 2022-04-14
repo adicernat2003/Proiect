@@ -1,5 +1,7 @@
 package com.example.licentaBackendSB.security;
 
+import com.example.licentaBackendSB.loaders.StudentAccountsLoader;
+import com.example.licentaBackendSB.loaders.StudentsLoader;
 import com.example.licentaBackendSB.model.entities.StudentAccount;
 import com.example.licentaBackendSB.repositories.StudentAccountRepository;
 import com.example.licentaBackendSB.repositories.StudentRepository;
@@ -21,9 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static com.example.licentaBackendSB.loaders.StudentAccountsLoader.hardcodeStudentsAccountsDB;
 import static com.example.licentaBackendSB.loaders.StudentAccountsLoader.studentAccountsDB;
-import static com.example.licentaBackendSB.loaders.StudentsLoader.hardcodeStudents;
 import static com.example.licentaBackendSB.loaders.StudentsLoader.studentsDB;
 import static com.example.licentaBackendSB.security.UserRole.*;
 
@@ -36,6 +36,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final PasswordEncoder passwordEncoder;
     private final StudentAccountRepository studentAccountRepository;
     private final StudentRepository studentRepository;
+    private final StudentsLoader studentsLoader;
+    private final StudentAccountsLoader studentAccountsLoader;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -107,11 +109,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         studentAccountsDB = studentAccountRepository.findAll();
 
         if (studentsDB.isEmpty()) {
-            studentsDB = hardcodeStudents();
+            studentsDB = studentsLoader.hardcodeStudents();
         }
 
         if (studentAccountsDB.isEmpty()) {
-            studentAccountsDB = hardcodeStudentsAccountsDB(studentsDB);
+            studentAccountsDB = studentAccountsLoader.hardcodeStudentsAccountsDB(studentsDB);
         }
 
         for (StudentAccount studentAccount : studentAccountsDB) {

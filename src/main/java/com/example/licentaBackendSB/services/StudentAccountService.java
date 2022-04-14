@@ -1,6 +1,7 @@
 package com.example.licentaBackendSB.services;
 
 import com.example.licentaBackendSB.model.dtos.StudentDto;
+import com.example.licentaBackendSB.model.entities.Student;
 import com.example.licentaBackendSB.model.entities.StudentAccount;
 import com.example.licentaBackendSB.others.LoggedAccount;
 import com.example.licentaBackendSB.others.randomizers.DoBandCNPandGenderRandomizer;
@@ -19,6 +20,7 @@ public class StudentAccountService {
 
     //Field
     private final StudentAccountRepository studentAccountRepository;
+    private final DoBandCNPandGenderRandomizer doBandCNPandGenderRandomizer;
 
     /*  ~~~~~~~~~~~ Get Logged Account from Current Session ~~~~~~~~~~~ */
     public StudentAccount getLoggedStudentAccount() {
@@ -68,13 +70,26 @@ public class StudentAccountService {
                     && newStudent.getZi_de_nastere().length() > 0
                     && !foundStudent.getZi_de_nastere().equals(newStudent.getZi_de_nastere())) {
                 foundStudent.setZi_de_nastere(newStudent.getZi_de_nastere());
-                foundStudent.setPassword(DoBandCNPandGenderRandomizer.splitDoBbyDot(newStudent.getZi_de_nastere()));
+                foundStudent.setPassword(doBandCNPandGenderRandomizer.splitDoBbyDot(newStudent.getZi_de_nastere()));
             }
 
             studentAccountRepository.save(foundStudent);
         } else {
             throw new IllegalStateException("Student account with cnp " + studentCnp + " does not exist");
         }
+    }
+
+    public StudentAccount createNewStudentAccount(Student student) {
+        return StudentAccount.builder()
+                .nume(student.getNume())
+                .prenume(student.getPrenume())
+                .zi_de_nastere(student.getZi_de_nastere())
+                .username(student.getCnp())
+                .password(doBandCNPandGenderRandomizer.splitDoBbyDot(student.getZi_de_nastere()))
+                .cnp(student.getCnp())
+                .autoritate("STUDENT")
+                .isActive(Boolean.TRUE)
+                .build();
     }
 
 }

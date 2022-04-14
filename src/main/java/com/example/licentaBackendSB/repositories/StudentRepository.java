@@ -12,6 +12,7 @@ import java.util.Optional;
 @Repository
 @Transactional(Transactional.TxType.MANDATORY)
 public interface StudentRepository extends JpaRepository<Student, Long> {
+    Integer countAllByAnUniversitar(Integer anUniversitar);
 
     List<Student> findAllByAnUniversitar(Integer anUniversitar);
 

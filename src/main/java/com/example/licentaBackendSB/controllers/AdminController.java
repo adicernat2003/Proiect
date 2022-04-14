@@ -4,6 +4,7 @@ import com.example.licentaBackendSB.converters.StudentConverter;
 import com.example.licentaBackendSB.model.dtos.StudentDto;
 import com.example.licentaBackendSB.model.entities.Student;
 import com.example.licentaBackendSB.others.LoggedAccount;
+import com.example.licentaBackendSB.services.SessionService;
 import com.example.licentaBackendSB.services.StudentAccountService;
 import com.example.licentaBackendSB.services.StudentService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ public class AdminController {
     private final StudentService studentService;
     private final StudentAccountService studentAccountService;
     private final StudentConverter studentConverter;
+    private final SessionService sessionService;
 
     /* ~~~~~~~~~~~ AdminView ~~~~~~~~~~~ */
     @GetMapping
@@ -40,7 +42,7 @@ public class AdminController {
     @GetMapping("/students/{anUniversitar}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
     public String getStudents(@PathVariable String anUniversitar, Model model) {
-        model.addAttribute("listOfStudents", studentService.getStudentsByAnUniversitar(Integer.parseInt(anUniversitar)));
+        model.addAttribute("listOfStudents", sessionService.createNewSession(Integer.parseInt(anUniversitar)));
         model.addAttribute("isAdmin", "admin");
 
         return "pages/layer 4/students table/students_list";

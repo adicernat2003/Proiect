@@ -1,12 +1,12 @@
 package com.example.licentaBackendSB.model.entities;
 
+import com.example.licentaBackendSB.enums.Gender;
+import com.example.licentaBackendSB.enums.Master;
 import com.example.licentaBackendSB.others.sort.sortingAlgorithms.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -31,11 +31,15 @@ public class Student extends BaseEntity {
     private String grupa;
     private String serie;
     private Integer an;
+    @Enumerated(EnumType.STRING)
+    private Master master;
+    private Boolean isMasterand;
     private Double medie;
     private String zi_de_nastere;
     private String cnp;
     private String judet;
-    private String genSexual;
+    @Enumerated(EnumType.STRING)
+    private Gender genSexual;
     private String myToken;
     private String friendToken;
     private String camin_preferat;

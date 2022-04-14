@@ -12,6 +12,8 @@ import java.util.Optional;
 @Transactional(Transactional.TxType.MANDATORY)
 public interface CaminRepository extends JpaRepository<Camin, Long> {
 
+    Integer countAllByAnUniversitar(Integer anUniversitar);
+
     List<Camin> findAllByAnUniversitar(Integer anUniversitar);
 
     Optional<Camin> findCaminByNumeCaminAndAnUniversitar(String numeCamin, Integer anUniversitar);

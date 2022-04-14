@@ -27,13 +27,13 @@ public class CamineLoader implements CommandLineRunner {
 
         camineDB = caminRepository.findAll();
         if (camineDB.isEmpty()) {
-            camineDB = hardcodeCamine();
+            camineDB = this.hardcodeCamine();
         }
 
         caminRepository.saveAll(camineDB);
     }
 
-    private static List<Camin> hardcodeCamine() {
+    private List<Camin> hardcodeCamine() {
         List<Camin> hardcodedListOfCamine = new ArrayList<>();
 
         hardcodedListOfCamine.add(Camin.builder()

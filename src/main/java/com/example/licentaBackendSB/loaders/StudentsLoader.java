@@ -1,5 +1,7 @@
 package com.example.licentaBackendSB.loaders;
 
+import com.example.licentaBackendSB.enums.Gender;
+import com.example.licentaBackendSB.enums.Master;
 import com.example.licentaBackendSB.model.entities.Student;
 import com.example.licentaBackendSB.others.randomizers.CountyManager;
 import com.example.licentaBackendSB.others.randomizers.DoBandCNPandGenderRandomizer;
@@ -12,7 +14,14 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+
+import static com.example.licentaBackendSB.model.entities.Student.endIndexing;
+import static com.example.licentaBackendSB.model.entities.Student.startIndexing;
+import static com.example.licentaBackendSB.utils.StringUtils.shuffleString;
 
 @Component
 @RequiredArgsConstructor
@@ -21,6 +30,8 @@ import java.util.*;
 public class StudentsLoader implements CommandLineRunner {
 
     private final StudentRepository studentRepository;
+    private final DoBandCNPandGenderRandomizer doBandCNPandGenderRandomizer;
+    private final CountyManager countyManager;
 
     public static List<Student> studentsDB;
 
@@ -31,74 +42,100 @@ public class StudentsLoader implements CommandLineRunner {
         studentRepository.saveAll(studentsDB);
     }
 
-    public static List<Student> hardcodeStudents() {
+    public List<Student> hardcodeStudents() {
         List<Student> hardcodedListOfStudents = new ArrayList<>();
+        long numberOfTotalStudentsToBeAdded = endIndexing - startIndexing + 1;
+        long numberOfMasteranziToBeAdded = numberOfTotalStudentsToBeAdded / 3;
+        long numberOfStudentsLaLicentaToBeAdded = numberOfTotalStudentsToBeAdded - numberOfMasteranziToBeAdded;
 
-        //manual harcode to test search query => check StudentRepository
-        hardcodedListOfStudents.add(
-                Student.builder()
-                        .nume("Cernat")
-                        .prenume("Adrian")
-                        .grupa("442")
-                        .serie("B")
-                        .an(4)
-                        .medie(10D)
-                        .myToken(shuffleString("cernat" + "adrian"))
-                        .zi_de_nastere("23.Ianuarie.1999")
-                        .cnp("1990123410036")
-                        .genSexual("Masculin")
-                        .judet("Bucuresti")
-                        .friendToken("null")
-                        .camin_preferat("null")
-                        .flagCazSpecial("Nu")
-                        .anUniversitar(2021)
-                        .build());
+        hardcodedListOfStudents = this.buildStudentsLaLicenta(hardcodedListOfStudents, numberOfStudentsLaLicentaToBeAdded);
+        hardcodedListOfStudents = this.buildMasteranzi(hardcodedListOfStudents, numberOfMasteranziToBeAdded);
 
-        for (long i = 1; i < 10; i++) {
-            String group = ygsRandomizer.getRandomGroup();
-            String series = ygsRandomizer.getRandomSeries();
+        return hardcodedListOfStudents;
+    }
 
-            int year = Character.getNumericValue(group.charAt(1));
-
-            String randomNume = nameRandomizer.getAlphaNumericString(5);
-            String randomPrenume = nameRandomizer.getAlphaNumericString(5);
-
-            String randomDoB = DoBandCNPandGenderRandomizer.getDoB();
-            String randomGender = DoBandCNPandGenderRandomizer.getGender();
-            String randomCNP = DoBandCNPandGenderRandomizer.getCNP(randomDoB, randomGender);
-
-            String countyCode = randomCNP.substring(7, 9);
-            String randomCounty = CountyManager.getCountyFromTwoDigitCode(countyCode);
-
-            hardcodedListOfStudents.add(Student.builder()
-                    .nume(randomNume)
-                    .prenume(randomPrenume)
-                    .grupa(group)
-                    .serie(series)
-                    .an(year)
-                    .medie((1D + (10D - 1D) * new Random().nextDouble()))
-                    .myToken(shuffleString(randomNume + randomPrenume))
-                    .zi_de_nastere(randomDoB)
-                    .cnp(randomCNP)
-                    .genSexual(randomGender)
-                    .judet(randomCounty)
-                    .friendToken("null")
-                    .camin_preferat("null")
-                    .flagCazSpecial("Nu")
-                    .anUniversitar(2021)
-                    .build());
+    private List<Student> buildStudentsLaLicenta(List<Student> hardcodedListOfStudents, long numberOfStudentsLaLicentaToBeAdded) {
+        for (long i = 0; i < numberOfStudentsLaLicentaToBeAdded; i++) {
+            hardcodedListOfStudents.add(this.createStudentLicenta());
         }
         return hardcodedListOfStudents;
     }
 
-    public static String shuffleString(String string) {
-        List<String> letters = Arrays.asList(string.split(""));
-        Collections.shuffle(letters);
-        StringBuilder shuffled = new StringBuilder();
-        for (String letter : letters) {
-            shuffled.append(letter);
+    private List<Student> buildMasteranzi(List<Student> hardcodedListOfStudents, long numberOfStudentsLaLicentaToBeAdded) {
+        for (long i = 0; i < numberOfStudentsLaLicentaToBeAdded; i++) {
+            hardcodedListOfStudents.add(this.createStudentMaster());
         }
-        return shuffled.toString();
+        return hardcodedListOfStudents;
     }
 
+    private Student createStudentLicenta() {
+        String group = ygsRandomizer.getRandomGroup();
+        int year = Character.getNumericValue(group.charAt(1));
+
+        String randomNume = nameRandomizer.getAlphaNumericString(5);
+        String randomPrenume = nameRandomizer.getAlphaNumericString(5);
+
+        String randomDoB = doBandCNPandGenderRandomizer.getDoBLicenta();
+        Gender randomGender = doBandCNPandGenderRandomizer.getGender();
+        String randomCNP = doBandCNPandGenderRandomizer.getCNP(randomDoB, randomGender);
+
+        return Student.builder()
+                .nume(randomNume)
+                .prenume(randomPrenume)
+                .grupa(group)
+                .serie(ygsRandomizer.getRandomSeries())
+                .an(year)
+                .medie((1D + (10D - 1D) * new Random().nextDouble()))
+                .myToken(shuffleString(randomNume + randomPrenume))
+                .zi_de_nastere(randomDoB)
+                .cnp(randomCNP)
+                .genSexual(randomGender)
+                .judet(countyManager.getCountyFromTwoDigitCode(randomCNP.substring(7, 9)))
+                .friendToken("null")
+                .camin_preferat("null")
+                .flagCazSpecial("Nu")
+                .anUniversitar(2021)
+                .isMasterand(Boolean.FALSE)
+                .build();
+    }
+
+    private Student createStudentMaster() {
+        String randomNume = nameRandomizer.getAlphaNumericString(5);
+        String randomPrenume = nameRandomizer.getAlphaNumericString(5);
+
+        String randomDoB = doBandCNPandGenderRandomizer.getDoBMaster();
+        Gender randomGender = doBandCNPandGenderRandomizer.getGender();
+        String randomCNP = doBandCNPandGenderRandomizer.getCNP(randomDoB, randomGender);
+
+        return Student.builder()
+                .nume(randomNume)
+                .prenume(randomPrenume)
+                .an(this.getRandomYearForMaster())
+                .medie((1D + (10D - 1D) * new Random().nextDouble()))
+                .myToken(shuffleString(randomNume + randomPrenume))
+                .zi_de_nastere(randomDoB)
+                .cnp(randomCNP)
+                .genSexual(randomGender)
+                .judet(countyManager.getCountyFromTwoDigitCode(randomCNP.substring(7, 9)))
+                .friendToken("null")
+                .camin_preferat("null")
+                .flagCazSpecial("Nu")
+                .anUniversitar(2021)
+                .isMasterand(Boolean.TRUE)
+                .master(this.getRandomMaster())
+                .build();
+    }
+
+    private int getRandomYearForMaster() {
+        boolean randomBoolean = new Random().nextBoolean();
+        if (Boolean.TRUE.equals(randomBoolean)) {
+            return 2;
+        }
+        return 1;
+    }
+
+    public Master getRandomMaster() {
+        List<Master> masters = Arrays.asList(Master.values());
+        return masters.get(new Random().nextInt(masters.size()));
+    }
 }

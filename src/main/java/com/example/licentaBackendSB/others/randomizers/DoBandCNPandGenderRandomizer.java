@@ -1,49 +1,73 @@
 package com.example.licentaBackendSB.others.randomizers;
 
-import java.util.*;
+import com.example.licentaBackendSB.enums.Gender;
+import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Random;
+
+@Component
 public class DoBandCNPandGenderRandomizer {
 
-    public static String getDoB() {
-        Random rand = new Random();
+    public String getDoBMaster() {
+        int randomDay = this.getRandomDayOfBirth();
+        int randomMonth = this.getRandomMonthOfBirth();
+        int randomYearMaster = this.getRandomYearOfBirthForMaster();
+        return this.getDateOfBirth(randomDay, randomMonth, randomYearMaster);
+    }
 
-        //ziua
-        int firstDayOfMonth = 1;
-        int lastDayOfMonth = 31;
-        int randomDay = rand.nextInt(lastDayOfMonth - firstDayOfMonth) + firstDayOfMonth;
+    public String getDoBLicenta() {
+        int randomDay = this.getRandomDayOfBirth();
+        int randomMonth = this.getRandomMonthOfBirth();
+        int randomYearLicenta = this.getRandomYearOfBirthForLicenta();
+        return this.getDateOfBirth(randomDay, randomMonth, randomYearLicenta);
+    }
 
-        //luna
-        Map<Integer, String> months = DoBandCNPandGenderRandomizer.getMonths();
-        int firstMonth = 1;
-        int lastMonth = 12;
-        int randomMonth = rand.nextInt(lastMonth - firstMonth) + firstMonth;
-
-        //anul
-        int firstYear = 1997;
-        int lastYear = 2002;
-        int randomYear = rand.nextInt(lastYear - firstYear) + firstYear;
-
-        //concatenare
+    private String getDateOfBirth(int randomDay, int randomMonth, int randomYear) {
+        Map<Integer, String> months = this.getMonths();
         return (randomDay < 10 ? "0" + randomDay : randomDay)
                 + "." + months.get(randomMonth)
                 + "." + randomYear;
     }
 
-    public static String getGender() {
-        List<String> genders = new ArrayList<>();
-        genders.add("Masculin");
-        genders.add("Feminin");
+    private int getRandomYearOfBirthForMaster() {
+        int firstYear = 1996;
+        int lastYear = 1998;
+        return new Random().nextInt(lastYear - firstYear) + firstYear;
+    }
 
-        Random rand = new Random();
+    private int getRandomYearOfBirthForLicenta() {
+        int firstYear = 1998;
+        int lastYear = 2003;
+        return new Random().nextInt(lastYear - firstYear) + firstYear;
+    }
+
+    private int getRandomDayOfBirth() {
+        int firstDayOfMonth = 1;
+        int lastDayOfMonth = 31;
+        return new Random().nextInt(lastDayOfMonth - firstDayOfMonth) + firstDayOfMonth;
+    }
+
+    private int getRandomMonthOfBirth() {
+        int firstMonth = 1;
+        int lastMonth = 12;
+        return new Random().nextInt(lastMonth - firstMonth) + firstMonth;
+    }
+
+    public Gender getGender() {
+        Gender[] genders = Gender.values();
+
         int startIndex = 1;
         int endIndex = 100;
 
-        int randomGenderIndex = rand.nextInt(endIndex - startIndex) + startIndex;
+        int randomGenderIndex = new Random().nextInt(endIndex - startIndex) + startIndex;
 
-        return genders.get(randomGenderIndex % 2);
+        return genders[randomGenderIndex % 2];
     }
 
-    public static String getCNP(String tmp, String gender) {
+    public String getCNP(String tmp, Gender gender) {
         Map<Integer, String> months = getMonths();
         Random rand = new Random();
 
@@ -58,11 +82,11 @@ public class DoBandCNPandGenderRandomizer {
 
         //In functie de sex si de an
         int genderIndicator;
-        if (gender.equals("Masculin") && Integer.parseInt(year) < 2000)
+        if (Gender.MASCULIN.equals(gender) && Integer.parseInt(year) < 2000)
             genderIndicator = 1;
-        else if (gender.equals("Masculin") && Integer.parseInt(year) >= 2000)
+        else if (Gender.MASCULIN.equals(gender) && Integer.parseInt(year) >= 2000)
             genderIndicator = 5;
-        else if (gender.equals("Feminin") && Integer.parseInt(year) < 2000)
+        else if (Gender.FEMININ.equals(gender) && Integer.parseInt(year) < 2000)
             genderIndicator = 2;
         else
             genderIndicator = 6;
@@ -71,7 +95,7 @@ public class DoBandCNPandGenderRandomizer {
         int startCountyCode = 1;
         int endCountyCode = 52;
         int randomCountyCode = 48;  //oricare din 47, 48, 49, 50
-        while (!DoBandCNPandGenderRandomizer.checkCountyCode(randomCountyCode)) {
+        while (!this.checkCountyCode(randomCountyCode)) {
             randomCountyCode = rand.nextInt(endCountyCode - startCountyCode) + startCountyCode;
         }
 
@@ -95,11 +119,11 @@ public class DoBandCNPandGenderRandomizer {
                 + randomFourthLetter;
     }
 
-    public static Boolean checkCountyCode(int tmp) {
+    public Boolean checkCountyCode(int tmp) {
         return tmp != 47 && tmp != 48 && tmp != 49 && tmp != 50;
     }
 
-    public static String splitDoBbyDot(String tmp) {
+    public String splitDoBbyDot(String tmp) {
         Map<Integer, String> months = getMonths();
 
         String day = tmp.split("\\.")[0];
@@ -110,7 +134,7 @@ public class DoBandCNPandGenderRandomizer {
         return day + (Integer.valueOf(10).compareTo(Objects.requireNonNull(keyofMonth)) > 0 ? "0" + keyofMonth : keyofMonth) + year;
     }
 
-    public static Map<Integer, String> getMonths() {
+    public Map<Integer, String> getMonths() {
         Map<Integer, String> months = new HashMap<>();
 
         months.putIfAbsent(1, "Ianuarie");
@@ -129,7 +153,7 @@ public class DoBandCNPandGenderRandomizer {
         return months;
     }
 
-    public static <T, E> T getFirstKeyByValue(Map<T, E> map, E value) {
+    public <T, E> T getFirstKeyByValue(Map<T, E> map, E value) {
         for (Map.Entry<T, E> entry : map.entrySet()) {
             if (Objects.equals(value, entry.getValue())) {
                 return entry.getKey();
