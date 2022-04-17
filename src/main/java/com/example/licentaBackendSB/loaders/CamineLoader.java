@@ -36,47 +36,23 @@ public class CamineLoader implements CommandLineRunner {
     private List<Camin> hardcodeCamine() {
         List<Camin> hardcodedListOfCamine = new ArrayList<>();
 
-        hardcodedListOfCamine.add(Camin.builder()
+        hardcodedListOfCamine.add(new Camin().toBuilder()
                 .numeCamin("Leu A")
-                .capacitate(0)
-                .nrCamereTotal(0)
-                .nrCamereUnStudent(0)
-                .nrCamereDoiStudenti(0)
-                .nrCamereTreiStudenti(0)
-                .nrCamerePatruStudenti(0)
                 .anUniversitar(2021)
                 .build());
 
-        hardcodedListOfCamine.add(Camin.builder()
+        hardcodedListOfCamine.add(new Camin().toBuilder()
                 .numeCamin("Leu C")
-                .capacitate(0)
-                .nrCamereTotal(0)
-                .nrCamereUnStudent(0)
-                .nrCamereDoiStudenti(0)
-                .nrCamereTreiStudenti(0)
-                .nrCamerePatruStudenti(0)
                 .anUniversitar(2021)
                 .build());
 
-        hardcodedListOfCamine.add(Camin.builder()
+        hardcodedListOfCamine.add(new Camin().toBuilder()
                 .numeCamin("P20")
-                .capacitate(0)
-                .nrCamereTotal(0)
-                .nrCamereUnStudent(0)
-                .nrCamereDoiStudenti(0)
-                .nrCamereTreiStudenti(0)
-                .nrCamerePatruStudenti(0)
                 .anUniversitar(2021)
                 .build());
 
-        hardcodedListOfCamine.add(Camin.builder()
+        hardcodedListOfCamine.add(new Camin().toBuilder()
                 .numeCamin("P23")
-                .capacitate(0)
-                .nrCamereTotal(0)
-                .nrCamereUnStudent(0)
-                .nrCamereDoiStudenti(0)
-                .nrCamereTreiStudenti(0)
-                .nrCamerePatruStudenti(0)
                 .anUniversitar(2021)
                 .build());
 

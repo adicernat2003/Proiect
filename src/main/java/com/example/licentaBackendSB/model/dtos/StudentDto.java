@@ -1,6 +1,7 @@
 package com.example.licentaBackendSB.model.dtos;
 
 import com.example.licentaBackendSB.enums.Gender;
+import com.example.licentaBackendSB.enums.Master;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,4 +32,7 @@ public class StudentDto {
     private String friendToken;
     private String camin_preferat;
     private String flagCazSpecial;
+    @Enumerated
+    private Master master;
+    private Boolean isMasterand;
 }

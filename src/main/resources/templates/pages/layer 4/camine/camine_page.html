@@ -80,6 +80,23 @@
                 <li class="nav-item">
                     <a aria-current="page" class="nav-link" href="/admin">Pagina principala</a>
                 </li>
+                <div>
+                    <li class="nav-item">
+                        <form th:action="@{/admin/camine/schimbaAn}">
+                            <label for="year"></label>
+                            <select id="year" name="year" style="color:red">
+                                <option th:selected="true" th:text="${anCurent}"
+                                        th:value="${anCurent}"></option>
+                                <option style="color:black"
+                                        th:each="year : ${selectedYears}"
+                                        th:if="${year != anCurent}"
+                                        th:name="${year}" th:text="${year}">
+                                </option>
+                            </select>
+                            <button>Afiseaza lista caminelor din acest an</button>
+                        </form>
+                    </li>
+                </div>
             </ul>
         </div>
     </nav>

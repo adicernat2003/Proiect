@@ -1,20 +1,20 @@
 package com.example.licentaBackendSB.controllers;
 
 import com.example.licentaBackendSB.converters.CaminConverter;
+import com.example.licentaBackendSB.managers.Manager;
 import com.example.licentaBackendSB.model.dtos.CaminDto;
 import com.example.licentaBackendSB.model.entities.Camin;
 import com.example.licentaBackendSB.services.CaminService;
+import com.example.licentaBackendSB.services.SessionService;
 import com.example.licentaBackendSB.services.StudentCaminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import static com.example.licentaBackendSB.constants.Constants.*;
+import static com.example.licentaBackendSB.enums.Session.CAMIN;
 
 @Controller
 @RequestMapping(path = "/admin/camine")
@@ -25,18 +25,28 @@ public class CamineController {
     private final CaminService caminService;
     private final StudentCaminService studentCaminService;
     private final CaminConverter caminConverter;
+    private final Manager manager;
+    private final SessionService sessionService;
 
     /* ~~~~~~~~~~~ Get Camine View ~~~~~~~~~~~ */
     @GetMapping("/{anUniversitar}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
     public String getCaminePage(@PathVariable String anUniversitar, Model model) {
-        model.addAttribute("listOfCamine", caminService.getCamineByAnUniversitar(Integer.parseInt(anUniversitar)));
+        model.addAttribute("listOfCamine", sessionService.getNewSession(Integer.parseInt(anUniversitar), CAMIN));
+        model.addAttribute("selectedYears", manager.getListOfYears(anUniversitar));
+        model.addAttribute("anCurent", anUniversitar);
         model.addAttribute("leuA", caminService.getCaminByNumeCaminAndAnUniversitar(LEU_A, Integer.parseInt(anUniversitar)));
         model.addAttribute("leuC", caminService.getCaminByNumeCaminAndAnUniversitar(LEU_C, Integer.parseInt(anUniversitar)));
         model.addAttribute("p20", caminService.getCaminByNumeCaminAndAnUniversitar(P20, Integer.parseInt(anUniversitar)));
         model.addAttribute("p23", caminService.getCaminByNumeCaminAndAnUniversitar(P23, Integer.parseInt(anUniversitar)));
 
         return "pages/layer 4/camine/camine_page";
+    }
+
+    @RequestMapping("/schimbaAn")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
+    public String getSelectedYearCamine(@RequestParam(required = false, name = "year") String year) {
+        return "redirect:/admin/camine/" + year;
     }
 
     @GetMapping("/{anUniversitar}/students/{numeCamin}")
@@ -54,7 +64,7 @@ public class CamineController {
     @PreAuthorize("hasAuthority('student:write')")
     public String editCamin(@PathVariable("caminId") Long caminId, Model model) {
         Camin camin = caminService.getCaminById(caminId);
-        CaminDto caminDto = caminConverter.convertCaminEntityToDto(camin);
+        CaminDto caminDto = caminConverter.mapCaminEntityToDto(camin);
         model.addAttribute("selectedCaminById", caminDto);
 
         return "pages/layer 4/camine/crud camine/update_info_camin";
@@ -64,26 +74,12 @@ public class CamineController {
     @PostMapping(path = "/update/{caminId}")
     @PreAuthorize("hasAuthority('student:write')")
     public String updateCamin(@PathVariable("caminId") Long caminId, CaminDto newCamin) {
-        caminService.updateCamin(caminId, newCamin);
-
-        return "redirect:/admin/camine/" + caminService.getCaminById(caminId).getAnUniversitar();
+        return "redirect:/admin/camine/" + caminService.updateCamin(caminId, newCamin);
     }
 
     /* ~~~~~~~~~~~ Clear Fields and Update with 0 and Redirect to Camine Page ~~~~~~~~~~~ */
     @GetMapping(path = "/clear/{caminId}")
     public String clearCamin(@PathVariable("caminId") Long caminId) {
-        //Preluam caminul actual stiind Id-ul
-        Camin selectedCamin = caminService.getCaminById(caminId);
-
-        selectedCamin.setCapacitate(0);
-        selectedCamin.setNrCamereTotal(0);
-        selectedCamin.setNrCamereUnStudent(0);
-        selectedCamin.setNrCamereDoiStudenti(0);
-        selectedCamin.setNrCamereTreiStudenti(0);
-        selectedCamin.setNrCamerePatruStudenti(0);
-
-        caminService.clearCamin(selectedCamin.getId(), selectedCamin);
-
-        return "redirect:/admin/camine/" + selectedCamin.getAnUniversitar();
+        return "redirect:/admin/camine/" + caminService.clearCamin(caminId);
     }
 }

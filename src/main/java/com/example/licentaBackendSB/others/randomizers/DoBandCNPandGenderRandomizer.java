@@ -11,17 +11,17 @@ import java.util.Random;
 @Component
 public class DoBandCNPandGenderRandomizer {
 
-    public String getDoBMaster() {
+    public String getDoBMaster(Integer anUniversitar) {
         int randomDay = this.getRandomDayOfBirth();
         int randomMonth = this.getRandomMonthOfBirth();
-        int randomYearMaster = this.getRandomYearOfBirthForMaster();
+        int randomYearMaster = this.getRandomYearOfBirthForMaster(anUniversitar);
         return this.getDateOfBirth(randomDay, randomMonth, randomYearMaster);
     }
 
-    public String getDoBLicenta() {
+    public String getDoBLicenta(Integer anUniversitar) {
         int randomDay = this.getRandomDayOfBirth();
         int randomMonth = this.getRandomMonthOfBirth();
-        int randomYearLicenta = this.getRandomYearOfBirthForLicenta();
+        int randomYearLicenta = this.getRandomYearOfBirthForLicenta(anUniversitar);
         return this.getDateOfBirth(randomDay, randomMonth, randomYearLicenta);
     }
 
@@ -32,15 +32,15 @@ public class DoBandCNPandGenderRandomizer {
                 + "." + randomYear;
     }
 
-    private int getRandomYearOfBirthForMaster() {
-        int firstYear = 1996;
-        int lastYear = 1998;
+    private int getRandomYearOfBirthForMaster(Integer anUniversitar) {
+        int firstYear = anUniversitar - 25;
+        int lastYear = anUniversitar - 23;
         return new Random().nextInt(lastYear - firstYear) + firstYear;
     }
 
-    private int getRandomYearOfBirthForLicenta() {
-        int firstYear = 1998;
-        int lastYear = 2003;
+    private int getRandomYearOfBirthForLicenta(Integer anUniversitar) {
+        int firstYear = anUniversitar - 23;
+        int lastYear = anUniversitar - 18;
         return new Random().nextInt(lastYear - firstYear) + firstYear;
     }
 

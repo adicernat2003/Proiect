@@ -1,6 +1,7 @@
 package com.example.licentaBackendSB.controllers;
 
 import com.example.licentaBackendSB.converters.StudentConverter;
+import com.example.licentaBackendSB.managers.Manager;
 import com.example.licentaBackendSB.model.dtos.StudentDto;
 import com.example.licentaBackendSB.model.entities.Student;
 import com.example.licentaBackendSB.others.LoggedAccount;
@@ -11,10 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import static com.example.licentaBackendSB.enums.Session.STUDENT;
 
 @Controller
 @RequestMapping(path = "/admin")
@@ -26,6 +26,7 @@ public class AdminController {
     private final StudentAccountService studentAccountService;
     private final StudentConverter studentConverter;
     private final SessionService sessionService;
+    private final Manager manager;
 
     /* ~~~~~~~~~~~ AdminView ~~~~~~~~~~~ */
     @GetMapping
@@ -42,10 +43,19 @@ public class AdminController {
     @GetMapping("/students/{anUniversitar}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
     public String getStudents(@PathVariable String anUniversitar, Model model) {
-        model.addAttribute("listOfStudents", sessionService.createNewSession(Integer.parseInt(anUniversitar)));
+        model.addAttribute("listOfStudents", sessionService.getNewSession(Integer.parseInt(anUniversitar), STUDENT));
+        model.addAttribute("selectedYears", manager.getListOfYears(anUniversitar));
+        model.addAttribute("anCurent", anUniversitar);
+        model.addAttribute("anUniversitar", anUniversitar);
         model.addAttribute("isAdmin", "admin");
-
         return "pages/layer 4/students table/students_list";
+    }
+
+    /* ~~~~~~~~~~~ Student List ~~~~~~~~~~~ */
+    @RequestMapping("/students")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
+    public String getSelectedYearStudents(@RequestParam(required = false, name = "year") String year) {
+        return "redirect:/admin/students/" + year;
     }
 
     /* ~~~~~~~~~~~ Dev Admin Page ~~~~~~~~~~~ */

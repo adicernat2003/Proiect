@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CaminConverter {
 
-    public CaminDto convertCaminEntityToDto(Camin camin) {
+    public CaminDto mapCaminEntityToDto(Camin camin) {
         return CaminDto.builder()
                 .anUniversitar(String.valueOf(camin.getAnUniversitar()))
                 .numeCamin(camin.getNumeCamin())
@@ -23,7 +23,7 @@ public class CaminConverter {
                 .build();
     }
 
-    public Camin convertCaminDtoToEntity(CaminDto caminDto) {
+    public Camin mapCaminDtoToEntity(CaminDto caminDto) {
         return Camin.builder()
                 .anUniversitar(Integer.parseInt(caminDto.getAnUniversitar()))
                 .numeCamin(caminDto.getNumeCamin())

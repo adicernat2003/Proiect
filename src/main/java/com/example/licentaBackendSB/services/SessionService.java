@@ -2,6 +2,7 @@ package com.example.licentaBackendSB.services;
 
 import com.example.licentaBackendSB.enums.AnDeStudiu;
 import com.example.licentaBackendSB.enums.Gender;
+import com.example.licentaBackendSB.enums.Session;
 import com.example.licentaBackendSB.loaders.StudentsLoader;
 import com.example.licentaBackendSB.model.entities.Camin;
 import com.example.licentaBackendSB.model.entities.Student;
@@ -23,7 +24,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Stream;
 
+import static com.example.licentaBackendSB.constants.Constants.DEFAULT_YEAR;
 import static com.example.licentaBackendSB.enums.AnDeStudiu.*;
+import static com.example.licentaBackendSB.enums.Session.CAMIN;
 import static com.example.licentaBackendSB.utils.StringUtils.shuffleString;
 import static org.hibernate.type.IntegerType.ZERO;
 
@@ -39,23 +42,33 @@ public class SessionService {
     private final CountyManager countyManager;
     private final StudentsLoader studentsLoader;
     private final StudentAccountService studentAccountService;
+    private final CaminService caminService;
+    private final StudentService studentService;
 
-    public List<Student> createNewSession(Integer anUniversitar) {
-        this.getCamineOfAnUniversitar(anUniversitar);
-        return this.getStudentsOfAnUniversitar(anUniversitar);
-    }
-
-    private List<Student> getStudentsOfAnUniversitar(Integer anUniversitar) {
+    public List<?> getNewSession(Integer anUniversitar, Session session) {
         Integer numberOfStudentsForAnUniversitar = studentRepository.countAllByAnUniversitar(anUniversitar);
         if (ZERO.compareTo(numberOfStudentsForAnUniversitar) == 0) {
-            return this.createStudentsOfAnUniversitar(anUniversitar);
-        } else {
-            return studentRepository.findAllByAnUniversitar(anUniversitar);
+            int lastYearOfStudents;
+            for (lastYearOfStudents = anUniversitar - 1; lastYearOfStudents >= DEFAULT_YEAR; lastYearOfStudents--) {
+                Integer numberOfStudentsOfCurrentYear = studentRepository.countAllByAnUniversitar(lastYearOfStudents);
+                if (ZERO.compareTo(numberOfStudentsOfCurrentYear) != 0) {
+                    break;
+                }
+            }
+            for (int year = lastYearOfStudents + 1; year <= anUniversitar; year++) {
+                this.createCamineNoiOfAnUniversitar(year);
+                this.createStudentsOfAnUniversitar(year);
+            }
         }
+        if (CAMIN.equals(session)) {
+            return caminService.getCamineByAnUniversitar(anUniversitar);
+        }
+        return studentService.getStudentsByAnUniversitar(anUniversitar);
     }
 
-    private List<Student> createStudentsOfAnUniversitar(Integer anUniversitar) {
+    private void createStudentsOfAnUniversitar(Integer anUniversitar) {
         List<Student> previousStudentOfAnUniversitar = studentRepository.findAllByAnUniversitar(anUniversitar - 1);
+
         List<Student> previousStudentsInFirstAndThirdYearOfLicenta = this.getStudentsByYearFromPreviousAnUniversitar(previousStudentOfAnUniversitar);
         List<Student> previousStudentsInSecondYearOfLicenta = this.getStudentsByYearFromPreviousAnUniversitar(previousStudentOfAnUniversitar, TWO, false);
         List<Student> previousStudentsInFourthYearOfLicenta = this.getStudentsByYearFromPreviousAnUniversitar(previousStudentOfAnUniversitar, FOUR, false);
@@ -63,14 +76,9 @@ public class SessionService {
         List<Student> previousStudentsInFirstYearOfMaster = this.getStudentsByYearFromPreviousAnUniversitar(previousStudentOfAnUniversitar, ONE, true);
         List<Student> previousStudentsInSecondYearOfMaster = this.getStudentsByYearFromPreviousAnUniversitar(previousStudentOfAnUniversitar, TWO, true);
 
-        int totalNumberOfStudents = previousStudentOfAnUniversitar.size();
-        int totalNumberOfStudentsAfterDeletingStudentsFromSecondYearOfMaster = totalNumberOfStudents - previousStudentsInSecondYearOfMaster.size();
-        int difference = totalNumberOfStudents - totalNumberOfStudentsAfterDeletingStudentsFromSecondYearOfMaster;
-        int previousNumberOfStudentsInFourthYearOfLicenta = previousStudentsInFourthYearOfLicenta.size();
-        int totalNumberOfStudentsCareAplicaPentruMaster = this.getRandomNumberOfStudentiCareAplicaPentruMaster(previousNumberOfStudentsInFourthYearOfLicenta);
-
-        int totalNumberOfNewStudentsInFirstYearOfLicenta = this.getTotalNumberOfStudentsInFirstYearOfLicenta(previousNumberOfStudentsInFourthYearOfLicenta,
-                totalNumberOfStudentsCareAplicaPentruMaster, difference);
+        int totalNumberOfStudentsCareAplicaPentruMaster = this.getRandomNumberOfStudentiCareAplicaPentruMaster(previousStudentsInFourthYearOfLicenta.size());
+        int totalNumberOfNewStudentsInFirstYearOfLicenta = this.getTotalNumberOfStudentsInFirstYearOfLicenta(previousStudentsInFourthYearOfLicenta.size(),
+                totalNumberOfStudentsCareAplicaPentruMaster, previousStudentsInSecondYearOfMaster.size());
 
         List<Student> newStudentsInFirstYearOfLicenta = this.createListOfNewStudentsInFirstYearOfLicenta(totalNumberOfNewStudentsInFirstYearOfLicenta, anUniversitar);
         List<Student> newStudentsInSecondAndFourthYearOfLicenta = previousStudentsInFirstAndThirdYearOfLicenta.stream()
@@ -91,31 +99,8 @@ public class SessionService {
 
         List<StudentAccount> studentAccountsToBeAddedInDB = this.createStudentAccountsToBeAddedInDB(newStudentsInFirstYearOfLicenta);
 
-        List<Student> listOfStudentsCareNuAplicaLaMaster = this.getListOfStudentsCareNuAplicaLaMaster(previousStudentsInFourthYearOfLicenta,
-                totalNumberOfStudentsCareAplicaPentruMaster);
-
-        List<Student> listOfStudentsToBeDeletedFromDB = this.getListOfStudentsThatWillBeDeleted(previousStudentsInFourthYearOfLicenta, listOfStudentsCareNuAplicaLaMaster);
-
         studentAccountRepository.saveAll(studentAccountsToBeAddedInDB);
-
         studentRepository.saveAll(studentsToBeAddedInDB);
-        studentRepository.deleteAll(listOfStudentsToBeDeletedFromDB);
-        return studentRepository.findAllByAnUniversitar(anUniversitar);
-    }
-
-    private List<Student> getListOfStudentsThatWillBeDeleted(List<Student> previousStudentsInSecondYearOfMaster, List<Student> listOfStudentsCareNuAplicaLaMaster) {
-        return Stream.of(previousStudentsInSecondYearOfMaster, listOfStudentsCareNuAplicaLaMaster)
-                .flatMap(Collection::stream)
-                .toList();
-    }
-
-    private List<Student> getListOfStudentsCareNuAplicaLaMaster(List<Student> previousStudentsInFourthYearOfLicenta,
-                                                                int totalNumberOfNewStudentsInFirstYear) {
-        List<Student> listOfStudentsCareNuAplicaLaMaster = new ArrayList<>();
-        for (int i = totalNumberOfNewStudentsInFirstYear; i < previousStudentsInFourthYearOfLicenta.size(); i++) {
-            listOfStudentsCareNuAplicaLaMaster.add(previousStudentsInFourthYearOfLicenta.get(i));
-        }
-        return listOfStudentsCareNuAplicaLaMaster;
     }
 
     private List<Student> getListOfStudentsToBeAddedInDB(List<Student> newStudentsInFirstYearOfLicenta,
@@ -137,9 +122,9 @@ public class SessionService {
 
     private int getTotalNumberOfStudentsInFirstYearOfLicenta(Integer previousNumberOfStudentsInFourthYearOfLicenta,
                                                              Integer totalNumberOfStudentsCareAplicaPentruMaster,
-                                                             Integer difference) {
-        int totalNumberOfStudentsLeavingAfterFourthYearOfLicenta = previousNumberOfStudentsInFourthYearOfLicenta - totalNumberOfStudentsCareAplicaPentruMaster; // vin aia de anu 1 in locul lor
-        return difference + totalNumberOfStudentsLeavingAfterFourthYearOfLicenta;
+                                                             Integer previousNumberOfStudentsInSecondYearOfMaster) {
+        int totalNumberOfStudentsLeavingAfterFourthYearOfLicenta = previousNumberOfStudentsInFourthYearOfLicenta - totalNumberOfStudentsCareAplicaPentruMaster;
+        return previousNumberOfStudentsInSecondYearOfMaster + totalNumberOfStudentsLeavingAfterFourthYearOfLicenta;
     }
 
     private int getRandomNumberOfStudentiCareAplicaPentruMaster(int previousNumberOfStudentsInFourthYearOfLicenta) {
@@ -208,7 +193,7 @@ public class SessionService {
         String randomNume = nameRandomizer.getAlphaNumericString(5);
         String randomPrenume = nameRandomizer.getAlphaNumericString(5);
 
-        String randomDoB = doBandCNPandGenderRandomizer.getDoBLicenta();
+        String randomDoB = doBandCNPandGenderRandomizer.getDoBLicenta(anUniversitar);
         Gender randomGender = doBandCNPandGenderRandomizer.getGender();
         String randomCNP = doBandCNPandGenderRandomizer.getCNP(randomDoB, randomGender);
 
@@ -302,63 +287,30 @@ public class SessionService {
                 .toList();
     }
 
-    private List<Camin> getCamineOfAnUniversitar(Integer anUniversitar) {
-        Integer numberOfCamineForAnUniversitar = caminRepository.countAllByAnUniversitar(anUniversitar);
-        if (ZERO.compareTo(numberOfCamineForAnUniversitar) == 0) {
-            return this.createCamineNoiOfAnUniversitar(anUniversitar);
-        } else {
-            return caminRepository.findAllByAnUniversitar(anUniversitar);
-        }
-    }
-
-    private List<Camin> createCamineNoiOfAnUniversitar(Integer anUniversitar) {
+    private void createCamineNoiOfAnUniversitar(Integer anUniversitar) {
         List<Camin> camine = new ArrayList<>();
 
-        camine.add(Camin.builder()
+        camine.add(new Camin().toBuilder()
                 .numeCamin("Leu A")
-                .capacitate(0)
-                .nrCamereTotal(0)
-                .nrCamereUnStudent(0)
-                .nrCamereDoiStudenti(0)
-                .nrCamereTreiStudenti(0)
-                .nrCamerePatruStudenti(0)
                 .anUniversitar(anUniversitar)
                 .build());
 
-        camine.add(Camin.builder()
+        camine.add(new Camin().toBuilder()
                 .numeCamin("Leu C")
-                .capacitate(0)
-                .nrCamereTotal(0)
-                .nrCamereUnStudent(0)
-                .nrCamereDoiStudenti(0)
-                .nrCamereTreiStudenti(0)
-                .nrCamerePatruStudenti(0)
                 .anUniversitar(anUniversitar)
                 .build());
 
-        camine.add(Camin.builder()
+        camine.add(new Camin().toBuilder()
                 .numeCamin("P20")
-                .capacitate(0)
-                .nrCamereTotal(0)
-                .nrCamereUnStudent(0)
-                .nrCamereDoiStudenti(0)
-                .nrCamereTreiStudenti(0)
-                .nrCamerePatruStudenti(0)
                 .anUniversitar(anUniversitar)
                 .build());
 
-        camine.add(Camin.builder()
+        camine.add(new Camin().toBuilder()
                 .numeCamin("P23")
-                .capacitate(0)
-                .nrCamereTotal(0)
-                .nrCamereUnStudent(0)
-                .nrCamereDoiStudenti(0)
-                .nrCamereTreiStudenti(0)
-                .nrCamerePatruStudenti(0)
                 .anUniversitar(anUniversitar)
                 .build());
 
-        return caminRepository.saveAll(camine);
+        caminRepository.saveAll(camine);
     }
 
 }

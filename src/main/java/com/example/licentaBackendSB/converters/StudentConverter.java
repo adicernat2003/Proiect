@@ -27,6 +27,8 @@ public class StudentConverter {
                 .prenume(student.getPrenume())
                 .serie(student.getSerie())
                 .zi_de_nastere(student.getZi_de_nastere())
+                .master(student.getMaster())
+                .isMasterand(student.getIsMasterand())
                 .build();
     }
 
@@ -48,6 +50,8 @@ public class StudentConverter {
                 .prenume(studentDto.getPrenume())
                 .serie(studentDto.getSerie())
                 .zi_de_nastere(studentDto.getZi_de_nastere())
+                .master(studentDto.getMaster())
+                .isMasterand(studentDto.getIsMasterand())
                 .build();
     }
 

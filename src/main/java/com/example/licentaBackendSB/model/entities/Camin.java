@@ -7,7 +7,10 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.example.licentaBackendSB.constants.Constants.ZERO;
 
@@ -17,16 +20,18 @@ import static com.example.licentaBackendSB.constants.Constants.ZERO;
 @Setter// for getters/setters
 @AllArgsConstructor // for constructor
 @NoArgsConstructor
-@SuperBuilder // for building an instance of Camin
+@SuperBuilder(toBuilder = true) // for building an instance of Camin
 public class Camin extends BaseEntity {
 
     private String numeCamin;
-    private Integer capacitate;
-    private Integer nrCamereTotal;
-    private Integer nrCamereUnStudent;
-    private Integer nrCamereDoiStudenti;
-    private Integer nrCamereTreiStudenti;
-    private Integer nrCamerePatruStudenti;
+    private Integer capacitate = 0;
+    private Integer nrCamereTotal = 0;
+    private Integer nrCamereUnStudent = 0;
+    private Integer nrCamereDoiStudenti = 0;
+    private Integer nrCamereTreiStudenti = 0;
+    private Integer nrCamerePatruStudenti = 0;
+    @OneToMany(mappedBy = "camin")
+    private List<Camera> camere = new ArrayList<>();
 
     public Boolean checkIfValuesAreZero() {
         return ZERO.equals(this.capacitate)

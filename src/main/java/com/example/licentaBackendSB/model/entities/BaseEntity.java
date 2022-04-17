@@ -13,7 +13,7 @@ import javax.persistence.MappedSuperclass;
 
 @Getter
 @Setter
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @AllArgsConstructor // for constructor
 @NoArgsConstructor
 @MappedSuperclass
@@ -22,5 +22,5 @@ public class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private Integer anUniversitar;
+    private Integer anUniversitar = 2021;
 }

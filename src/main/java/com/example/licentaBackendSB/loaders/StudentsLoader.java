@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import static com.example.licentaBackendSB.constants.Constants.DEFAULT_YEAR;
 import static com.example.licentaBackendSB.model.entities.Student.endIndexing;
 import static com.example.licentaBackendSB.model.entities.Student.startIndexing;
 import static com.example.licentaBackendSB.utils.StringUtils.shuffleString;
@@ -75,7 +76,7 @@ public class StudentsLoader implements CommandLineRunner {
         String randomNume = nameRandomizer.getAlphaNumericString(5);
         String randomPrenume = nameRandomizer.getAlphaNumericString(5);
 
-        String randomDoB = doBandCNPandGenderRandomizer.getDoBLicenta();
+        String randomDoB = doBandCNPandGenderRandomizer.getDoBLicenta(DEFAULT_YEAR);
         Gender randomGender = doBandCNPandGenderRandomizer.getGender();
         String randomCNP = doBandCNPandGenderRandomizer.getCNP(randomDoB, randomGender);
 
@@ -103,7 +104,7 @@ public class StudentsLoader implements CommandLineRunner {
         String randomNume = nameRandomizer.getAlphaNumericString(5);
         String randomPrenume = nameRandomizer.getAlphaNumericString(5);
 
-        String randomDoB = doBandCNPandGenderRandomizer.getDoBMaster();
+        String randomDoB = doBandCNPandGenderRandomizer.getDoBMaster(DEFAULT_YEAR);
         Gender randomGender = doBandCNPandGenderRandomizer.getGender();
         String randomCNP = doBandCNPandGenderRandomizer.getCNP(randomDoB, randomGender);
 
@@ -127,11 +128,7 @@ public class StudentsLoader implements CommandLineRunner {
     }
 
     private int getRandomYearForMaster() {
-        boolean randomBoolean = new Random().nextBoolean();
-        if (Boolean.TRUE.equals(randomBoolean)) {
-            return 2;
-        }
-        return 1;
+        return Boolean.TRUE.equals(new Random().nextBoolean()) ? 2 : 1;
     }
 
     public Master getRandomMaster() {
