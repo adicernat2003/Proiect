@@ -28,14 +28,10 @@ public class StudentAccountService {
         LoggedAccount loggedAccount = new LoggedAccount();
 
         List<StudentAccount> studentAccountsDB = studentAccountRepository.findAll();
-        for (StudentAccount it : studentAccountsDB) {
-            if (it.getCnp().equals(loggedAccount.getLoggedUsername())) {
-                result = it;
-                break;
-            }
-        }
-
-        return result;
+        return studentAccountsDB.stream()
+                .filter(studentAccount -> studentAccount.getCnp().equals(loggedAccount.getLoggedUsername()))
+                .findFirst()
+                .get();
     }
 
     /*  ~~~~~~~~~~~ Update Student ~~~~~~~~~~~ */

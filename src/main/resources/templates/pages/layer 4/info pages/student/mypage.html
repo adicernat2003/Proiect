@@ -68,6 +68,21 @@
                     <a aria-current="page" class="nav-link" href="/student">Pagina principala</a>
                 </li>
 
+                <li class="nav-item">
+                    <form th:action="@{/student/mypage}">
+                        <label for="year"></label>
+                        <select id="year" name="year" style="color:red">
+                            <option th:selected="true" th:text="${anCurent}"
+                                    th:value="${anCurent}"></option>
+                            <option style="color:black"
+                                    th:each="year : ${selectedYears}"
+                                    th:if="${year != anCurent}"
+                                    th:name="${year}" th:text="${year}">
+                            </option>
+                        </select>
+                        <button>Afiseaza pagina mea din acest an</button>
+                    </form>
+                </li>
             </ul>
         </div>
     </nav>
@@ -91,9 +106,15 @@
                 <span onclick="togglePasswordFromCodedToVisibile()"><i class="far fa-eye" id="eyecon"></i></span>
             </h3>
             <hr class="solid">
-            <h3><b>Grupa: </b> <span th:text="${infoStudent.getGrupa()}"></span></h3>
-            <h3><b>Serie: </b> <span th:text="${infoStudent.getSerie()}"></span></h3>
-            <h3><b>An de studiu: </b> <span th:text="${infoStudent.getAn()}"></span></h3>
+            <div th:if="${infoStudent.getIsMasterand() == false}">
+                <h3><b>Grupa: </b> <span th:text="${infoStudent.getGrupa()}"></span></h3>
+                <h3><b>Serie: </b> <span th:text="${infoStudent.getSerie()}"></span></h3>
+                <h3><b>An de studiu: </b> <span th:text="${infoStudent.getAn()}"></span></h3>
+            </div>
+            <div th:if="${infoStudent.getIsMasterand() == true}">
+                <h3><b>Master: </b> <span th:text="${infoStudent.getMaster()}"></span></h3>
+                <h3><b>An de master: </b> <span th:text="${infoStudent.getAn()}"></span></h3>
+            </div>
             </p>
         </div>
     </div>

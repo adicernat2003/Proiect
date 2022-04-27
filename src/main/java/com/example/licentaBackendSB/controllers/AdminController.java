@@ -6,7 +6,6 @@ import com.example.licentaBackendSB.model.dtos.StudentDto;
 import com.example.licentaBackendSB.model.entities.Student;
 import com.example.licentaBackendSB.others.LoggedAccount;
 import com.example.licentaBackendSB.services.SessionService;
-import com.example.licentaBackendSB.services.StudentAccountService;
 import com.example.licentaBackendSB.services.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,7 +22,6 @@ public class AdminController {
 
     //Field
     private final StudentService studentService;
-    private final StudentAccountService studentAccountService;
     private final StudentConverter studentConverter;
     private final SessionService sessionService;
     private final Manager manager;
@@ -44,7 +42,7 @@ public class AdminController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
     public String getStudents(@PathVariable String anUniversitar, Model model) {
         model.addAttribute("listOfStudents", sessionService.getNewSession(Integer.parseInt(anUniversitar), STUDENT));
-        model.addAttribute("selectedYears", manager.getListOfYears(anUniversitar));
+        model.addAttribute("selectedYears", manager.getListOfYears(Integer.parseInt(anUniversitar)));
         model.addAttribute("anCurent", anUniversitar);
         model.addAttribute("anUniversitar", anUniversitar);
         model.addAttribute("isAdmin", "admin");

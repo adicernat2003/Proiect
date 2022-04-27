@@ -1,6 +1,8 @@
 package com.example.licentaBackendSB.controllers;
 
+import com.example.licentaBackendSB.model.entities.StudentAccount;
 import com.example.licentaBackendSB.others.LoggedAccount;
+import com.example.licentaBackendSB.services.StudentAccountService;
 import com.example.licentaBackendSB.services.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,6 +19,7 @@ public class StudentController {
 
     //Field
     private final StudentService studentService;
+    private final StudentAccountService studentAccountService;
 
     /* ~~~~~~~~~~~ StudentView ~~~~~~~~~~~ */
     @GetMapping
@@ -26,6 +29,10 @@ public class StudentController {
         model.addAttribute("loggedUsername", loggedAccount.getLoggedUsername());
         model.addAttribute("isDevAcc", loggedAccount.checkIfStandardAccLogged().toString());
 
+        StudentAccount loggedStudentAccount = studentAccountService.getLoggedStudentAccount();
+        Integer anUniversitar = studentService.getLowestAnUniversitarForStudent(loggedStudentAccount.getNume(), loggedStudentAccount.getPrenume());
+
+        model.addAttribute("anUniversitar", String.valueOf(anUniversitar));
         return "pages/layer 3/student";
     }
 

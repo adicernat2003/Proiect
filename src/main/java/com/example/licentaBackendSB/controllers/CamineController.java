@@ -33,7 +33,7 @@ public class CamineController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
     public String getCaminePage(@PathVariable String anUniversitar, Model model) {
         model.addAttribute("listOfCamine", sessionService.getNewSession(Integer.parseInt(anUniversitar), CAMIN));
-        model.addAttribute("selectedYears", manager.getListOfYears(anUniversitar));
+        model.addAttribute("selectedYears", manager.getListOfYears(Integer.parseInt(anUniversitar)));
         model.addAttribute("anCurent", anUniversitar);
         model.addAttribute("leuA", caminService.getCaminByNumeCaminAndAnUniversitar(LEU_A, Integer.parseInt(anUniversitar)));
         model.addAttribute("leuC", caminService.getCaminByNumeCaminAndAnUniversitar(LEU_C, Integer.parseInt(anUniversitar)));

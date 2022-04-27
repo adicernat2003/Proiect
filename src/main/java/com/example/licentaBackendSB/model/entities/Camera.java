@@ -11,19 +11,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table
+@Table(name = "camera")
 @Getter
 @Setter// for getters/setters
 @AllArgsConstructor // for constructor
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true)
 public class Camera extends BaseEntity {
-
-    @ManyToOne
-    private Camin camin;
     private String numarCamera;
     private Integer numarTotalPersoane;
     private Integer numarCurentPersoane = 0;
+    @ManyToOne
+    private Camin camin;
     @OneToMany(mappedBy = "camera", cascade = CascadeType.ALL)
-    private List<StudentCazat> studenti = new ArrayList<>();
+    private List<StudentAplicant> studenti = new ArrayList<>();
 }

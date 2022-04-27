@@ -1,11 +1,13 @@
 package com.example.licentaBackendSB.controllers;
 
 import com.example.licentaBackendSB.converters.StudentConverter;
+import com.example.licentaBackendSB.managers.Manager;
 import com.example.licentaBackendSB.model.dtos.StudentDto;
 import com.example.licentaBackendSB.model.entities.Student;
 import com.example.licentaBackendSB.model.entities.StudentAccount;
 import com.example.licentaBackendSB.others.LoggedAccount;
 import com.example.licentaBackendSB.others.Validator;
+import com.example.licentaBackendSB.services.SessionService;
 import com.example.licentaBackendSB.services.StudentAccountService;
 import com.example.licentaBackendSB.services.StudentCaminService;
 import com.example.licentaBackendSB.services.StudentService;
@@ -13,10 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -30,11 +29,13 @@ public class MyPageController {
     private final StudentAccountService studentAccountService;
     private final StudentCaminService studentCaminService;
     private final StudentConverter studentConverter;
+    private final Manager manager;
+    private final SessionService sessionService;
 
     /* ~~~~~~~~~~~ Get MyPage View ~~~~~~~~~~~ */
-    @GetMapping
+    @GetMapping("/{anUniversitar}")
     @PreAuthorize("hasRole('ROLE_STUDENT')")
-    public String getMyPage(Model model) {
+    public String getMyPage(@PathVariable String anUniversitar, Model model) {
         LoggedAccount loggedAccount = new LoggedAccount();
 
         if (loggedAccount.checkIfStandardAccLogged()) {
@@ -42,7 +43,7 @@ public class MyPageController {
         } else {
             StudentAccount loggedStudentAccount = studentAccountService.getLoggedStudentAccount();
             //query call in db to get info of logged student
-            Student infoStudent = studentService.findStudentByNameAndSurname(loggedStudentAccount);
+            Student infoStudent = studentService.findStudentByNameAndSurnameAndAnUniversitar(loggedStudentAccount, Integer.parseInt(anUniversitar));
 
             //getting info about logged acc (credentials) && student info
             model.addAttribute("loggedStudentAccount", loggedStudentAccount);
@@ -50,12 +51,23 @@ public class MyPageController {
             //checkup in case we log in with a dev account
             model.addAttribute("isDevAcc", loggedAccount.checkIfStandardAccLogged().toString());
 
+            model.addAttribute("selectedYears", manager.getListOfYearsForStudentPage(infoStudent, Integer.parseInt(anUniversitar)));
+            model.addAttribute("anCurent", anUniversitar);
+            model.addAttribute("anUniversitar", anUniversitar);
+
             Optional<Student> secondStudent = studentService.findStudentByMyToken(infoStudent.getFriendToken());
             if (secondStudent.isPresent()) {
                 model.addAttribute("yourFriend", secondStudent);
             }
         }
         return "pages/layer 4/info pages/student/mypage";
+    }
+
+    @RequestMapping()
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
+    public String getSelectedYearPage(@RequestParam(required = false, name = "year") String year) {
+        sessionService.getNewSession(Integer.parseInt(year), null);
+        return "redirect:/student/mypage/" + year;
     }
 
     /* ~~~~~~~~~~~ Get Student knowing the ID for setting the Friend Token ~~~~~~~~~~~ */

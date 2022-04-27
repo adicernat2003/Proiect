@@ -38,15 +38,15 @@ public class StudentService {
     }
 
     /*  ~~~~~~~~~~~ Find Student by Name and Surname ~~~~~~~~~~~ */
-    public Student findStudentByNameAndSurname(StudentAccount studentAccount) {
-        Optional<Student> foundStudent = studentRepository.getStudentByNumeAndPrenume(studentAccount.getNume(), studentAccount.getPrenume());
-
-        return foundStudent.orElseThrow(() -> new IllegalStateException("Student doesn't exist!"));
+    public Student findStudentByNameAndSurnameAndAnUniversitar(StudentAccount studentAccount, Integer anUniversitar) {
+        Optional<Student> foundStudent = studentRepository.getStudentByNumeAndPrenumeAndAnUniversitar(studentAccount.getNume(), studentAccount.getPrenume(), anUniversitar);
+        return foundStudent
+                .orElseThrow(() -> new IllegalStateException("Student doesn't exist!"));
     }
 
     /*  ~~~~~~~~~~~ Add new Student ~~~~~~~~~~~ */
     public void addNewStudent(Student student) {
-        Optional<Student> studentOptional = studentRepository.getStudentByNumeAndPrenume(student.getNume(), student.getPrenume());
+        Optional<Student> studentOptional = studentRepository.getStudentByNumeAndPrenumeAndAnUniversitar(student.getNume(), student.getPrenume(), student.getAnUniversitar());
 
         //daca studentul cu exista cu numele respectiv, aruncam exceptie
         if (studentOptional.isPresent()) {
@@ -84,9 +84,16 @@ public class StudentService {
         Optional<Student> studentOptional = studentRepository.findById(studentId);
         if (studentOptional.isPresent()) {
             return studentOptional.get();
-        } else {
-            throw new IllegalArgumentException("Invalid student Id:" + studentId);
         }
+        throw new IllegalArgumentException("Invalid student Id:" + studentId);
+    }
+
+    public Integer getLowestAnUniversitarForStudent(String nume, String prenume) {
+        Optional<Integer> lowestAnUniversitarForStudentOpt = studentRepository.getLowestAnUniversitarForStudent(nume, prenume);
+        if (lowestAnUniversitarForStudentOpt.isPresent()) {
+            return lowestAnUniversitarForStudentOpt.get();
+        }
+        throw new IllegalArgumentException("Student does not exist");
     }
 
     /*  ~~~~~~~~~~~ Update Student ~~~~~~~~~~~ */

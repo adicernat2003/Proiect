@@ -16,7 +16,10 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     List<Student> findAllByAnUniversitar(Integer anUniversitar);
 
-    Optional<Student> getStudentByNumeAndPrenume(String nume, String prenume);
+    Optional<Student> getStudentByNumeAndPrenumeAndAnUniversitar(String nume, String prenume, Integer anUniversitar);
+
+    @Query("SELECT MIN(s.anUniversitar) FROM Student s WHERE s.nume = ?1 AND s.prenume = ?2")
+    Optional<Integer> getLowestAnUniversitarForStudent(String nume, String prenume);
 
     //get student knowing mytoken
     Optional<Student> getStudentByMyToken(String myToken);
