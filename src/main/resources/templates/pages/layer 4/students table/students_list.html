@@ -129,12 +129,12 @@
             <td th:text="${tempStudent.getCamin_preferat()}"></td>
             <td th:text="${tempStudent.getGenSexual()}"></td>
             <td th:text="${tempStudent.getFlagCazSpecial()}"></td>
-            <td th:if="${tempStudent.getFlagCazSpecial() == 'Nu'}">
+            <td th:if="${tempStudent.getFlagCazSpecial() == false}">
                 <a class="btn btn-outline-success"
                    th:href="@{/admin/students/{anUniversitar}/setFlag/{studentId}(studentId=${tempStudent.getId()}, anUniversitar=${tempStudent.getAnUniversitar()})}"><i
                         class="fas fa-toggle-on"></i></a>
             </td>
-            <td th:if="${tempStudent.getFlagCazSpecial() == 'Da'}">
+            <td th:if="${tempStudent.getFlagCazSpecial() == true}">
                 <a class="btn btn-outline-danger"
                    th:href="@{/admin/students/{anUniversitar}/setFlag/{studentId}(studentId=${tempStudent.getId()}, anUniversitar=${tempStudent.getAnUniversitar()})}"><i
                         class="fas fa-toggle-off"></i></a>
@@ -205,12 +205,12 @@
             <td th:text="${tempStudent.getCamin_preferat()}"></td>
             <td th:text="${tempStudent.getGenSexual()}"></td>
             <td th:text="${tempStudent.getFlagCazSpecial()}"></td>
-            <td th:if="${tempStudent.getFlagCazSpecial() == 'Nu'}">
+            <td th:if="${tempStudent.getFlagCazSpecial() == false}">
                 <a class="btn btn-outline-success"
                    th:href="@{/admin/students/{anUniversitar}/setFlag/{studentId}(studentId=${tempStudent.getId()}, anUniversitar=${tempStudent.getAnUniversitar()})}"><i
                         class="fas fa-toggle-on"></i></a>
             </td>
-            <td th:if="${tempStudent.getFlagCazSpecial() == 'Da'}">
+            <td th:if="${tempStudent.getFlagCazSpecial() == true}">
                 <a class="btn btn-outline-danger"
                    th:href="@{/admin/students/{anUniversitar}/setFlag/{studentId}(studentId=${tempStudent.getId()}, anUniversitar=${tempStudent.getAnUniversitar()})}"><i
                         class="fas fa-toggle-off"></i></a>

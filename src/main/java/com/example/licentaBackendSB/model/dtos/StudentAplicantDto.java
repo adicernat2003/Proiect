@@ -1,5 +1,6 @@
 package com.example.licentaBackendSB.model.dtos;
 
+import com.example.licentaBackendSB.model.entities.Camin;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,5 +21,6 @@ public class StudentAplicantDto {
     private Integer an;
     private String myToken;
     private String friendToken;
-    private String numeCamin;
+    private Camin camin;
+    private Boolean isCazat;
 }

@@ -5,6 +5,8 @@ import com.example.licentaBackendSB.enums.Master;
 import com.example.licentaBackendSB.others.sort.sortingAlgorithms.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.util.*;
@@ -16,7 +18,7 @@ import java.util.stream.Collectors;
 @Setter// for getters/setters
 @AllArgsConstructor // for constructor
 @NoArgsConstructor
-@SuperBuilder // for building an instance of Student
+@SuperBuilder(toBuilder = true) // for building an instance of Student
 @ToString
 public class Student extends BaseEntity {
 
@@ -43,7 +45,17 @@ public class Student extends BaseEntity {
     private String myToken;
     private String friendToken;
     private String camin_preferat;
-    private String flagCazSpecial;
+    @OneToOne
+    private Camin camin;
+    private Boolean flagCazSpecial = Boolean.FALSE;
+
+    @ElementCollection
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<String> friendTokens = new ArrayList<>();
+
+    @ElementCollection
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<String> numarLocuriCamera = new ArrayList<>();
 
     public static Map<String, Integer> sortByValue(Map<String, Integer> unsortMap, final boolean order) {
         List<Map.Entry<String, Integer>> list = new LinkedList<>(unsortMap.entrySet());

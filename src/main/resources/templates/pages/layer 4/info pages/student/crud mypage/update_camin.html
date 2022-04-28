@@ -28,7 +28,7 @@
         <div class="col-md-6">
             <form action="#"
                   method="post"
-                  th:action="@{/student/mypage/camin-update/{studentId}(studentId=${selectedStudentById.getId()})}"
+                  th:action="@{/student/mypage/camin-update/{studentId}/{anUniversitar}(studentId=${selectedStudentById.getId()}, anUniversitar = ${selectedStudentById.getAnUniversitar()})}"
                   th:object="${selectedStudentById}">
                 <div class="row">
                     <!-- TEORIE: for = "id_camp_in_frontend" tre sa fie acelasi cu id="id_camp_in_frontend" -->

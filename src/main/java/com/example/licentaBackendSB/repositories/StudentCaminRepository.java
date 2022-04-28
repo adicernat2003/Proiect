@@ -14,17 +14,20 @@ import java.util.Optional;
 @Transactional(Transactional.TxType.MANDATORY)
 public interface StudentCaminRepository extends JpaRepository<StudentAplicant, Long> {
 
+    @Query("SELECT s FROM StudentAplicant s WHERE s.camin.numeCamin = ?1 AND s.anUniversitar = ?2")
     List<StudentAplicant> findAllByNumeCaminAndAnUniversitar(String numeCamin, Integer anUniversitar);
 
-    Optional<StudentAplicant> getStudentCaminByCnpAndNumeCamin(String cnp, String numeCamin);
+    @Query("SELECT s FROM StudentAplicant s WHERE s.cnp = ?1 AND s.anUniversitar = ?2 AND s.camin.numeCamin = ?3")
+    Optional<StudentAplicant> getStudentCaminByCnpAndAnUniversitarAndNumeCamin(String cnp, Integer anUniversitar, String numeCamin);
 
     //Update friendToken knowing CNP
     @Modifying
-    @Query("update StudentAplicant set friendToken = ?1 where cnp = ?2 and numeCamin = ?3")
-    void updateFriendTokenFromStudentInCamin(String friendToken, String cnp, String numeCamin);
+    @Query("update StudentAplicant set friendToken = ?1 where cnp = ?2 and anUniversitar = ?3")
+    void updateFriendTokenFromStudentInCamin(String friendToken, String cnp, Integer anUniversitar);
 
     //Delete student din tabelul de camin care are anumite fielduri identice
     @Transactional
     @Modifying
-    void removeStudentCaminByMyTokenAndCnpAndNumeAndPrenumeAndNumeCamin(String studentToken, String studentCNP, String studetNume, String studentPrenume, String numeCamin);
+    @Query("DELETE FROM StudentAplicant where cnp = ?1 and anUniversitar = ?2")
+    void removeStudentCaminByCnpAndAnUniversitar(String studentCNP, Integer anUniversitar);
 }

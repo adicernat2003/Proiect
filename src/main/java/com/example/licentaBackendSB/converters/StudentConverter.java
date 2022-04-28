@@ -2,6 +2,7 @@ package com.example.licentaBackendSB.converters;
 
 import com.example.licentaBackendSB.model.dtos.StudentAplicantDto;
 import com.example.licentaBackendSB.model.dtos.StudentDto;
+import com.example.licentaBackendSB.model.entities.Camin;
 import com.example.licentaBackendSB.model.entities.Student;
 import com.example.licentaBackendSB.model.entities.StudentAplicant;
 import org.springframework.stereotype.Component;
@@ -29,6 +30,7 @@ public class StudentConverter {
                 .zi_de_nastere(student.getZi_de_nastere())
                 .master(student.getMaster())
                 .isMasterand(student.getIsMasterand())
+                .numarLocuriCamera(student.getNumarLocuriCamera())
                 .build();
     }
 
@@ -55,7 +57,7 @@ public class StudentConverter {
                 .build();
     }
 
-    public StudentAplicant convertStudentToStudentCamin(Student student, String numeCamin) {
+    public StudentAplicant convertStudentToStudentCamin(Student student, Camin camin) {
         return StudentAplicant.builder()
                 .an(student.getAn())
                 .cnp(student.getCnp())
@@ -64,8 +66,9 @@ public class StudentConverter {
                 .medie(student.getMedie())
                 .nume(student.getNume())
                 .prenume(student.getPrenume())
-                .numeCamin(numeCamin)
+                .camin(camin)
                 .anUniversitar(student.getAnUniversitar())
+                .isCazat(Boolean.FALSE)
                 .build();
     }
 
@@ -76,11 +79,12 @@ public class StudentConverter {
                 .cnp(studentAplicant.getCnp())
                 .id(studentAplicant.getId())
                 .friendToken(studentAplicant.getFriendToken())
-                .numeCamin(studentAplicant.getNumeCamin())
+                .camin(studentAplicant.getCamin())
                 .myToken(studentAplicant.getMyToken())
                 .nume(studentAplicant.getNume())
                 .prenume(studentAplicant.getPrenume())
                 .medie(studentAplicant.getMedie())
+                .isCazat(studentAplicant.getIsCazat())
                 .build();
     }
 

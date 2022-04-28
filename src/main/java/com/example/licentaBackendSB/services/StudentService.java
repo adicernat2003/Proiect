@@ -2,8 +2,10 @@ package com.example.licentaBackendSB.services;
 
 import com.example.licentaBackendSB.converters.StudentConverter;
 import com.example.licentaBackendSB.model.dtos.StudentDto;
+import com.example.licentaBackendSB.model.entities.Camin;
 import com.example.licentaBackendSB.model.entities.Student;
 import com.example.licentaBackendSB.model.entities.StudentAccount;
+import com.example.licentaBackendSB.repositories.CaminRepository;
 import com.example.licentaBackendSB.repositories.StudentAccountRepository;
 import com.example.licentaBackendSB.repositories.StudentRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ public class StudentService {
     private final StudentAccountRepository studentAccountRepository;
     private final StudentConverter studentConverter;
     private final StudentAccountService studentAccountService;
+    private final CaminRepository caminRepository;
 
     //Methods
     /*  ~~~~~~~~~~~ Get List of Students ~~~~~~~~~~~ */
@@ -166,37 +169,33 @@ public class StudentService {
 
     /*  ~~~~~~~~~~~ Update (THIS) with FriendToken ~~~~~~~~~~~ */
     public void updateFriendToken(Long studentId, StudentDto newStudent) {
-        studentRepository.findById(studentId)
-                .map(foundStudent -> {
-                    //Validari si Verificari
-
-                    /** update kid#1 with friendtoken*/
-                    if (newStudent.getFriendToken() != null
-                            && newStudent.getFriendToken().length() > 0
-                            && !foundStudent.getFriendToken().equals(newStudent.getFriendToken())
-                            && !foundStudent.getMyToken().equals(newStudent.getFriendToken())) {
-                        foundStudent.setFriendToken(newStudent.getFriendToken());
-                    }
-
-                    return studentRepository.save(foundStudent);
-                })
-                .orElseThrow(() -> new IllegalStateException("student with id " + studentId + " does not exist"));
+        Optional<Student> foundStudentOptional = studentRepository.findById(studentId);
+        if (foundStudentOptional.isPresent()) {
+            Student foundStudent = foundStudentOptional.get();
+            if (newStudent.getFriendToken() != null
+                    && newStudent.getFriendToken().length() > 0
+                    && !newStudent.getFriendToken().equals(foundStudent.getFriendToken())
+                    && !newStudent.getFriendToken().equals(foundStudent.getMyToken())) {
+                foundStudent.setFriendToken(newStudent.getFriendToken());
+                studentRepository.save(foundStudent);
+            }
+        } else {
+            throw new IllegalStateException("student with id " + studentId + " does not exist");
+        }
     }
 
     /*  ~~~~~~~~~~~ Clear FriendToken ~~~~~~~~~~~ */
     public void clearFriendToken(Long studentId, Student selectedStudent) {
-        studentRepository.findById(studentId)
-                .map(foundStudent -> {
-                    //Validari si Verificari
-
-                    /** clear friendToken and replace with null*/
-                    if (!foundStudent.getFriendToken().equals("null")) {
-                        foundStudent.setFriendToken(selectedStudent.getFriendToken());
-                    }
-
-                    return studentRepository.save(foundStudent);
-                })
-                .orElseThrow(() -> new IllegalStateException("student with id " + studentId + " does not exist"));
+        Optional<Student> foundStudentOptional = studentRepository.findById(studentId);
+        if (foundStudentOptional.isPresent()) {
+            Student foundStudent = foundStudentOptional.get();
+            if (foundStudent.getFriendToken() != null) {
+                foundStudent.setFriendToken(selectedStudent.getFriendToken());
+                studentRepository.save(foundStudent);
+            }
+        } else {
+            throw new IllegalStateException("student with id " + studentId + " does not exist");
+        }
     }
 
     /* ~~~~~~~~~~~ Validate if friend token exists in db ~~~~~~~~~~~ */
@@ -213,51 +212,41 @@ public class StudentService {
     }
 
     /*  ~~~~~~~~~~~ Update Student Camin ~~~~~~~~~~~ */
-    public void updateCamin(Long studentId, StudentDto newStudent) {
-        studentRepository.findById(studentId)
-                .map(foundStudent -> {
-                    //Validari si Verificari
-
-                    /** update nume*/
-                    if (newStudent.getCamin_preferat() != null
-                            && newStudent.getCamin_preferat().length() > 0
-                            && !foundStudent.getCamin_preferat().equals(newStudent.getCamin_preferat())) {
-                        foundStudent.setCamin_preferat(newStudent.getCamin_preferat());
-                    }
-
-                    return studentRepository.save(foundStudent);
-                })
-                .orElseThrow(() -> new IllegalStateException("student with id " + studentId + " does not exist"));
+    public void updateCamin(Long studentId, StudentDto newStudent, String anUniversitar) {
+        Optional<Student> foundStudentOptional = studentRepository.findById(studentId);
+        if (foundStudentOptional.isPresent()) {
+            Student foundStudent = foundStudentOptional.get();
+            if (newStudent.getCamin_preferat() != null
+                    && newStudent.getCamin_preferat().length() > 0
+                    && !newStudent.getCamin_preferat().equals(foundStudent.getCamin_preferat())) {
+                Optional<Camin> caminOptional = caminRepository.findCaminByNumeCaminAndAnUniversitar(newStudent.getCamin_preferat(), Integer.parseInt(anUniversitar));
+                if (caminOptional.isPresent()) {
+                    Camin camin = caminOptional.get();
+                    foundStudent.setCamin_preferat(camin.getNumeCamin());
+                    foundStudent.setCamin(camin);
+                    studentRepository.save(foundStudent);
+                }
+            }
+        } else {
+            throw new IllegalStateException("student with id " + studentId + " does not exist");
+        }
     }
 
     /*  ~~~~~~~~~~~ Clear Camin ~~~~~~~~~~~ */
-    public void clearCamin(Long studentId, Student selectedStudent) {
-        studentRepository.findById(studentId)
-                .map(foundStudent -> {
-                    //Validari si Verificari
-
-                    /** clear camin and replace with null*/
-                    if (!foundStudent.getCamin_preferat().equals("null")) {
-                        foundStudent.setCamin_preferat(selectedStudent.getCamin_preferat());
-                    }
-
-                    return studentRepository.save(foundStudent);
-                })
-                .orElseThrow(() -> new IllegalStateException("student with id " + studentId + " does not exist"));
+    public void clearCamin(Student student) {
+        student.setCamin_preferat(null);
+        student.setCamin(null);
+        studentRepository.save(student);
     }
 
     /*  ~~~~~~~~~~~ Update Flag from Nu to Da and reverse ~~~~~~~~~~~ */
     public void updateFlag(Long studentId) {
-        studentRepository.findById(studentId)
-                .map(foundStudent -> {
-                    //Validari si Verificari
-
-                    /** update flag */
-                    foundStudent.setFlagCazSpecial("Nu".equals(foundStudent.getFlagCazSpecial()) ? "Da" : "Nu");
-
-                    return studentRepository.save(foundStudent);
-                })
-                .orElseThrow(() -> new IllegalStateException("student with id " + studentId + " does not exist"));
+        Optional<Student> foundStudentOptional = studentRepository.findById(studentId);
+        if (foundStudentOptional.isPresent()) {
+            Student foundStudent = foundStudentOptional.get();
+            foundStudent.setFlagCazSpecial(Boolean.FALSE.equals(foundStudent.getFlagCazSpecial()) ? Boolean.TRUE : Boolean.FALSE);
+        } else {
+            throw new IllegalStateException("student with id " + studentId + " does not exist");
+        }
     }
-
 }

@@ -57,4 +57,14 @@ public class Manager {
                 .filter(an -> !an.equals(anUniversitar))
                 .toList();
     }
+
+    public List<String> getListaOptiuniCamereForStudent(Student student) {
+        return this.getListOptiuniCamere().stream()
+                .filter(camera -> !student.getNumarLocuriCamera().contains(camera))
+                .toList();
+    }
+
+    public List<String> getListOptiuniCamere() {
+        return List.of("O persoana", "Doua persoane", "Trei persoane", "Patru persoane");
+    }
 }

@@ -8,6 +8,7 @@ import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -26,7 +27,8 @@ public class StudentAplicant extends BaseEntity {
     private Integer an;
     private String myToken;
     private String friendToken;
-    private String numeCamin;
+    @OneToOne
+    private Camin camin;
     private Boolean isCazat;
     @ManyToOne
     private Camera camera;

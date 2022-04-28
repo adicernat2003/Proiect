@@ -2,6 +2,7 @@ package com.example.licentaBackendSB.services;
 
 import com.example.licentaBackendSB.converters.StudentConverter;
 import com.example.licentaBackendSB.model.dtos.StudentAplicantDto;
+import com.example.licentaBackendSB.model.entities.Camin;
 import com.example.licentaBackendSB.model.entities.StudentAplicant;
 import com.example.licentaBackendSB.repositories.StudentCaminRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,20 +32,16 @@ public class StudentCaminService {
     }
 
     /* ~~~~~~~~~~~ Delete Student in the Camin Table Corespunzator ~~~~~~~~~~~ */
-    public void deleteStudentInCamin(StudentAplicant selectedStudentAplicant, String numeCamin) {
-        studentCaminRepository.removeStudentCaminByMyTokenAndCnpAndNumeAndPrenumeAndNumeCamin(
-                selectedStudentAplicant.getMyToken(),
-                selectedStudentAplicant.getCnp(),
-                selectedStudentAplicant.getNume(),
-                selectedStudentAplicant.getPrenume(),
-                numeCamin);
+    public void deleteStudentInCamin(StudentAplicant selectedStudentAplicant, String anUniversitar) {
+        studentCaminRepository.removeStudentCaminByCnpAndAnUniversitar(selectedStudentAplicant.getCnp(), Integer.parseInt(anUniversitar));
     }
 
     /*  ~~~~~~~~~~~ Update Student from Camin Leu A with FriendToken ~~~~~~~~~~~ */
-    public void updateFriendTokenOfStudentInCamin(StudentAplicant studentAplicant, String numeCamin) {
-        Optional<StudentAplicant> studentDinCaminA = studentCaminRepository.getStudentCaminByCnpAndNumeCamin(studentAplicant.getCnp(), numeCamin);
-        studentDinCaminA.get().setFriendToken(studentAplicant.getFriendToken());
-        studentDinCaminA.ifPresent(student -> studentCaminRepository.updateFriendTokenFromStudentInCamin(student.getFriendToken(), student.getCnp(), numeCamin));
+    public void updateFriendTokenOfStudentInCamin(StudentAplicant studentAplicant, Camin camin, Integer anUniversitar) {
+        Optional<StudentAplicant> studentDinCaminOptional = studentCaminRepository.getStudentCaminByCnpAndAnUniversitarAndNumeCamin(studentAplicant.getCnp(), anUniversitar, camin.getNumeCamin());
+        StudentAplicant studentDinCamin = studentDinCaminOptional.get();
+        studentDinCamin.setFriendToken(studentAplicant.getFriendToken());
+        studentCaminRepository.save(studentDinCamin);
     }
 
 }

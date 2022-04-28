@@ -1,0 +1,83 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="layouts/header :: myheader"></div>
+
+<style>
+    #update-btn.center, #back-btn.center {
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+</style>
+
+<!-- ------------------------------------ ABOVE IS STYLING, DOWN IS INFO ------------------------------------ -->
+
+<head>
+    <meta charset="utf-8">
+    <meta content="ie=edge" http-equiv="x-ua-compatible">
+    <title>Update Student</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+</head>
+
+<body>
+<div class="container my-5">
+    <h2 class="mb-5">Selectare optiuni camere de camin</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <form action="#"
+                  method="POST"
+                  th:action="@{/student/mypage/camere-update/{studentId}/{anUniversitar}(studentId=${selectedStudentById.getId()}, anUniversitar = ${selectedStudentById.getAnUniversitar()})}"
+                  th:object="${selectedStudentById}">
+                <div class="container">
+                    <p th:if="${listOfCamere != null && listOfCamere.size() > 0}">
+                        <label>
+                            <select multiple="multiple" th:field="*{numarLocuriCamera}">
+                                <option th:each="camera: ${listOfCamere}"
+                                        th:text="${camera}" th:value="${camera}">
+                            </select>
+                        </label>
+                    </p>
+                    <button name="action" type="submit" value="save">Save</button>
+                    <button name="action" type="submit" value="add-more">Add another option</button>
+                    <button name="action" type="submit" value="cancel">Back to my page</button>
+                </div>
+            </form>
+            <div th:if="${firstOption} != null">
+                <h4 style="display: inline" th:if="${firstOption} != null"
+                    th:text="'Prima optiune aleasa: ' + ${firstOption}"></h4>
+                <a class="btn btn-outline-warning"
+                   th:href="@{/student/mypage/camere-update/delete-optiune-camera/{studentId}/{anUniversitar}/{option}(studentId = ${selectedStudentById.getId()},
+                    anUniversitar = ${selectedStudentById.getAnUniversitar}, option = 0)}"><i
+                        class="fas fa-user-times ml-2"></i></a>
+            </div>
+            <div th:if="${secondOption} != null">
+                <h4 style="display: inline" th:if="${secondOption} != null"
+                    th:text="'A doua optiune aleasa: ' + ${secondOption}"></h4>
+                <a class="btn btn-outline-warning"
+                   th:href="@{/student/mypage/camere-update/delete-optiune-camera/{studentId}/{anUniversitar}/{option}(studentId = ${selectedStudentById.getId()},
+                    anUniversitar = ${selectedStudentById.getAnUniversitar}, option = 1)}"><i
+                        class="fas fa-user-times ml-2"></i></a>
+            </div>
+            <div th:if="${thirdOption} != null">
+                <h4 style="display: inline" th:if="${thirdOption} != null"
+                    th:text="'A treia optiune aleasa: ' + ${thirdOption}"></h4>
+                <a class="btn btn-outline-warning"
+                   th:href="@{/student/mypage/camere-update/delete-optiune-camera/{studentId}/{anUniversitar}/{option}(studentId = ${selectedStudentById.getId()},
+                    anUniversitar = ${selectedStudentById.getAnUniversitar}, option = 2)}"><i
+                        class="fas fa-user-times ml-2"></i></a>
+            </div>
+            <div th:if="${fourthOption} != null">
+                <h4 style="display: inline" th:if="${fourthOption} != null"
+                    th:text="'A patra optiune aleasa: ' + ${fourthOption}">></h4>
+                <a class="btn btn-outline-warning"
+                   th:href="@{/student/mypage/camere-update/delete-optiune-camera/{studentId}/{anUniversitar}/{option}(studentId = ${selectedStudentById.getId()},
+                    anUniversitar = ${selectedStudentById.getAnUniversitar}, option = 3)}"><i
+                        class="fas fa-user-times ml-2"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

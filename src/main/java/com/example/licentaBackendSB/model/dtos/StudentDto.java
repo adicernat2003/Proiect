@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import java.util.List;
 
 @Data
 @Builder
@@ -31,8 +32,9 @@ public class StudentDto {
     private String myToken;
     private String friendToken;
     private String camin_preferat;
-    private String flagCazSpecial;
+    private Boolean flagCazSpecial;
     @Enumerated
     private Master master;
     private Boolean isMasterand;
+    private List<String> numarLocuriCamera;
 }
