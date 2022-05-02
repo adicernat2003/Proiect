@@ -4,6 +4,8 @@ import com.example.licentaBackendSB.enums.AnDeStudiu;
 import com.example.licentaBackendSB.enums.Gender;
 import com.example.licentaBackendSB.enums.Session;
 import com.example.licentaBackendSB.loaders.StudentsLoader;
+import com.example.licentaBackendSB.managers.Manager;
+import com.example.licentaBackendSB.model.entities.Camera;
 import com.example.licentaBackendSB.model.entities.Camin;
 import com.example.licentaBackendSB.model.entities.Student;
 import com.example.licentaBackendSB.model.entities.StudentAccount;
@@ -11,13 +13,13 @@ import com.example.licentaBackendSB.others.randomizers.CountyManager;
 import com.example.licentaBackendSB.others.randomizers.DoBandCNPandGenderRandomizer;
 import com.example.licentaBackendSB.others.randomizers.nameRandomizer;
 import com.example.licentaBackendSB.others.randomizers.ygsRandomizer;
+import com.example.licentaBackendSB.repositories.CameraRepository;
 import com.example.licentaBackendSB.repositories.CaminRepository;
 import com.example.licentaBackendSB.repositories.StudentAccountRepository;
 import com.example.licentaBackendSB.repositories.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -27,12 +29,10 @@ import java.util.stream.Stream;
 import static com.example.licentaBackendSB.constants.Constants.DEFAULT_YEAR;
 import static com.example.licentaBackendSB.enums.AnDeStudiu.*;
 import static com.example.licentaBackendSB.enums.Session.CAMIN;
-import static com.example.licentaBackendSB.utils.StringUtils.shuffleString;
 import static org.hibernate.type.IntegerType.ZERO;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(Transactional.TxType.REQUIRED)
 public class SessionService {
 
     private final CaminRepository caminRepository;
@@ -44,6 +44,8 @@ public class SessionService {
     private final StudentAccountService studentAccountService;
     private final CaminService caminService;
     private final StudentService studentService;
+    private final Manager manager;
+    private final CameraRepository cameraRepository;
 
     public List<?> getNewSession(Integer anUniversitar, Session session) {
         Integer numberOfStudentsForAnUniversitar = studentRepository.countAllByAnUniversitar(anUniversitar);
@@ -58,6 +60,7 @@ public class SessionService {
             for (int year = lastYearOfStudents + 1; year <= anUniversitar; year++) {
                 this.createCamineNoiOfAnUniversitar(year);
                 this.createStudentsOfAnUniversitar(year);
+                this.createCamereNoiOfAnUniversitar(year);
             }
         }
         if (CAMIN.equals(session)) {
@@ -150,9 +153,8 @@ public class SessionService {
                 .cnp(studentFromPreviousYear.getCnp())
                 .zi_de_nastere(studentFromPreviousYear.getZi_de_nastere())
                 .judet(studentFromPreviousYear.getJudet())
-                .myToken(shuffleString(studentFromPreviousYear.getNume() + studentFromPreviousYear.getPrenume()))
                 .genSexual(studentFromPreviousYear.getGenSexual())
-                .flagCazSpecial(studentFromPreviousYear.getFlagCazSpecial())
+                .isCazSpecial(studentFromPreviousYear.getIsCazSpecial())
                 .anUniversitar(anUniversitar)
                 .isMasterand(Boolean.TRUE)
                 .master(studentsLoader.getRandomMaster())
@@ -176,9 +178,8 @@ public class SessionService {
                 .cnp(studentFromPreviousYear.getCnp())
                 .zi_de_nastere(studentFromPreviousYear.getZi_de_nastere())
                 .judet(studentFromPreviousYear.getJudet())
-                .myToken(shuffleString(studentFromPreviousYear.getNume() + studentFromPreviousYear.getPrenume()))
                 .genSexual(studentFromPreviousYear.getGenSexual())
-                .flagCazSpecial(studentFromPreviousYear.getFlagCazSpecial())
+                .isCazSpecial(studentFromPreviousYear.getIsCazSpecial())
                 .anUniversitar(anUniversitar)
                 .isMasterand(Boolean.TRUE)
                 .master(studentFromPreviousYear.getMaster())
@@ -200,11 +201,10 @@ public class SessionService {
                 .serie(ygsRandomizer.getRandomSeries())
                 .an(ONE.getValue())
                 .medie((1D + (10D - 1D) * new Random().nextDouble()))
-                .myToken(shuffleString(randomNume + randomPrenume))
                 .zi_de_nastere(randomDoB)
                 .cnp(randomCNP)
                 .genSexual(randomGender)
-                .flagCazSpecial(Boolean.FALSE)
+                .isCazSpecial(Boolean.FALSE)
                 .judet(countyManager.getCountyFromTwoDigitCode(randomCNP.substring(7, 9)))
                 .anUniversitar(anUniversitar)
                 .isMasterand(Boolean.FALSE)
@@ -222,9 +222,8 @@ public class SessionService {
                 .cnp(studentFromPreviousYear.getCnp())
                 .zi_de_nastere(studentFromPreviousYear.getZi_de_nastere())
                 .judet(studentFromPreviousYear.getJudet())
-                .myToken(shuffleString(studentFromPreviousYear.getNume() + studentFromPreviousYear.getPrenume()))
                 .genSexual(studentFromPreviousYear.getGenSexual())
-                .flagCazSpecial(studentFromPreviousYear.getFlagCazSpecial())
+                .isCazSpecial(studentFromPreviousYear.getIsCazSpecial())
                 .anUniversitar(anUniversitar)
                 .isMasterand(Boolean.FALSE)
                 .build();
@@ -241,9 +240,8 @@ public class SessionService {
                 .cnp(studentFromPreviousYear.getCnp())
                 .zi_de_nastere(studentFromPreviousYear.getZi_de_nastere())
                 .judet(studentFromPreviousYear.getJudet())
-                .myToken(shuffleString(studentFromPreviousYear.getNume() + studentFromPreviousYear.getPrenume()))
                 .genSexual(studentFromPreviousYear.getGenSexual())
-                .flagCazSpecial(studentFromPreviousYear.getFlagCazSpecial())
+                .isCazSpecial(studentFromPreviousYear.getIsCazSpecial())
                 .anUniversitar(anUniversitar)
                 .isMasterand(Boolean.FALSE)
                 .build();
@@ -301,6 +299,25 @@ public class SessionService {
                 .build());
 
         caminRepository.saveAll(camine);
+    }
+
+    private void createCamereNoiOfAnUniversitar(Integer anUniversitar) {
+        List<Camera> camere = new ArrayList<>();
+        List<Camin> camine = caminRepository.findAllByAnUniversitar(anUniversitar);
+        for (Camin camin : camine) {
+            List<Object[]> optiuniCamere = caminRepository.getAllCamereOptiuniByNumeCaminAndAnUniversitar(camin.getNumeCamin(), DEFAULT_YEAR);
+            for (int j = 0; j < 4; j++) {
+                for (int i = 0; i < (Integer) optiuniCamere.get(0)[j]; i++) {
+                    camere.add(new Camera().toBuilder()
+                            .anUniversitar(camin.getAnUniversitar())
+                            .numarTotalPersoane(j + 1)
+                            .camin(camin)
+                            .numarCamera(manager.getRandomRoomNumber(camin.getNumeCamin()))
+                            .build());
+                }
+            }
+        }
+        cameraRepository.saveAll(camere);
     }
 
 }

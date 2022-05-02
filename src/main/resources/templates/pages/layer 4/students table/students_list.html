@@ -93,9 +93,6 @@
             <th>CNP</th>
             <th>Zi de nastere</th>
             <th>Judet</th>
-            <th>My Token</th>
-            <th>Friend Token</th>
-            <th>Camin ales</th>
             <th>Gen</th>
             <th>Flag</th>
             <th>Edit Flag</th>
@@ -124,17 +121,14 @@
             <td th:text="${tempStudent.getCnp()}"></td>
             <td th:text="${tempStudent.getZi_de_nastere()}"></td>
             <td th:text="${tempStudent.getJudet()}"></td>
-            <td th:text="${tempStudent.getMyToken()}"></td>
-            <td th:text="${tempStudent.getFriendToken()}"></td>
-            <td th:text="${tempStudent.getCamin_preferat()}"></td>
             <td th:text="${tempStudent.getGenSexual()}"></td>
-            <td th:text="${tempStudent.getFlagCazSpecial()}"></td>
-            <td th:if="${tempStudent.getFlagCazSpecial() == false}">
+            <td th:text="${tempStudent.getIsCazSpecial()}"></td>
+            <td th:if="${tempStudent.getIsCazSpecial() == false}">
                 <a class="btn btn-outline-success"
                    th:href="@{/admin/students/{anUniversitar}/setFlag/{studentId}(studentId=${tempStudent.getId()}, anUniversitar=${tempStudent.getAnUniversitar()})}"><i
                         class="fas fa-toggle-on"></i></a>
             </td>
-            <td th:if="${tempStudent.getFlagCazSpecial() == true}">
+            <td th:if="${tempStudent.getIsCazSpecial() == true}">
                 <a class="btn btn-outline-danger"
                    th:href="@{/admin/students/{anUniversitar}/setFlag/{studentId}(studentId=${tempStudent.getId()}, anUniversitar=${tempStudent.getAnUniversitar()})}"><i
                         class="fas fa-toggle-off"></i></a>
@@ -170,9 +164,6 @@
             <th>CNP</th>
             <th>Zi de nastere</th>
             <th>Judet</th>
-            <th>My Token</th>
-            <th>Friend Token</th>
-            <th>Camin ales</th>
             <th>Gen</th>
             <th>Flag</th>
             <th>Edit Flag</th>
@@ -200,17 +191,14 @@
             <td th:text="${tempStudent.getCnp()}"></td>
             <td th:text="${tempStudent.getZi_de_nastere()}"></td>
             <td th:text="${tempStudent.getJudet()}"></td>
-            <td th:text="${tempStudent.getMyToken()}"></td>
-            <td th:text="${tempStudent.getFriendToken()}"></td>
-            <td th:text="${tempStudent.getCamin_preferat()}"></td>
             <td th:text="${tempStudent.getGenSexual()}"></td>
-            <td th:text="${tempStudent.getFlagCazSpecial()}"></td>
-            <td th:if="${tempStudent.getFlagCazSpecial() == false}">
+            <td th:text="${tempStudent.getIsCazSpecial()}"></td>
+            <td th:if="${tempStudent.getIsCazSpecial() == false}">
                 <a class="btn btn-outline-success"
                    th:href="@{/admin/students/{anUniversitar}/setFlag/{studentId}(studentId=${tempStudent.getId()}, anUniversitar=${tempStudent.getAnUniversitar()})}"><i
                         class="fas fa-toggle-on"></i></a>
             </td>
-            <td th:if="${tempStudent.getFlagCazSpecial() == true}">
+            <td th:if="${tempStudent.getIsCazSpecial() == true}">
                 <a class="btn btn-outline-danger"
                    th:href="@{/admin/students/{anUniversitar}/setFlag/{studentId}(studentId=${tempStudent.getId()}, anUniversitar=${tempStudent.getAnUniversitar()})}"><i
                         class="fas fa-toggle-off"></i></a>

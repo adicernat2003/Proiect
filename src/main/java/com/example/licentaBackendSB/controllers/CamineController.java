@@ -6,7 +6,7 @@ import com.example.licentaBackendSB.model.dtos.CaminDto;
 import com.example.licentaBackendSB.model.entities.Camin;
 import com.example.licentaBackendSB.services.CaminService;
 import com.example.licentaBackendSB.services.SessionService;
-import com.example.licentaBackendSB.services.StudentCaminService;
+import com.example.licentaBackendSB.services.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -23,10 +23,10 @@ public class CamineController {
 
     //Fields
     private final CaminService caminService;
-    private final StudentCaminService studentCaminService;
     private final CaminConverter caminConverter;
     private final Manager manager;
     private final SessionService sessionService;
+    private final StudentService studentService;
 
     /* ~~~~~~~~~~~ Get Camine View ~~~~~~~~~~~ */
     @GetMapping("/{anUniversitar}")
@@ -54,8 +54,7 @@ public class CamineController {
     public String getStudents(@PathVariable String anUniversitar,
                               @PathVariable String numeCamin,
                               Model model) {
-        model.addAttribute("listOfStudents", studentCaminService.getStudents(numeCamin, Integer.parseInt(anUniversitar)));
-
+        model.addAttribute("listOfStudents", studentService.getStudentsByCaminAndAnUniversitar(numeCamin, anUniversitar));
         return "pages/layer 4/camine/tables/studentCaminList";
     }
 

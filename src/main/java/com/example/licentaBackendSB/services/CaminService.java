@@ -10,13 +10,11 @@ import com.example.licentaBackendSB.repositories.CaminRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(Transactional.TxType.REQUIRED)
 public class CaminService {
     //Fields
     private final CaminRepository caminRepository;

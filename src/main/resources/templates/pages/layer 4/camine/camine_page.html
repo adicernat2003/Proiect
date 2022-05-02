@@ -119,26 +119,26 @@
                 </li>
                 <li style="font-size: 19px">
                     <b style="font-size: 25px">Info camin:</b>
-                    <span style="color: darkred" th:if="${leuA.checkIfValuesAreZero()}">needitat</span>
-                    <span style="color: darkgreen" th:unless="${leuA.checkIfValuesAreZero()}">editat</span>
+                    <span style="color: darkred" th:if="${leuA.checkIfValuesAreDefaultValues()}">needitat</span>
+                    <span style="color: darkgreen" th:unless="${leuA.checkIfValuesAreDefaultValues()}">editat</span>
 
                     <!-- edit and update -->
                     <a th:href="@{/admin/camine/edit/{caminId}(caminId=${leuA.getId()})}"
-                       th:if="${leuA.checkIfValuesAreZero()}">
+                       th:if="${leuA.checkIfValuesAreDefaultValues()}">
                         <i class="fas fa-sliders-h ml-2 fa-lg" style="color: darkred"></i>
                     </a>
                     <a th:href="@{/admin/camine/edit/{caminId}(caminId=${leuA.getId()})}"
-                       th:unless="${leuA.checkIfValuesAreZero()}">
+                       th:unless="${leuA.checkIfValuesAreDefaultValues()}">
                         <i class="fas fa-sliders-h ml-2 fa-lg" style="color: darkgreen"></i>
                     </a>
 
                     <!-- clear -->
                     <a th:href="@{/admin/camine/clear/{caminId}(caminId=${leuA.getId()})}"
-                       th:if="${leuA.checkIfValuesAreZero()}">
+                       th:if="${leuA.checkIfValuesAreDefaultValues()}">
                         <i class="fas fa-eraser ml-2 fa-lg" style="color: darkred"></i>
                     </a>
                     <a th:href="@{/admin/camine/clear/{caminId}(caminId=${leuA.getId()})}"
-                       th:unless="${leuA.checkIfValuesAreZero()}">
+                       th:unless="${leuA.checkIfValuesAreDefaultValues()}">
                         <i class="fas fa-eraser ml-2 fa-lg" style="color: darkgreen"></i>
                     </a>
                 </li>
@@ -161,26 +161,26 @@
                 </li>
                 <li style="font-size: 19px">
                     <b style="font-size: 25px">Info camin:</b>
-                    <span style="color: darkred" th:if="${leuC.checkIfValuesAreZero()}">needitat</span>
-                    <span style="color: darkgreen" th:unless="${leuC.checkIfValuesAreZero()}">editat</span>
+                    <span style="color: darkred" th:if="${leuC.checkIfValuesAreDefaultValues()}">needitat</span>
+                    <span style="color: darkgreen" th:unless="${leuC.checkIfValuesAreDefaultValues()}">editat</span>
 
                     <!-- edit and update -->
                     <a th:href="@{/admin/camine/edit/{caminId}(caminId=${leuC.getId()})}"
-                       th:if="${leuC.checkIfValuesAreZero()}">
+                       th:if="${leuC.checkIfValuesAreDefaultValues()}">
                         <i class="fas fa-sliders-h ml-2 fa-lg" style="color: darkred"></i>
                     </a>
                     <a th:href="@{/admin/camine/edit/{caminId}(caminId=${leuC.getId()})}"
-                       th:unless="${leuC.checkIfValuesAreZero()}">
+                       th:unless="${leuC.checkIfValuesAreDefaultValues()}">
                         <i class="fas fa-sliders-h ml-2 fa-lg" style="color: darkgreen"></i>
                     </a>
 
                     <!-- clear -->
                     <a th:href="@{/admin/camine/clear/{caminId}(caminId=${leuC.getId()})}"
-                       th:if="${leuC.checkIfValuesAreZero()}">
+                       th:if="${leuC.checkIfValuesAreDefaultValues()}">
                         <i class="fas fa-eraser ml-2 fa-lg" style="color: darkred"></i>
                     </a>
                     <a th:href="@{/admin/camine/clear/{caminId}(caminId=${leuC.getId()})}"
-                       th:unless="${leuC.checkIfValuesAreZero()}">
+                       th:unless="${leuC.checkIfValuesAreDefaultValues()}">
                         <i class="fas fa-eraser ml-2 fa-lg" style="color: darkgreen"></i>
                     </a>
                 </li>
@@ -203,27 +203,27 @@
                 </li>
                 <li style="font-size: 19px">
                     <b style="font-size: 25px">Info camin:</b>
-                    <span style="color: darkred" th:if="${p20.checkIfValuesAreZero()}">needitat</span>
-                    <span style="color: darkgreen" th:unless="${p20.checkIfValuesAreZero()}">editat</span>
+                    <span style="color: darkred" th:if="${p20.checkIfValuesAreDefaultValues()}">needitat</span>
+                    <span style="color: darkgreen" th:unless="${p20.checkIfValuesAreDefaultValues()}">editat</span>
 
                     <!-- edit and update -->
                     <a th:href="@{/admin/camine/edit/{caminId}(caminId=${p20.getId()})}"
-                       th:if="${p20.checkIfValuesAreZero()}">
+                       th:if="${p20.checkIfValuesAreDefaultValues()}">
                         <i class="fas fa-sliders-h ml-2 fa-lg" style="color: darkred"></i>
                     </a>
 
                     <a th:href="@{/admin/camine/edit/{caminId}(caminId=${p20.getId()})}"
-                       th:unless="${p20.checkIfValuesAreZero()}">
+                       th:unless="${p20.checkIfValuesAreDefaultValues()}">
                         <i class="fas fa-sliders-h ml-2 fa-lg" style="color: darkgreen"></i>
                     </a>
 
                     <!-- clear -->
                     <a th:href="@{/admin/camine/clear/{caminId}(caminId=${p20.getId()})}"
-                       th:if="${p20.checkIfValuesAreZero()}">
+                       th:if="${p20.checkIfValuesAreDefaultValues()}">
                         <i class="fas fa-eraser ml-2 fa-lg" style="color: darkred"></i>
                     </a>
                     <a th:href="@{/admin/camine/clear/{caminId}(caminId=${p20.getId()})}"
-                       th:unless="${p20.checkIfValuesAreZero()}">
+                       th:unless="${p20.checkIfValuesAreDefaultValues()}">
                         <i class="fas fa-eraser ml-2 fa-lg" style="color: darkgreen"></i>
                     </a>
                 </li>
@@ -246,26 +246,26 @@
                 </li>
                 <li style="font-size: 19px">
                     <b style="font-size: 25px">Info camin:</b>
-                    <span style="color: darkred" th:if="${p23.checkIfValuesAreZero()}">needitat</span>
-                    <span style="color: darkgreen" th:unless="${p23.checkIfValuesAreZero()}">editat</span>
+                    <span style="color: darkred" th:if="${p23.checkIfValuesAreDefaultValues()}">needitat</span>
+                    <span style="color: darkgreen" th:unless="${p23.checkIfValuesAreDefaultValues()}">editat</span>
 
                     <!-- edit and update -->
                     <a th:href="@{/admin/camine/edit/{caminId}(caminId=${p23.getId()})}"
-                       th:if="${p23.checkIfValuesAreZero()}">
+                       th:if="${p23.checkIfValuesAreDefaultValues()}">
                         <i class="fas fa-sliders-h ml-2 fa-lg" style="color: darkred"></i>
                     </a>
                     <a th:href="@{/admin/camine/edit/{caminId}(caminId=${p23.getId()})}"
-                       th:unless="${p23.checkIfValuesAreZero()}">
+                       th:unless="${p23.checkIfValuesAreDefaultValues()}">
                         <i class="fas fa-sliders-h ml-2 fa-lg" style="color: darkgreen"></i>
                     </a>
 
                     <!-- clear -->
                     <a th:href="@{/admin/camine/clear/{caminId}(caminId=${p23.getId()})}"
-                       th:if="${p23.checkIfValuesAreZero()}">
+                       th:if="${p23.checkIfValuesAreDefaultValues()}">
                         <i class="fas fa-eraser ml-2 fa-lg" style="color: darkred"></i>
                     </a>
                     <a th:href="@{/admin/camine/clear/{caminId}(caminId=${p23.getId()})}"
-                       th:unless="${p23.checkIfValuesAreZero()}">
+                       th:unless="${p23.checkIfValuesAreDefaultValues()}">
                         <i class="fas fa-eraser ml-2 fa-lg" style="color: darkgreen"></i>
                     </a>
                 </li>

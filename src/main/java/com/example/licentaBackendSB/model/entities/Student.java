@@ -3,7 +3,11 @@ package com.example.licentaBackendSB.model.entities;
 import com.example.licentaBackendSB.enums.Gender;
 import com.example.licentaBackendSB.enums.Master;
 import com.example.licentaBackendSB.others.sort.sortingAlgorithms.*;
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -19,7 +23,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor // for constructor
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true) // for building an instance of Student
-@ToString
 public class Student extends BaseEntity {
 
     //De aici modifici limitele referitoare la numarul de studenti
@@ -32,30 +35,50 @@ public class Student extends BaseEntity {
     private String prenume;
     private String grupa;
     private String serie;
-    private Integer an;
-    @Enumerated(EnumType.STRING)
-    private Master master;
-    private Boolean isMasterand;
-    private Double medie;
     private String zi_de_nastere;
     private String cnp;
     private String judet;
+    private Boolean isCazSpecial = Boolean.FALSE;
+    private Boolean isCazat = Boolean.FALSE;
+    private Boolean isMasterand;
+    private Integer an;
+    private Integer prioritate;
+    private Double medie;
+
+    @Enumerated(EnumType.STRING)
+    private Master master;
+
     @Enumerated(EnumType.STRING)
     private Gender genSexual;
-    private String myToken;
-    private String friendToken;
-    private String camin_preferat;
+
     @OneToOne
-    private Camin camin;
-    private Boolean flagCazSpecial = Boolean.FALSE;
+    private Camin caminRepartizat;
+
+    @OneToOne
+    private Camera cameraRepartizata;
+
+    @OneToMany
+    @JoinTable(name = "student_camine_preferate", joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "camin_id", referencedColumnName = "id"))
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Camin> caminePreferate;
+
+    @OneToMany
+    @JoinTable(name = "student_camere_preferate", joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "camera_id", referencedColumnName = "id"))
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Camera> camerePreferate;
+
+    @ManyToMany
+    @JoinTable(name = "student_friends", joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "friend_id", referencedColumnName = "id"))
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @JsonIgnore
+    private List<Student> friends = new ArrayList<>();
 
     @ElementCollection
     @LazyCollection(LazyCollectionOption.FALSE)
-    private List<String> friendTokens = new ArrayList<>();
-
-    @ElementCollection
-    @LazyCollection(LazyCollectionOption.FALSE)
-    private List<String> numarLocuriCamera = new ArrayList<>();
+    private List<Integer> numarLocuriCamera = new ArrayList<>();
 
     public static Map<String, Integer> sortByValue(Map<String, Integer> unsortMap, final boolean order) {
         List<Map.Entry<String, Integer>> list = new LinkedList<>(unsortMap.entrySet());
@@ -187,6 +210,11 @@ public class Student extends BaseEntity {
         timeEnded = System.nanoTime();
         //System.out.println("BubbleSort: sorting time => " + (timeEnded - timeStarted) + " ns");
         return (timeEnded - timeStarted);
+    }
+
+    @Override
+    public String toString() {
+        return nume + " " + prenume;
     }
 }
 

@@ -122,46 +122,36 @@
         <div class="card-body">
             <p class="card-text">
             <h3><b>Medie: </b> <span th:text="${infoStudent.getMedie()}"></span></h3>
-            <h3><b>My Token: </b> <span th:text="${infoStudent.getMyToken()}"></span></h3>
 
             <hr class="solid">
-            <h3><b>Friend Token: </b> <span id="friendTokenText" th:text="${infoStudent.getFriendToken()}"></span>
-                <td><a class="btn btn-outline-primary"
-                       id="update-btn-ft"
-                       th:href="@{/student/mypage/ft-edit/{studentId}/{anUniversitar}(studentId=${infoStudent.getId()}, anUniversitar=${infoStudent.getAnUniversitar()})}"><i
+
+            <h3>
+                <b>Eligibil pentru caz special: </b><span th:text="${infoStudent.getIsCazSpecial()}"></span>
+            </h3>
+            <h3>
+                <b>Colegi de camera cu care as vrea sa stau: </b><span
+                    th:text="${infoStudent.getFriends()}"></span>
+                <a class="btn btn-outline-primary"
+                   th:href="@{/student/mypage/friend-tokens-edit/{studentId}(studentId=${infoStudent.getId()})}"><i
+                        class="fas fa-user-edit ml-2"></i></a>
+                <a class="btn btn-outline-warning"
+                   th:href="@{/student/mypage/friend-tokens-clear/{studentId}/{anUniversitar}(studentId=${infoStudent.getId()}, anUniversitar = ${infoStudent.getAnUniversitar()})}"><i
+                        class="fas fa-user-times ml-2"></i></a>
+            </h3>
+            <h3><b>Camine preferate: </b> <span th:text="${optiuniCamine}"></span>
+                <td><a class="btn btn-outline-success"
+                       th:href="@{/student/mypage/camine-edit/{studentId}/(studentId=${infoStudent.getId()})}"><i
                         class="fas fa-user-edit ml-2"></i></a></td>
-                <td><a class="btn btn-outline-danger"
-                       id="clear-btn-ft"
-                       th:href="@{/student/mypage/ft-clear/{studentId}/{anUniversitar}(studentId=${infoStudent.getId()}, anUniversitar=${infoStudent.getAnUniversitar()})}"><i
+                <td><a class="btn btn-outline-warning"
+                       th:href="@{/student/mypage/camine-clear/{studentId}/{anUniversitar}(studentId=${infoStudent.getId()}, anUniversitar = ${infoStudent.getAnUniversitar()})}"><i
                         class="fas fa-user-times ml-2"></i></a></td>
             </h3>
-            <span th:if="${infoStudent.getFriendToken() != null}">
-                            <h4>
-                                <b>Nume: </b><td th:text="${yourFriend.get().getNume()}"></td>
-                            </h4>
-                            <h4>
-                                <b>Prenume: </b><td th:text="${yourFriend.get().getPrenume()}"></td>
-                            </h4>
-                        </span>
-            <hr class="solid">
-            <h3>
-                <b>Eligibil pentru caz special: </b><span th:text="${infoStudent.getFlagCazSpecial()}"></span>
-            </h3>
-            <h3>
-                <b>Optiuni numar de locuri in camera: </b><span th:text="${infoStudent.getNumarLocuriCamera()}"></span>
-                <td><a class="btn btn-outline-primary"
-                       th:href="@{/student/mypage/camere-edit/{studentId}(studentId=${infoStudent.getId()})}"><i
+            <h3><b>Camere preferate: </b> <span th:text="${optiuniCamere}"></span>
+                <td><a class="btn btn-outline-success"
+                       th:href="@{/student/mypage/camere-edit/{studentId}/(studentId=${infoStudent.getId()})}"><i
                         class="fas fa-user-edit ml-2"></i></a></td>
                 <td><a class="btn btn-outline-warning"
                        th:href="@{/student/mypage/camere-clear/{studentId}/{anUniversitar}(studentId=${infoStudent.getId()}, anUniversitar = ${infoStudent.getAnUniversitar()})}"><i
-                        class="fas fa-user-times ml-2"></i></a></td>
-            </h3>
-            <h3><b>Camin ales: </b> <span th:text="${infoStudent.getCamin_preferat()}"></span>
-                <td><a class="btn btn-outline-success"
-                       th:href="@{/student/mypage/camin-edit/{studentId}/(studentId=${infoStudent.getId()})}"><i
-                        class="fas fa-user-edit ml-2"></i></a></td>
-                <td><a class="btn btn-outline-warning"
-                       th:href="@{/student/mypage/camin-clear/{studentId}/{anUniversitar}(studentId=${infoStudent.getId()}, anUniversitar = ${infoStudent.getAnUniversitar()})}"><i
                         class="fas fa-user-times ml-2"></i></a></td>
             </h3>
             <h3>

@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import static com.example.licentaBackendSB.constants.Constants.ZERO;
+import static com.example.licentaBackendSB.constants.Constants.*;
 
 @Data
 @Builder
@@ -22,13 +22,13 @@ public class CaminDto {
     private Integer nrCamereTreiStudenti;
     private Integer nrCamerePatruStudenti;
 
-    public Boolean checkIfValuesAreZero() {
-        return ZERO.equals(this.capacitate)
-                && ZERO.equals(this.nrCamereTotal)
-                && ZERO.equals(this.nrCamereUnStudent)
-                && ZERO.equals(this.nrCamereDoiStudenti)
-                && ZERO.equals(this.nrCamereTreiStudenti)
-                && ZERO.equals(this.nrCamerePatruStudenti);
+    public Boolean checkIfValuesAreDefaultValues() {
+        return DEFAULT_CAMIN_CAPACITY.equals(this.capacitate)
+                && DEFAULT_NUMBER_OF_ROOMS.equals(this.nrCamereTotal)
+                && DEFAULT_NUMBER_OF_EACH_KIND_OF_ROOM.equals(this.nrCamereUnStudent)
+                && DEFAULT_NUMBER_OF_EACH_KIND_OF_ROOM.equals(this.nrCamereDoiStudenti)
+                && DEFAULT_NUMBER_OF_EACH_KIND_OF_ROOM.equals(this.nrCamereTreiStudenti)
+                && DEFAULT_NUMBER_OF_EACH_KIND_OF_ROOM.equals(this.nrCamerePatruStudenti);
     }
 
 }

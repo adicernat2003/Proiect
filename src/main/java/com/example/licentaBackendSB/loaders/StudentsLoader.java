@@ -22,7 +22,6 @@ import java.util.Random;
 import static com.example.licentaBackendSB.constants.Constants.DEFAULT_YEAR;
 import static com.example.licentaBackendSB.model.entities.Student.endIndexing;
 import static com.example.licentaBackendSB.model.entities.Student.startIndexing;
-import static com.example.licentaBackendSB.utils.StringUtils.shuffleString;
 
 @Component
 @RequiredArgsConstructor
@@ -87,13 +86,11 @@ public class StudentsLoader implements CommandLineRunner {
                 .serie(ygsRandomizer.getRandomSeries())
                 .an(year)
                 .medie((1D + (10D - 1D) * new Random().nextDouble()))
-                .myToken(shuffleString(randomNume + randomPrenume))
                 .zi_de_nastere(randomDoB)
                 .cnp(randomCNP)
                 .genSexual(randomGender)
                 .judet(countyManager.getCountyFromTwoDigitCode(randomCNP.substring(7, 9)))
-                .flagCazSpecial(Boolean.FALSE)
-                .camin_preferat(null)
+                .isCazSpecial(Boolean.FALSE)
                 .anUniversitar(2021)
                 .isMasterand(Boolean.FALSE)
                 .build();
@@ -112,12 +109,11 @@ public class StudentsLoader implements CommandLineRunner {
                 .prenume(randomPrenume)
                 .an(this.getRandomYearForMaster())
                 .medie((1D + (10D - 1D) * new Random().nextDouble()))
-                .myToken(shuffleString(randomNume + randomPrenume))
                 .zi_de_nastere(randomDoB)
                 .cnp(randomCNP)
                 .genSexual(randomGender)
                 .judet(countyManager.getCountyFromTwoDigitCode(randomCNP.substring(7, 9)))
-                .flagCazSpecial(Boolean.FALSE)
+                .isCazSpecial(Boolean.FALSE)
                 .anUniversitar(2021)
                 .isMasterand(Boolean.TRUE)
                 .master(this.getRandomMaster())

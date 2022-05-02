@@ -1,0 +1,97 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="layouts/header :: myheader"></div>
+
+<style>
+    #update-btn.center, #back-btn.center {
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+</style>
+
+<!-- ------------------------------------ ABOVE IS STYLING, DOWN IS INFO ------------------------------------ -->
+
+<head>
+    <meta charset="utf-8">
+    <meta content="ie=edge" http-equiv="x-ua-compatible">
+    <title>Update Student</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk="
+            src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js"></script>
+    <link crossorigin="anonymous"
+          href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css"
+          integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" rel="stylesheet"/>
+</head>
+
+<body>
+<div class="container my-5">
+    <h2 class="mb-5">Doresc sa stau cu urmatorii colegi in camera</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <form action="#"
+                  method="POST"
+                  th:action="@{/student/mypage/friend-tokens-update/{studentId}/{anUniversitar}(studentId=${selectedStudentById.getId()}, anUniversitar = ${selectedStudentById.getAnUniversitar()})}"
+                  th:object="${selectedStudentById}">
+                <div class="container">
+                    <p th:if="${listOfFriends != null && listOfFriends.size() > 0 && selectedStudentById.getFriends().size() < maxNumberOfStudents - 1}">
+                        <select multiple="multiple" placeholder="Alege un viitor coleg de camera"
+                                th:field="*{friends}" th:width="300px">
+                            <option th:each="friend: ${listOfFriends}"
+                                    th:text="${friend}" th:value="${friend}">
+                        </select>
+                    </p>
+                    <button name="action" type="submit" value="save">Save</button>
+                    <button name="action" type="submit" value="add-more">Add another option</button>
+                    <button name="action" type="submit" value="cancel">Back to my page</button>
+                </div>
+            </form>
+            <div th:if="${firstOption} != null">
+                <h4 style="display: inline" th:if="${firstOption} != null"
+                    th:text="'Primul coleg ales: ' + ${firstOption}"></h4>
+                <a class="btn btn-outline-warning"
+                   th:href="@{/student/mypage/friend-tokens-update/delete-friend-token/{studentId}/{anUniversitar}/{option}(studentId = ${selectedStudentById.getId()},
+                    anUniversitar = ${selectedStudentById.getAnUniversitar}, option = 0)}"><i
+                        class="fas fa-user-times ml-2"></i></a>
+            </div>
+            <div th:if="${secondOption} != null">
+                <h4 style="display: inline" th:if="${secondOption} != null"
+                    th:text="'Al doilea coleg ales: ' + ${secondOption}"></h4>
+                <a class="btn btn-outline-warning"
+                   th:href="@{/student/mypage/friend-tokens-update/delete-friend-token/{studentId}/{anUniversitar}/{option}(studentId = ${selectedStudentById.getId()},
+                    anUniversitar = ${selectedStudentById.getAnUniversitar}, option = 1)}"><i
+                        class="fas fa-user-times ml-2"></i></a>
+            </div>
+            <div th:if="${thirdOption} != null">
+                <h4 style="display: inline" th:if="${thirdOption} != null"
+                    th:text="'Al treilea coleg ales: ' + ${thirdOption}"></h4>
+                <a class="btn btn-outline-warning"
+                   th:href="@{/student/mypage/friend-tokens-update/delete-friend-token/{studentId}/{anUniversitar}/{option}(studentId = ${selectedStudentById.getId()},
+                    anUniversitar = ${selectedStudentById.getAnUniversitar}, option = 2)}"><i
+                        class="fas fa-user-times ml-2"></i></a>
+            </div>
+            <div th:if="${fourthOption} != null">
+                <h4 style="display: inline" th:if="${fourthOption} != null"
+                    th:text="'Al patrulea coleg ales: ' + ${fourthOption}">></h4>
+                <a class="btn btn-outline-warning"
+                   th:href="@{/student/mypage/friend-tokens-update/delete-friend-token/{studentId}/{anUniversitar}/{option}(studentId = ${selectedStudentById.getId()},
+                    anUniversitar = ${selectedStudentById.getAnUniversitar}, option = 3)}"><i
+                        class="fas fa-user-times ml-2"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+<script>
+    $(document).ready(function () {
+        $('select').selectize({
+            sortField: 'text'
+        });
+    });
+</script>

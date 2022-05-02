@@ -29,12 +29,17 @@ public class StudentDto {
     private String judet;
     @Enumerated(EnumType.STRING)
     private Gender genSexual;
-    private String myToken;
-    private String friendToken;
-    private String camin_preferat;
-    private Boolean flagCazSpecial;
+    private Boolean isCazSpecial;
     @Enumerated
     private Master master;
     private Boolean isMasterand;
     private List<String> numarLocuriCamera;
+    private List<String> friends;
+    private List<String> caminePreferate;
+    private List<String> camerePreferate;
+
+    @Override
+    public String toString() {
+        return nume + " " + prenume;
+    }
 }

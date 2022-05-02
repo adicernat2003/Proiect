@@ -35,32 +35,14 @@
         <div class="col-md-6">
             <form action="#"
                   method="POST"
-                  th:action="@{/student/mypage/camere-update/{studentId}/{anUniversitar}(studentId=${selectedStudentById.getId()}, anUniversitar = ${selectedStudentById.getAnUniversitar()})}"
+                  th:action="@{/student/mypage/camine-update/{studentId}/{anUniversitar}(studentId=${selectedStudentById.getId()}, anUniversitar = ${selectedStudentById.getAnUniversitar()})}"
                   th:object="${selectedStudentById}">
                 <div class="container">
-                    <p th:if="${listOfCamerePreferate != null && listOfCamerePreferate.size() > 0}">
-                        <select multiple="multiple" placeholder="Alege camerele preferate"
-                                th:field="*{camerePreferate}" th:width="300px">
-                            <optgroup label="Camin Leu A">
-                                <option th:each="camera: ${listOfCamerePreferate}"
-                                        th:if="${camera.startsWith('LEU A') == true}"
-                                        th:text="${camera}" th:value="${camera}">
-                            </optgroup>
-                            <optgroup label="Camin Leu C">
-                                <option th:each="camera: ${listOfCamerePreferate}"
-                                        th:if="${camera.startsWith('LEU C') == true}"
-                                        th:text="${camera}" th:value="${camera}">
-                            </optgroup>
-                            <optgroup label="Camin P20">
-                                <option th:each="camera: ${listOfCamerePreferate}"
-                                        th:if="${camera.startsWith('P20') == true}"
-                                        th:text="${camera}" th:value="${camera}">
-                            </optgroup>
-                            <optgroup label="Camin P23">
-                                <option th:each="camera: ${listOfCamerePreferate}"
-                                        th:if="${camera.startsWith('P23') == true}"
-                                        th:text="${camera}" th:value="${camera}">
-                            </optgroup>
+                    <p th:if="${listOfCamine != null && listOfCamine.size() > 0}">
+                        <select multiple="multiple" placeholder="Alege un camin preferat"
+                                th:field="*{caminePreferate}" th:width="300px">
+                            <option th:each="camin: ${listOfCamine}"
+                                    th:text="${camin}" th:value="${camin}">
                         </select>
                     </p>
                     <button name="action" type="submit" value="save">Save</button>
@@ -69,11 +51,11 @@
                 </div>
             </form>
 
-            <tr th:each="camera,iter : ${selectedStudentById.camerePreferate}">
+            <tr th:each="camin,iter : ${selectedStudentById.caminePreferate}">
                 <div>
-                    <h4 style="display: inline" th:text="'Optiunea numarul ' + ${iter.count} + ': ' + ${camera}"></h4>
+                    <h4 style="display: inline" th:text="'Optiunea numarul ' + ${iter.count} + ': ' + ${camin}"></h4>
                     <a class="btn btn-outline-warning"
-                       th:href="@{/student/mypage/camere-update/delete-optiune-camera/{studentId}/{anUniversitar}/{option}(studentId = ${selectedStudentById.getId()},
+                       th:href="@{/student/mypage/camine-update/delete-clear-camin-preferat/{studentId}/{anUniversitar}/{option}(studentId = ${selectedStudentById.getId()},
                     anUniversitar = ${selectedStudentById.getAnUniversitar}, option = ${iter.index})}"><i
                             class="fas fa-user-times ml-2"></i></a>
                 </div>
