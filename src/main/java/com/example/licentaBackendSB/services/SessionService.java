@@ -23,12 +23,12 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Stream;
 
 import static com.example.licentaBackendSB.constants.Constants.DEFAULT_YEAR;
 import static com.example.licentaBackendSB.enums.AnDeStudiu.*;
 import static com.example.licentaBackendSB.enums.Session.CAMIN;
+import static com.example.licentaBackendSB.managers.Manager.random;
 import static org.hibernate.type.IntegerType.ZERO;
 
 @Service
@@ -131,7 +131,7 @@ public class SessionService {
     }
 
     private int getRandomNumberOfStudentiCareAplicaPentruMaster(int previousNumberOfStudentsInFourthYearOfLicenta) {
-        return new Random().nextInt(0, previousNumberOfStudentsInFourthYearOfLicenta + 1);
+        return random.nextInt(0, previousNumberOfStudentsInFourthYearOfLicenta + 1);
     }
 
     private List<Student> createListOfNewStudentsInFirstYearOfMaster(List<Student> previousStudentsInFourthYearOfLicenta,
@@ -149,7 +149,7 @@ public class SessionService {
                 .nume(studentFromPreviousYear.getNume())
                 .prenume(studentFromPreviousYear.getPrenume())
                 .an(ONE.getValue())
-                .medie((1D + (10D - 1D) * new Random().nextDouble()))
+                .medie((1D + (10D - 1D) * random.nextDouble()))
                 .cnp(studentFromPreviousYear.getCnp())
                 .zi_de_nastere(studentFromPreviousYear.getZi_de_nastere())
                 .judet(studentFromPreviousYear.getJudet())
@@ -158,6 +158,7 @@ public class SessionService {
                 .anUniversitar(anUniversitar)
                 .isMasterand(Boolean.TRUE)
                 .master(studentsLoader.getRandomMaster())
+                .prioritate(manager.getRandomPrioritate())
                 .build();
     }
 
@@ -174,7 +175,7 @@ public class SessionService {
                 .nume(studentFromPreviousYear.getNume())
                 .prenume(studentFromPreviousYear.getPrenume())
                 .an(TWO.getValue())
-                .medie((1D + (10D - 1D) * new Random().nextDouble()))
+                .medie((1D + (10D - 1D) * random.nextDouble()))
                 .cnp(studentFromPreviousYear.getCnp())
                 .zi_de_nastere(studentFromPreviousYear.getZi_de_nastere())
                 .judet(studentFromPreviousYear.getJudet())
@@ -183,6 +184,7 @@ public class SessionService {
                 .anUniversitar(anUniversitar)
                 .isMasterand(Boolean.TRUE)
                 .master(studentFromPreviousYear.getMaster())
+                .prioritate(studentFromPreviousYear.getPrioritate())
                 .build();
     }
 
@@ -200,7 +202,7 @@ public class SessionService {
                 .grupa(this.getNewGrupaForFirstOrThirdYear(ONE))
                 .serie(ygsRandomizer.getRandomSeries())
                 .an(ONE.getValue())
-                .medie((1D + (10D - 1D) * new Random().nextDouble()))
+                .medie((1D + (10D - 1D) * random.nextDouble()))
                 .zi_de_nastere(randomDoB)
                 .cnp(randomCNP)
                 .genSexual(randomGender)
@@ -208,6 +210,7 @@ public class SessionService {
                 .judet(countyManager.getCountyFromTwoDigitCode(randomCNP.substring(7, 9)))
                 .anUniversitar(anUniversitar)
                 .isMasterand(Boolean.FALSE)
+                .prioritate(manager.getRandomPrioritate())
                 .build();
     }
 
@@ -218,7 +221,7 @@ public class SessionService {
                 .grupa(this.getNewGrupaForFirstOrThirdYear(THREE))
                 .serie(ygsRandomizer.getRandomSeries())
                 .an(THREE.getValue())
-                .medie((1D + (10D - 1D) * new Random().nextDouble()))
+                .medie((1D + (10D - 1D) * random.nextDouble()))
                 .cnp(studentFromPreviousYear.getCnp())
                 .zi_de_nastere(studentFromPreviousYear.getZi_de_nastere())
                 .judet(studentFromPreviousYear.getJudet())
@@ -226,6 +229,7 @@ public class SessionService {
                 .isCazSpecial(studentFromPreviousYear.getIsCazSpecial())
                 .anUniversitar(anUniversitar)
                 .isMasterand(Boolean.FALSE)
+                .prioritate(studentFromPreviousYear.getPrioritate())
                 .build();
     }
 
@@ -236,7 +240,7 @@ public class SessionService {
                 .grupa(this.incrementAndGetNewGrupaForSecondAndFourthYear(studentFromPreviousYear.getGrupa()))
                 .serie(studentFromPreviousYear.getSerie())
                 .an(ONE.getValue().equals(studentFromPreviousYear.getAn()) ? TWO.getValue() : FOUR.getValue())
-                .medie((1D + (10D - 1D) * new Random().nextDouble()))
+                .medie((1D + (10D - 1D) * random.nextDouble()))
                 .cnp(studentFromPreviousYear.getCnp())
                 .zi_de_nastere(studentFromPreviousYear.getZi_de_nastere())
                 .judet(studentFromPreviousYear.getJudet())
@@ -244,6 +248,7 @@ public class SessionService {
                 .isCazSpecial(studentFromPreviousYear.getIsCazSpecial())
                 .anUniversitar(anUniversitar)
                 .isMasterand(Boolean.FALSE)
+                .prioritate(studentFromPreviousYear.getPrioritate())
                 .build();
     }
 

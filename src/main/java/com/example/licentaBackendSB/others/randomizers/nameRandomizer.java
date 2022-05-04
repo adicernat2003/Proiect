@@ -1,7 +1,8 @@
 package com.example.licentaBackendSB.others.randomizers;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Random;
+
+import static com.example.licentaBackendSB.managers.Manager.random;
 
 public class nameRandomizer {
 
@@ -10,7 +11,7 @@ public class nameRandomizer {
 
         // length is bounded by 256 Character
         byte[] array = new byte[256];
-        new Random().nextBytes(array);
+        random.nextBytes(array);
 
         String randomString = new String(array, StandardCharsets.UTF_8);
 

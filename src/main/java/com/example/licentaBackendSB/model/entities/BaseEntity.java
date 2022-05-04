@@ -22,4 +22,20 @@ public class BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Integer anUniversitar = 2021;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof BaseEntity that)) return false;
+
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        return anUniversitar != null ? anUniversitar.equals(that.anUniversitar) : that.anUniversitar == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (anUniversitar != null ? anUniversitar.hashCode() : 0);
+        return result;
+    }
 }

@@ -94,6 +94,7 @@
             <th>Zi de nastere</th>
             <th>Judet</th>
             <th>Gen</th>
+            <th>Prioritate</th>
             <th>Flag</th>
             <th>Edit Flag</th>
             <th>Edit Info</th>
@@ -122,6 +123,7 @@
             <td th:text="${tempStudent.getZi_de_nastere()}"></td>
             <td th:text="${tempStudent.getJudet()}"></td>
             <td th:text="${tempStudent.getGenSexual()}"></td>
+            <td th:text="${tempStudent.getPrioritate()}"></td>
             <td th:text="${tempStudent.getIsCazSpecial()}"></td>
             <td th:if="${tempStudent.getIsCazSpecial() == false}">
                 <a class="btn btn-outline-success"
@@ -165,6 +167,7 @@
             <th>Zi de nastere</th>
             <th>Judet</th>
             <th>Gen</th>
+            <th>Prioritate</th>
             <th>Flag</th>
             <th>Edit Flag</th>
             <th>Edit Info</th>
@@ -192,6 +195,7 @@
             <td th:text="${tempStudent.getZi_de_nastere()}"></td>
             <td th:text="${tempStudent.getJudet()}"></td>
             <td th:text="${tempStudent.getGenSexual()}"></td>
+            <td th:text="${tempStudent.getPrioritate()}"></td>
             <td th:text="${tempStudent.getIsCazSpecial()}"></td>
             <td th:if="${tempStudent.getIsCazSpecial() == false}">
                 <a class="btn btn-outline-success"

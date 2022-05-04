@@ -31,9 +31,8 @@ public class StudentConverter {
                 .zi_de_nastere(student.getZi_de_nastere())
                 .master(student.getMaster())
                 .isMasterand(student.getIsMasterand())
-                .numarLocuriCamera(stringUtils.mapListOfIntegersNumarPersoaneCameraToListOfString(student.getNumarLocuriCamera()))
                 .friends(student.getFriends() != null ? student.getFriends().stream()
-                        .map(friend -> friend.getNume() + " " + friend.getPrenume())
+                        .map(friend -> stringUtils.concatenateStrings(friend.getNume(), friend.getPrenume()))
                         .toList() : null)
                 .caminePreferate(student.getCaminePreferate() != null ? student.getCaminePreferate().stream()
                         .map(Camin::getNumeCamin)
@@ -41,6 +40,7 @@ public class StudentConverter {
                 .camerePreferate(student.getCamerePreferate() != null ? student.getCamerePreferate().stream()
                         .map(Camera::getNumarCamera)
                         .toList() : null)
+                .prioritate(student.getPrioritate())
                 .build();
     }
 

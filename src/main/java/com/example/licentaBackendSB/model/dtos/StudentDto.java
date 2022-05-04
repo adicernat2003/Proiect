@@ -37,6 +37,7 @@ public class StudentDto {
     private List<String> friends;
     private List<String> caminePreferate;
     private List<String> camerePreferate;
+    private Integer prioritate;
 
     @Override
     public String toString() {

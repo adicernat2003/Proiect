@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 @Setter// for getters/setters
 @AllArgsConstructor // for constructor
 @NoArgsConstructor
-@SuperBuilder(toBuilder = true) // for building an instance of Student
+@SuperBuilder(toBuilder = true)
 public class Student extends BaseEntity {
 
     //De aici modifici limitele referitoare la numarul de studenti
@@ -57,17 +58,17 @@ public class Student extends BaseEntity {
     @OneToOne
     private Camera cameraRepartizata;
 
-    @OneToMany
+    @ManyToMany
     @JoinTable(name = "student_camine_preferate", joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "camin_id", referencedColumnName = "id"))
     @LazyCollection(LazyCollectionOption.FALSE)
-    private List<Camin> caminePreferate;
+    private List<Camin> caminePreferate = new ArrayList<>();
 
-    @OneToMany
+    @ManyToMany
     @JoinTable(name = "student_camere_preferate", joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "camera_id", referencedColumnName = "id"))
     @LazyCollection(LazyCollectionOption.FALSE)
-    private List<Camera> camerePreferate;
+    private List<Camera> camerePreferate = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(name = "student_friends", joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"),
@@ -75,10 +76,6 @@ public class Student extends BaseEntity {
     @LazyCollection(LazyCollectionOption.FALSE)
     @JsonIgnore
     private List<Student> friends = new ArrayList<>();
-
-    @ElementCollection
-    @LazyCollection(LazyCollectionOption.FALSE)
-    private List<Integer> numarLocuriCamera = new ArrayList<>();
 
     public static Map<String, Integer> sortByValue(Map<String, Integer> unsortMap, final boolean order) {
         List<Map.Entry<String, Integer>> list = new LinkedList<>(unsortMap.entrySet());
@@ -215,6 +212,19 @@ public class Student extends BaseEntity {
     @Override
     public String toString() {
         return nume + " " + prenume;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Student student = (Student) o;
+        return getId() != null && Objects.equals(getId(), student.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
     }
 }
 

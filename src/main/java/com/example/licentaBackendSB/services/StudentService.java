@@ -100,6 +100,15 @@ public class StudentService {
         throw new IllegalArgumentException("Invalid student Id:" + studentId);
     }
 
+    public List<Student> getStudentsByCaminAndAnUniversitar(String numeCamin, String anUniversitar) {
+        Optional<Camin> caminOpt = caminRepository.findCaminByNumeCaminAndAnUniversitar(numeCamin, Integer.parseInt(anUniversitar));
+        if (caminOpt.isPresent()) {
+            Camin camin = caminOpt.get();
+            return studentRepository.findAllByCaminAndAnUniversitar(camin, Integer.parseInt(anUniversitar));
+        }
+        throw new IllegalArgumentException("Acest camin nu exista!");
+    }
+
     public Integer getLowestAnUniversitarForStudent(String nume, String prenume) {
         Optional<Integer> lowestAnUniversitarForStudentOpt = studentRepository.getLowestAnUniversitarForStudent(nume, prenume);
         if (lowestAnUniversitarForStudentOpt.isPresent()) {
@@ -212,7 +221,8 @@ public class StudentService {
         }
     }
 
-    public String validateNumberOfFriendsBasedOnMaximumNumberOfStudentiInCamera(Student student, StudentDto studentDto) {
+    /*
+        public String validateNumberOfFriendsBasedOnMaximumNumberOfStudentiInCamera(Student student, StudentDto studentDto) {
         String message = "";
         if (studentDto.getFriends() == null) {
             return message;
@@ -224,18 +234,7 @@ public class StudentService {
         }
         return message;
     }
-
-    private void importOptiuniNumarPersoanePentruCeilaltiPrieteniAdaugati(Student student) {
-        List<Student> friends = student.getFriends();
-        for (Student friend : friends) {
-            friend.getNumarLocuriCamera().clear();
-            for (Integer numarPersoaneCamera : student.getNumarLocuriCamera()) {
-                if (!friend.getNumarLocuriCamera().contains(numarPersoaneCamera))
-                    friend.getNumarLocuriCamera().add(numarPersoaneCamera);
-            }
-            studentRepository.save(friend);
-        }
-    }
+     */
 
     public String redirectToMyPage(String anUniversitar) {
         return "redirect:/student/mypage/" + anUniversitar;
@@ -249,43 +248,36 @@ public class StudentService {
         return "pages/layer 4/info pages/student/crud mypage/update_optiuni_camere";
     }
 
-    public String updateOptiuniCamere(Long studentId, String anUniversitar, StudentDto newStudent) {
+    public String updateOptiuniCamere(Long studentId, String anUniversitar, StudentDto newStudent, boolean addAnotherOptiuneCamera) {
         Student student = this.getStudentById(studentId);
-        if (newStudent.getCamerePreferate() != null) {
+        if (newStudent.getCamerePreferate() != null && !newStudent.getCamerePreferate().isEmpty()) {
             for (String numeCamera : newStudent.getCamerePreferate()) {
                 Camera camera = cameraRepository.findByNumarCameraAndAnUniversitar(stringUtils.extractNumeCameraFromString(numeCamera), Integer.parseInt(anUniversitar));
                 student.getCamerePreferate().add(camera);
             }
             studentRepository.save(student);
+            this.refreshCamerePreferateToAllStudentFriends(student);
+            if (Boolean.TRUE.equals(addAnotherOptiuneCamera)) {
+                return "redirect:/student/mypage/camere-edit/" + studentId;
+            }
         }
         return "redirect:/student/mypage/" + anUniversitar;
     }
 
-    public String addAnotherOptiuneCamera(Long studentId, String anUniversitar, StudentDto newStudent) {
+    public String clearCamerePreferate(Long studentId, String indexOptiuneString, String anUniversitar, boolean clearAllCamerePreferate) {
         Student student = this.getStudentById(studentId);
-        if (newStudent.getNumarLocuriCamera() != null) {
-            newStudent.getNumarLocuriCamera().forEach(camera -> student.getNumarLocuriCamera().add(stringUtils.mapStringNumarPersoaneCameraToInteger(camera)));
+        if (Boolean.TRUE.equals(clearAllCamerePreferate)) {
+            student.getCamerePreferate().clear();
             studentRepository.save(student);
-            this.importOptiuniNumarPersoanePentruCeilaltiPrieteniAdaugati(student);
-            return "redirect:/student/mypage/camere-edit/" + studentId;
-        } else {
+            this.refreshCamerePreferateToAllStudentFriends(student);
             return "redirect:/student/mypage/" + anUniversitar;
+        } else {
+            int indexOptiuneInteger = Integer.parseInt(indexOptiuneString);
+            student.getCamerePreferate().remove(indexOptiuneInteger);
+            studentRepository.save(student);
+            this.refreshCamerePreferateToAllStudentFriends(student);
+            return "redirect:/student/mypage/camere-edit/" + studentId;
         }
-    }
-
-    public String clearCameraPreferata(Long studentId, String indexOptiuneString, String anUniversitar) {
-        Student student = this.getStudentById(studentId);
-        int indexOptiuneInteger = Integer.parseInt(indexOptiuneString);
-        student.getCamerePreferate().remove(indexOptiuneInteger);
-        studentRepository.save(student);
-        return "redirect:/student/mypage/camere-edit/" + studentId;
-    }
-
-    public String clearCamerePreferate(Long studentId, String anUniversitar) {
-        Student student = this.getStudentById(studentId);
-        student.getCamerePreferate().clear();
-        studentRepository.save(student);
-        return "redirect:/student/mypage/" + anUniversitar;
     }
 
     public String editFriendTokens(Long studentId, Model model) {
@@ -293,7 +285,6 @@ public class StudentService {
         StudentDto studentDto = studentConverter.mapStudentEntityToDto(selectedStudent);
         model.addAttribute("selectedStudentById", studentDto);
         model.addAttribute("listOfFriends", manager.getListOfStudentsForStudent(selectedStudent));
-        model.addAttribute("maxNumberOfStudents", manager.getMaxNumberOfStudentiInCamera(selectedStudent));
         model.addAttribute("firstOption", studentDto.getFriends().size() > 0 ? studentDto.getFriends().get(0) : null);
         model.addAttribute("secondOption", studentDto.getFriends().size() > 1 ? studentDto.getFriends().get(1) : null);
         model.addAttribute("thirdOption", studentDto.getFriends().size() > 2 ? studentDto.getFriends().get(2) : null);
@@ -301,129 +292,147 @@ public class StudentService {
         return "pages/layer 4/info pages/student/crud mypage/update_friend_tokens";
     }
 
-    public String updateFriendTokens(Long studentId, String anUniversitar, StudentDto newStudent) {
+    public String updateFriendTokens(Long studentId, String anUniversitar, StudentDto newStudent, boolean addAnotherFriend) {
         Student student = this.getStudentById(studentId);
-        String err = this.validateNumberOfFriendsBasedOnMaximumNumberOfStudentiInCamera(student, newStudent);
-        if (!err.isEmpty()) {
-            log.info(err);
-            return "redirect:/student/mypage/" + anUniversitar;
-        }
-        if (newStudent.getFriends() != null) {
+        if (newStudent.getFriends() != null && !newStudent.getFriends().isEmpty()) {
             for (String friend : newStudent.getFriends()) {
                 String[] numeSiPrenume = friend.split(" ");
                 Student studentFriend = studentRepository.getStudentByNumeAndPrenumeAndAnUniversitar(numeSiPrenume[0], numeSiPrenume[1], Integer.parseInt(anUniversitar)).get();
-                this.makeFriends(student, studentFriend);
+                student.getFriends().add(studentFriend);
+                studentFriend.getFriends().add(student);
+                studentRepository.save(studentFriend);
             }
-            this.importOptiuniNumarPersoanePentruCeilaltiPrieteniAdaugati(student);
+            student = studentRepository.save(student);
+            this.makeFriends(student);
+            this.refreshCamereAndCaminePreferateForAllStudentFriends(student);
+            if (Boolean.TRUE.equals(addAnotherFriend)) {
+                return "redirect:/student/mypage/friend-tokens-edit/" + studentId;
+            }
         }
         return "redirect:/student/mypage/" + anUniversitar;
     }
 
-    public String addAnotherFriend(Long studentId, String anUniversitar, StudentDto newStudent) {
-        Student student = this.getStudentById(studentId);
-        String err = this.validateNumberOfFriendsBasedOnMaximumNumberOfStudentiInCamera(student, newStudent);
-        if (!err.isEmpty()) {
-            log.info(err);
-            return "redirect:/student/mypage/" + anUniversitar;
-        }
-        if (newStudent.getFriends() != null) {
-            for (String friend : newStudent.getFriends()) {
-                String[] numeSiPrenume = friend.split(" ");
-                Student studentFriend = studentRepository.getStudentByNumeAndPrenumeAndAnUniversitar(numeSiPrenume[0], numeSiPrenume[1], Integer.parseInt(anUniversitar)).get();
-                this.makeFriends(student, studentFriend);
+    private void makeFriends(Student student) {
+        List<Student> friends = studentRepository.findAllFriendsOfStudent(student.getId());
+        for (Student friend : friends) {
+            for (Student otherFriend : student.getFriends()) {
+                if (!friend.getId().equals(otherFriend.getId()) && !isFriendAlreadyInStudentsFriendList(friend, otherFriend)) {
+                    friend.getFriends().add(otherFriend);
+                }
             }
-            this.importOptiuniNumarPersoanePentruCeilaltiPrieteniAdaugati(student);
-            return "redirect:/student/mypage/friend-tokens-edit/" + studentId;
-        } else {
-            return "redirect:/student/mypage/" + anUniversitar;
-        }
-    }
-
-    // Fiecare prieten deja existent il va adauga pe cel nou il lista lui, iar cel nou ii va adauga pe toti ceilalti
-    private void makeFriends(Student student, Student studentFriend) {
-        // Mai intai noul prieten se imprieteneste cu student-ul principal
-        student.getFriends().add(studentFriend);
-        studentFriend.getFriends().add(student);
-        student = studentRepository.save(student);
-        // Apoi cu lista lui de prieteni
-        for (Student friend : student.getFriends()) {
-            if (!friend.equals(studentFriend)) {
-                friend.getFriends().add(studentFriend);
-                studentFriend.getFriends().add(friend);
-                studentRepository.save(friend);
-            }
-        }
-        studentRepository.save(studentFriend);
-    }
-
-    public String deleteFriendToken(Long studentId, String indexOptiuneString) {
-        Student student = this.getStudentById(studentId);
-        int indexOptiuneInteger = Integer.parseInt(indexOptiuneString);
-        student.getFriends().remove(indexOptiuneInteger);
-        studentRepository.save(student);
-        return "redirect:/student/mypage/friend-tokens-edit/" + studentId;
-    }
-
-    public String clearFriendTokens(Long studentId, String anUniversitar) {
-        Student student = this.getStudentById(studentId);
-        for (Student friend : student.getFriends()) {
-            friend.getFriends().clear();
             studentRepository.save(friend);
         }
-        student.getFriends().clear();
-        studentRepository.save(student);
-        return "redirect:/student/mypage/" + anUniversitar;
     }
 
-    public List<Student> getStudentsByCaminAndAnUniversitar(String numeCamin, String anUniversitar) {
-        Optional<Camin> caminOpt = caminRepository.findCaminByNumeCaminAndAnUniversitar(numeCamin, Integer.parseInt(anUniversitar));
-        if (caminOpt.isPresent()) {
-            Camin camin = caminOpt.get();
-            return studentRepository.findAllByCaminAndAnUniversitar(camin, Integer.parseInt(anUniversitar));
+    private boolean isFriendAlreadyInStudentsFriendList(Student student, Student friend) {
+        if (student.getFriends().size() == 0) {
+            return false;
         }
-        throw new IllegalArgumentException("Acest camin nu exista!");
+        return student.getFriends()
+                .stream()
+                .anyMatch(localFriend -> localFriend.getId().equals(friend.getId()));
     }
 
-    public String editOptiuniCaminePreferate(Long studentId, Model model) {
+    public String clearFriendTokens(Long studentId, String indexOptiuneString, String anUniversitar, boolean clearAllFriends) {
+        Student student = this.getStudentById(studentId);
+        if (Boolean.TRUE.equals(clearAllFriends)) {
+            List<Student> friends = studentRepository.findAllFriendsOfStudent(studentId);
+            for (Student friend : friends) {
+                friend.getFriends().clear();
+                studentRepository.save(friend);
+            }
+            student.getFriends().clear();
+            studentRepository.save(student);
+            this.refreshCamereAndCaminePreferateForAllStudentFriends(student);
+            return "redirect:/student/mypage/" + anUniversitar;
+        } else {
+            int indexOptiuneInteger = Integer.parseInt(indexOptiuneString);
+            this.deleteStudent(student, student.getFriends().get(indexOptiuneInteger).getId(), indexOptiuneInteger);
+            return "redirect:/student/mypage/friend-tokens-edit/" + studentId;
+        }
+    }
+
+    private void deleteStudent(Student student, Long idOfStudentToBeDeleted, int indexOptiuneInteger) {
+        Student studentToBeDeleted = studentRepository.getById(idOfStudentToBeDeleted);
+        student.getFriends().remove(indexOptiuneInteger);
+        studentRepository.save(student);
+        studentToBeDeleted.getFriends().clear();
+        studentToBeDeleted.getCaminePreferate().clear();
+        studentToBeDeleted.getCamerePreferate().clear();
+        List<Student> friends = studentRepository.findAllFriendsOfStudent(student.getId());
+        for (Student friend : friends) {
+            friend.getFriends().remove(studentToBeDeleted);
+            studentRepository.save(friend);
+        }
+        studentRepository.save(studentToBeDeleted);
+    }
+
+    public String editCaminePreferate(Long studentId, Model model) {
         Student selectedStudent = this.getStudentById(studentId);
         StudentDto studentDto = studentConverter.mapStudentEntityToDto(selectedStudent);
         model.addAttribute("selectedStudentById", studentDto);
         model.addAttribute("listOfCamine", manager.getListOfCaminePreferate(selectedStudent));
-        model.addAttribute("firstOption", selectedStudent.getCaminePreferate().size() > 0 ?
-                selectedStudent.getCaminePreferate().get(0).getNumeCamin() : null);
-        model.addAttribute("secondOption", selectedStudent.getCaminePreferate().size() > 1 ?
-                selectedStudent.getCaminePreferate().get(1).getNumeCamin() : null);
-        model.addAttribute("thirdOption", selectedStudent.getCaminePreferate().size() > 2 ?
-                selectedStudent.getCaminePreferate().get(2).getNumeCamin() : null);
-        model.addAttribute("fourthOption", selectedStudent.getCaminePreferate().size() > 3 ?
-                selectedStudent.getCaminePreferate().get(3).getNumeCamin() : null);
         return "pages/layer 4/info pages/student/crud mypage/update_optiuni_camine";
     }
 
-    public String updateCaminePreferate(Long studentId, String anUniversitar, StudentDto newStudent) {
+    public String updateCaminePreferate(Long studentId, String anUniversitar, StudentDto newStudent, boolean addAnotherCaminPreferat) {
         Student student = this.getStudentById(studentId);
-        if (newStudent.getCaminePreferate() != null) {
+        if (newStudent.getCaminePreferate() != null && !newStudent.getCaminePreferate().isEmpty()) {
             for (String numeCamin : newStudent.getCaminePreferate()) {
                 Camin camin = caminRepository.findCaminByNumeCaminAndAnUniversitar(numeCamin, Integer.parseInt(anUniversitar)).get();
                 student.getCaminePreferate().add(camin);
             }
+            studentRepository.save(student);
+            this.refreshCaminePreferateToAllStudentFriends(student);
+            if (Boolean.TRUE.equals(addAnotherCaminPreferat)) {
+                return "redirect:/student/mypage/camine-edit/" + studentId;
+            }
         }
-        studentRepository.save(student);
         return "redirect:/student/mypage/" + anUniversitar;
     }
 
-    public String clearCaminePreferate(Long studentId, String anUniversitar) {
+    public String clearCaminePreferate(Long studentId, String indexOptiuneString, String anUniversitar, boolean clearAllCaminePreferate) {
         Student student = this.getStudentById(studentId);
-        student.getCaminePreferate().clear();
-        studentRepository.save(student);
-        return "redirect:/student/mypage/" + anUniversitar;
+        if (Boolean.TRUE.equals(clearAllCaminePreferate)) {
+            student.getCaminePreferate().clear();
+            studentRepository.save(student);
+            this.refreshCaminePreferateToAllStudentFriends(student);
+            return "redirect:/student/mypage/" + anUniversitar;
+        } else {
+            student.getCaminePreferate().remove(Integer.parseInt(indexOptiuneString));
+            studentRepository.save(student);
+            this.refreshCaminePreferateToAllStudentFriends(student);
+            return "redirect:/student/mypage/camine-edit/" + studentId;
+        }
     }
 
-    public String clearCaminPreferat(Long studentId, String indexOptiuneString) {
-        Student student = this.getStudentById(studentId);
-        int indexOptiuneInteger = Integer.parseInt(indexOptiuneString);
-        student.getCaminePreferate().remove(indexOptiuneInteger);
-        studentRepository.save(student);
-        return "redirect:/student/mypage/camine-edit/" + studentId;
+    private void refreshCamereAndCaminePreferateForAllStudentFriends(Student student) {
+        this.refreshCaminePreferateToAllStudentFriends(student);
+        this.refreshCamerePreferateToAllStudentFriends(student);
     }
+
+    private void refreshCaminePreferateToAllStudentFriends(Student student) {
+        List<Student> friends = studentRepository.findAllFriendsOfStudent(student.getId());
+        for (Student friend : friends) {
+            friend.getCaminePreferate().clear();
+            List<Camin> caminePreferate = caminRepository.findAllCaminePreferateOfStudent(student.getId());
+            for (Camin camin : caminePreferate) {
+                friend.getCaminePreferate().add(camin);
+            }
+            studentRepository.save(friend);
+        }
+    }
+
+    private void refreshCamerePreferateToAllStudentFriends(Student student) {
+        List<Student> friends = studentRepository.findAllFriendsOfStudent(student.getId());
+        for (Student friend : friends) {
+            friend.getCamerePreferate().clear();
+            List<Camera> camerePreferate = cameraRepository.findAllCamerePreferateOfStudent(student.getId());
+            for (Camera camera : camerePreferate) {
+                friend.getCamerePreferate().add(camera);
+            }
+            studentRepository.save(friend);
+        }
+    }
+
 }

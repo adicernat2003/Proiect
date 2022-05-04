@@ -27,4 +27,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     @Query("select s from Student s where s.caminRepartizat = ?1 and s.anUniversitar = ?2")
     List<Student> findAllByCaminAndAnUniversitar(Camin camin, Integer anUniversitar);
+
+    @Query(nativeQuery = true, value = "select * from Student s where s.id in (select sf.friend_id from student_friends sf WHERE sf.student_id = ?1)")
+    List<Student> findAllFriendsOfStudent(Long studentId);
 }

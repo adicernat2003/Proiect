@@ -23,6 +23,10 @@ public class StringUtils {
         return shuffled.toString();
     }
 
+    public String concatenateStrings(String a, String b) {
+        return a + " " + b;
+    }
+
     public List<String> mapCamineToNumeCamie(List<Camin> camine) {
         return camine.stream()
                 .map(Camin::getNumeCamin)

@@ -30,9 +30,14 @@ public class Manager {
     private final StringUtils stringUtils;
     private final CaminRepository caminRepository;
     private final CameraRepository cameraRepository;
+    public static final Random random = new Random();
+
+    public Integer getRandomPrioritate() {
+        return random.nextInt(0, 5);
+    }
 
     public String getRandomRoomNumber(String numeCamin) {
-        int roomNum = new Random().nextInt(9999 - 1000) + 1000;
+        int roomNum = random.nextInt(9999 - 1000) + 1000;
         return numeCamin.toUpperCase() + "-" + roomNum;
     }
 
@@ -78,14 +83,6 @@ public class Manager {
                 .toList();
     }
 
-    public List<String> getListaOptiuniCamereForStudent(Student student) {
-        return this.getListOptiuniCamere().stream()
-                .map(stringUtils::mapStringNumarPersoaneCameraToInteger)
-                .filter(integer -> !student.getNumarLocuriCamera().contains(integer))
-                .map(stringUtils::mapIntegerNumarPersoaneCameraToString)
-                .toList();
-    }
-
     public List<String> getListOfCaminePreferate(Student student) {
         return caminRepository.findAllByAnUniversitar(student.getAnUniversitar()).stream()
                 .filter(camin -> !student.getCaminePreferate().contains(camin))
@@ -106,13 +103,6 @@ public class Manager {
 
     public List<String> getListOptiuniCamere() {
         return List.of(O_PERSOANA, DOUA_PERSOANE, TREI_PERSOANE, PATRU_PERSOANE);
-    }
-
-    public int getMaxNumberOfStudentiInCamera(Student student) {
-        return student.getNumarLocuriCamera() != null && student.getNumarLocuriCamera().size() > 0 ?
-                student.getNumarLocuriCamera().stream()
-                        .max(Integer::compareTo)
-                        .get() : 0;
     }
 
 }

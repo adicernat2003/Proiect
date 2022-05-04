@@ -38,7 +38,7 @@
                   th:action="@{/student/mypage/friend-tokens-update/{studentId}/{anUniversitar}(studentId=${selectedStudentById.getId()}, anUniversitar = ${selectedStudentById.getAnUniversitar()})}"
                   th:object="${selectedStudentById}">
                 <div class="container">
-                    <p th:if="${listOfFriends != null && listOfFriends.size() > 0 && selectedStudentById.getFriends().size() < maxNumberOfStudents - 1}">
+                    <p th:if="${listOfFriends != null && listOfFriends.size() > 0}">
                         <select multiple="multiple" placeholder="Alege un viitor coleg de camera"
                                 th:field="*{friends}" th:width="300px">
                             <option th:each="friend: ${listOfFriends}"

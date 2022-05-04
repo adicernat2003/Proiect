@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 
+import static com.example.licentaBackendSB.managers.Manager.random;
+
 @Component
 public class DoBandCNPandGenderRandomizer {
 
@@ -35,25 +37,25 @@ public class DoBandCNPandGenderRandomizer {
     private int getRandomYearOfBirthForMaster(Integer anUniversitar) {
         int firstYear = anUniversitar - 25;
         int lastYear = anUniversitar - 23;
-        return new Random().nextInt(lastYear - firstYear) + firstYear;
+        return random.nextInt(lastYear - firstYear) + firstYear;
     }
 
     private int getRandomYearOfBirthForLicenta(Integer anUniversitar) {
         int firstYear = anUniversitar - 23;
         int lastYear = anUniversitar - 18;
-        return new Random().nextInt(lastYear - firstYear) + firstYear;
+        return random.nextInt(lastYear - firstYear) + firstYear;
     }
 
     private int getRandomDayOfBirth() {
         int firstDayOfMonth = 1;
         int lastDayOfMonth = 31;
-        return new Random().nextInt(lastDayOfMonth - firstDayOfMonth) + firstDayOfMonth;
+        return random.nextInt(lastDayOfMonth - firstDayOfMonth) + firstDayOfMonth;
     }
 
     private int getRandomMonthOfBirth() {
         int firstMonth = 1;
         int lastMonth = 12;
-        return new Random().nextInt(lastMonth - firstMonth) + firstMonth;
+        return random.nextInt(lastMonth - firstMonth) + firstMonth;
     }
 
     public Gender getGender() {
@@ -62,14 +64,14 @@ public class DoBandCNPandGenderRandomizer {
         int startIndex = 1;
         int endIndex = 100;
 
-        int randomGenderIndex = new Random().nextInt(endIndex - startIndex) + startIndex;
+        int randomGenderIndex = random.nextInt(endIndex - startIndex) + startIndex;
 
         return genders[randomGenderIndex % 2];
     }
 
     public String getCNP(String tmp, Gender gender) {
         Map<Integer, String> months = getMonths();
-        Random rand = new Random();
+        Random rand = random;
 
         //Split zi de nastere dupa caracterul punct "."
         String day = tmp.split("\\.")[0];
