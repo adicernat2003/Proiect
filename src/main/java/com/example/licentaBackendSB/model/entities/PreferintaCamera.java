@@ -8,12 +8,12 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity //for hibernate framework
-@Table(name = "student_camine_preferate")  //for database
+@Table(name = "preferinta_camera")  //for database
 @Getter
 @Setter// for getters/setters
 @AllArgsConstructor // for constructor
 @NoArgsConstructor
-public class StudentCaminePreferate {
+public class PreferintaCamera {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

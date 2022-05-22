@@ -20,6 +20,6 @@ public interface CaminRepository extends JpaRepository<Camin, Long> {
     @Query("select c.nrCamereUnStudent, c.nrCamereDoiStudenti, c.nrCamereTreiStudenti, c.nrCamerePatruStudenti from Camin c where c.numeCamin = ?1 and c.anUniversitar = ?2")
     List<Object[]> getAllCamereOptiuniByNumeCaminAndAnUniversitar(String numeCamin, Integer anUniversitar);
 
-    @Query(nativeQuery = true, value = "select * from camin c where c.id in (select sf.camin_id from student_camine_preferate sf WHERE sf.student_id = ?1)")
-    List<Camin> findAllCaminePreferateOfStudent(Long studentId);
+    @Query("select c from Camin c where c.id = ?1")
+    Camin getCaminOfPreferinta(Long caminId);
 }

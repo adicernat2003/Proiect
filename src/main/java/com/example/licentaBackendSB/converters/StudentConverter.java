@@ -1,8 +1,6 @@
 package com.example.licentaBackendSB.converters;
 
 import com.example.licentaBackendSB.model.dtos.StudentDto;
-import com.example.licentaBackendSB.model.entities.Camera;
-import com.example.licentaBackendSB.model.entities.Camin;
 import com.example.licentaBackendSB.model.entities.Student;
 import com.example.licentaBackendSB.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
@@ -34,12 +32,14 @@ public class StudentConverter {
                 .friends(student.getFriends() != null ? student.getFriends().stream()
                         .map(friend -> stringUtils.concatenateStrings(friend.getNume(), friend.getPrenume()))
                         .toList() : null)
-                .caminePreferate(student.getCaminePreferate() != null ? student.getCaminePreferate().stream()
+                /*
+                               .caminePreferate(student.getCaminePreferate() != null ? student.getCaminePreferate().stream()
                         .map(Camin::getNumeCamin)
                         .toList() : null)
                 .camerePreferate(student.getCamerePreferate() != null ? student.getCamerePreferate().stream()
                         .map(Camera::getNumarCamera)
                         .toList() : null)
+                 */
                 .prioritate(student.getPrioritate())
                 .build();
     }

@@ -1,10 +1,12 @@
 package com.example.licentaBackendSB.services;
 
 import com.example.licentaBackendSB.converters.CaminConverter;
+import com.example.licentaBackendSB.enums.Gender;
 import com.example.licentaBackendSB.managers.Manager;
 import com.example.licentaBackendSB.model.dtos.CaminDto;
 import com.example.licentaBackendSB.model.entities.Camera;
 import com.example.licentaBackendSB.model.entities.Camin;
+import com.example.licentaBackendSB.model.entities.Preferinta;
 import com.example.licentaBackendSB.repositories.CameraRepository;
 import com.example.licentaBackendSB.repositories.CaminRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ public class CaminService {
     private final CaminConverter caminConverter;
     private final CameraRepository cameraRepository;
     private final Manager manager;
+    private final CameraService cameraService;
 
     //Methods
     /* Get all Camine */
@@ -156,5 +159,72 @@ public class CaminService {
                 .anUniversitar(camin.getAnUniversitar())
                 .numarTotalPersoane(numarTotalPersoane)
                 .build();
+    }
+
+    public void addCamera(Long caminId, Camera camera) {
+        Camin camin = caminRepository.getById(caminId);
+        camin.getCamere().add(camera);
+        camera.setCamin(camin);
+        cameraRepository.save(camera);
+        caminRepository.save(camin);
+    }
+
+    public List<Camera> getCamere(Long caminId) {
+        return cameraRepository.findAllByCaminId(caminId);
+    }
+
+    public int getCapacity(Long caminId) {
+        List<Camera> camere = cameraRepository.findAllByCaminId(caminId);
+        return camere.stream()
+                .mapToInt(Camera::getNumarTotalPersoane)
+                .sum();
+    }
+
+    public int getAllFreeSpots(Long caminId) {
+        List<Camera> camere = cameraRepository.findAllByCaminId(caminId);
+        return camere.stream()
+                .mapToInt(camera -> cameraService.getAvailableSpots(camera.getId()))
+                .sum();
+    }
+
+    public boolean hasSpotForGender(Long caminId, Gender gender) {
+        List<Camera> camere = cameraRepository.findAllByCaminId(caminId);
+        return camere.stream()
+                .anyMatch(camera -> !cameraService.isFull(camera.getId()) && ((camera.getMAssignedGender() != null ? camera.getMAssignedGender() : gender) == gender));
+    }
+
+    public Camera getSpotForGender(Long caminId, Gender gender) {
+        List<Camera> camere = cameraRepository.findAllByCaminId(caminId);
+        return camere.stream()
+                .filter(camera -> !cameraService.isFull(camera.getId()) && ((camera.getMAssignedGender() != null ? camera.getMAssignedGender() : gender) == gender))
+                .findAny()
+                .get();
+    }
+
+    public int getFreeSpots(Long caminId, Gender gender) {
+        List<Camera> camere = cameraRepository.findAllByCaminId(caminId);
+        return camere.stream()
+                .filter(camera -> camera.getMAssignedGender() != null && camera.getMAssignedGender() == gender)
+                .mapToInt(camera -> cameraService.getAvailableSpots(camera.getId()))
+                .sum();
+    }
+
+    public int getFreeSpots(Long caminId) {
+        List<Camera> camere = cameraRepository.findAllByCaminId(caminId);
+        return camere.stream()
+                .filter(camera -> camera.getMAssignedGender() == null)
+                .mapToInt(camera -> cameraService.getAvailableSpots(camera.getId()))
+                .sum();
+    }
+
+    public Camin getCaminOfPreferinta(Preferinta preferinta) {
+        Optional<Camera> cameraOptional = preferinta.getCamere()
+                .stream()
+                .findFirst();
+        if (cameraOptional.isPresent()) {
+            Long caminId = cameraOptional.get().getCamin().getId();
+            return caminRepository.getCaminOfPreferinta(caminId);
+        }
+        return null;
     }
 }

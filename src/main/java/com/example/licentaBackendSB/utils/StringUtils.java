@@ -2,11 +2,13 @@ package com.example.licentaBackendSB.utils;
 
 import com.example.licentaBackendSB.model.entities.Camera;
 import com.example.licentaBackendSB.model.entities.Camin;
+import com.example.licentaBackendSB.model.entities.Preferinta;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import static com.example.licentaBackendSB.constants.Constants.*;
 import static java.util.Objects.nonNull;
@@ -27,7 +29,7 @@ public class StringUtils {
         return a + " " + b;
     }
 
-    public List<String> mapCamineToNumeCamie(List<Camin> camine) {
+    public List<String> mapCamineToNumeCamie(Set<Camin> camine) {
         return camine.stream()
                 .map(Camin::getNumeCamin)
                 .toList();
@@ -70,8 +72,10 @@ public class StringUtils {
                 .toList() : List.of();
     }
 
-    public List<String> mapCamereToNumarCamere(List<Camera> camere) {
-        return camere.stream()
+    public List<String> mapCamereToNumarCamere(List<Preferinta> preferinte) {
+        return preferinte
+                .stream()
+                .flatMap(preferinta -> preferinta.getCamere().stream())
                 .map(Camera::getNumarCamera)
                 .toList();
     }

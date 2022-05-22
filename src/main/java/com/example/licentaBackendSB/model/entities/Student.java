@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor // for constructor
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true)
-public class Student extends BaseEntity {
+public class Student extends BaseEntity implements Comparable<Student> {
 
     //De aici modifici limitele referitoare la numarul de studenti
     @Transient
@@ -46,29 +46,20 @@ public class Student extends BaseEntity {
     private Integer prioritate;
     private Double medie;
 
+    @ElementCollection
+    private final List<String> mUndesiredAccommodation = new ArrayList<>();
+
     @Enumerated(EnumType.STRING)
     private Master master;
 
     @Enumerated(EnumType.STRING)
     private Gender genSexual;
 
-    @OneToOne
-    private Camin caminRepartizat;
-
-    @OneToOne
+    @ManyToOne
     private Camera cameraRepartizata;
 
-    @ManyToMany
-    @JoinTable(name = "student_camine_preferate", joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "camin_id", referencedColumnName = "id"))
-    @LazyCollection(LazyCollectionOption.FALSE)
-    private List<Camin> caminePreferate = new ArrayList<>();
-
-    @ManyToMany
-    @JoinTable(name = "student_camere_preferate", joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "camera_id", referencedColumnName = "id"))
-    @LazyCollection(LazyCollectionOption.FALSE)
-    private List<Camera> camerePreferate = new ArrayList<>();
+    @OneToMany(mappedBy = "student")
+    private Map<Camin, Preferinta> preferinte = new TreeMap<>();
 
     @ManyToMany
     @JoinTable(name = "student_friends", joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"),
@@ -211,7 +202,7 @@ public class Student extends BaseEntity {
 
     @Override
     public String toString() {
-        return nume + " " + prenume;
+        return this.getFullName() + " " + this.cnp;
     }
 
     @Override
@@ -225,6 +216,24 @@ public class Student extends BaseEntity {
     @Override
     public int hashCode() {
         return 0;
+    }
+
+    @Override
+    public int compareTo(Student o) {
+        if (!Objects.equals(this.getPrioritate(), o.getPrioritate())) {
+            return this.getPrioritate() - o.getPrioritate();
+        }
+        if (!Objects.equals(this.medie, o.medie)) {
+            return -Double.compare(this.medie, o.medie);
+        }
+//        if (this.mNumberOfOutstandingExams != that.mNumberOfOutstandingExams) {
+//            return this.mNumberOfOutstandingExams - that.mNumberOfOutstandingExams;
+//        }
+        return this.getFullName().compareTo(o.getFullName());
+    }
+
+    public String getFullName() {
+        return this.nume + this.prenume;
     }
 }
 

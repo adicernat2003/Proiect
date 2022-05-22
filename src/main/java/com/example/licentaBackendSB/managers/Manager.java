@@ -77,21 +77,25 @@ public class Manager {
     }
 
     public List<String> getListOfCamerePreferateForStudent(Student student) {
-        return cameraRepository.findAllByAnUniversitar(student.getAnUniversitar()).stream()
-                .filter(camera -> !student.getCamerePreferate().contains(camera))
+        return cameraRepository.findAllByAnUniversitar(student.getAnUniversitar())
+                .stream()
+                .filter(camera -> !student.getPreferinte().values().stream().flatMap(preferinta -> preferinta.getCamere().stream()).toList().contains(camera))
+                //.filter(camera -> !student.getCamerePreferate().contains(camera))
                 .map(camera -> camera.getNumarCamera() + ", " + stringUtils.mapIntegerNumarPersoaneCameraToString(camera.getNumarTotalPersoane()))
                 .toList();
     }
 
     public List<String> getListOfCaminePreferate(Student student) {
-        return caminRepository.findAllByAnUniversitar(student.getAnUniversitar()).stream()
-                .filter(camin -> !student.getCaminePreferate().contains(camin))
+        return caminRepository.findAllByAnUniversitar(student.getAnUniversitar())
+                .stream()
+                //.filter(camin -> !student.getCaminePreferate().contains(camin))
                 .map(Camin::getNumeCamin)
                 .toList();
     }
 
     public List<StudentDto> getListOfStudentsForStudent(Student student) {
-        return this.getListOfAllStudentsBasedOnGender(student.getGenSexual(), student.getAnUniversitar()).stream()
+        return this.getListOfAllStudentsBasedOnGender(student.getGenSexual(), student.getAnUniversitar())
+                .stream()
                 .filter(friend -> !student.getFriends().contains(friend) && !friend.getId().equals(student.getId()))
                 .map(studentConverter::mapStudentEntityToDto)
                 .toList();

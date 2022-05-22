@@ -54,7 +54,7 @@ public class CamineController {
     public String getStudents(@PathVariable String anUniversitar,
                               @PathVariable String numeCamin,
                               Model model) {
-        model.addAttribute("listOfStudents", studentService.getStudentsByCaminAndAnUniversitar(numeCamin, anUniversitar));
+        model.addAttribute("listOfStudents", studentService.getStudentsByCaminAndAnUniversitar(numeCamin.replace('_', ' '), anUniversitar));
         return "pages/layer 4/camine/tables/studentCaminList";
     }
 

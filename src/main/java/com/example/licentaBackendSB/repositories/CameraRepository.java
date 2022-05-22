@@ -18,6 +18,6 @@ public interface CameraRepository extends JpaRepository<Camera, Long> {
 
     Camera findByNumarCameraAndAnUniversitar(String numarCamera, Integer anUniversitar);
 
-    @Query(nativeQuery = true, value = "select * from camera c where c.id in (select sf.camera_id from student_camere_preferate sf WHERE sf.student_id = ?1)")
-    List<Camera> findAllCamerePreferateOfStudent(Long studentId);
+    @Query(nativeQuery = true, value = "select * from camera c where c.id IN (select pc.camera_id from preferinta_camera pc where pc.preferinta_id = ?1)")
+    List<Camera> getAllCamereByPreferinta(Long preferintaId);
 }

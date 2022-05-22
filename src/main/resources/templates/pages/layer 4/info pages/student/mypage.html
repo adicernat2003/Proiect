@@ -138,14 +138,6 @@
                    th:href="@{/student/mypage/friend-tokens-clear/{studentId}/{anUniversitar}(studentId=${infoStudent.getId()}, anUniversitar = ${infoStudent.getAnUniversitar()})}"><i
                         class="fas fa-user-times ml-2"></i></a>
             </h3>
-            <h3><b>Camine preferate: </b> <span th:text="${optiuniCamine}"></span>
-                <td><a class="btn btn-outline-success"
-                       th:href="@{/student/mypage/camine-edit/{studentId}/(studentId=${infoStudent.getId()})}"><i
-                        class="fas fa-user-edit ml-2"></i></a></td>
-                <td><a class="btn btn-outline-warning"
-                       th:href="@{/student/mypage/camine-clear/{studentId}/{anUniversitar}(studentId=${infoStudent.getId()}, anUniversitar = ${infoStudent.getAnUniversitar()})}"><i
-                        class="fas fa-user-times ml-2"></i></a></td>
-            </h3>
             <h3><b>Camere preferate: </b> <span th:text="${optiuniCamere}"></span>
                 <td><a class="btn btn-outline-success"
                        th:href="@{/student/mypage/camere-edit/{studentId}/(studentId=${infoStudent.getId()})}"><i

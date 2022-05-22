@@ -23,7 +23,7 @@ import static com.example.licentaBackendSB.constants.Constants.*;
 @AllArgsConstructor // for constructor
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true) // for building an instance of Camin
-public class Camin extends BaseEntity {
+public class Camin extends BaseEntity implements Comparable<Camin> {
 
     private String numeCamin;
     private Integer capacitate = DEFAULT_CAMIN_CAPACITY;
@@ -47,5 +47,11 @@ public class Camin extends BaseEntity {
     @Override
     public int hashCode() {
         return 0;
+    }
+
+
+    @Override
+    public int compareTo(Camin o) {
+        return numeCamin.compareTo(o.numeCamin);
     }
 }

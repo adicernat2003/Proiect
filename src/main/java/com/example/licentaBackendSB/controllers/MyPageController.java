@@ -61,13 +61,15 @@ public class MyPageController {
     public String clearCaminPreferat(@PathVariable("studentId") Long studentId,
                                      @PathVariable("anUniversitar") String anUniversitar,
                                      @PathVariable("option") String indexOptiuneString) {
-        return studentService.clearCaminePreferate(studentId, indexOptiuneString, anUniversitar, false);
+        //return studentService.clearCaminePreferate(studentId, indexOptiuneString, anUniversitar, false);
+        return null;
     }
 
     @RequestMapping(path = "/camine-clear/{studentId}/{anUniversitar}")
     public String clearCaminePreferate(@PathVariable("studentId") Long studentId,
                                        @PathVariable("anUniversitar") String anUniversitar) {
-        return studentService.clearCaminePreferate(studentId, null, anUniversitar, true);
+        //return studentService.clearCaminePreferate(studentId, null, anUniversitar, true);
+        return null;
     }
 
     @GetMapping(path = "/camere-edit/{studentId}")
