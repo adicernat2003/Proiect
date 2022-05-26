@@ -23,16 +23,18 @@ import java.util.*;
 public class Camera extends BaseEntity implements Comparable<Camera> {
     private String numarCamera;
     private Integer numarTotalPersoane;
+
+    @Enumerated(EnumType.STRING)
     private Gender mAssignedGender;
 
-    @OneToMany(mappedBy = "cameraRepartizata")
+    @OneToMany(mappedBy = "cameraRepartizata", fetch = FetchType.EAGER)
     private List<Student> mAssignedStudents = new ArrayList<>();
 
     @ManyToMany
-    @JoinTable(name = "preferinta_camera", joinColumns = @JoinColumn(name = "camera_id", referencedColumnName = "id"),
+    @JoinTable(name = "student_camera_preferata", joinColumns = @JoinColumn(name = "camera_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"))
     @LazyCollection(LazyCollectionOption.FALSE)
-    private Set<Student> mPreferedBy = new TreeSet<>();
+    private Collection<Student> mPreferedBy = new TreeSet<>();
 
     @ManyToOne
     private Camin camin;
@@ -57,4 +59,6 @@ public class Camera extends BaseEntity implements Comparable<Camera> {
         }
         return this.numarCamera.compareTo(camera.numarCamera);
     }
+
+
 }

@@ -43,20 +43,6 @@ public class MyPageController {
         return studentService.editCaminePreferate(studentId, model);
     }
 
-    @RequestMapping(value = "/camine-update/{studentId}/{anUniversitar}", method = RequestMethod.POST, params = "action=save")
-    public String updateCaminePreferate(@PathVariable("studentId") Long studentId,
-                                        @PathVariable("anUniversitar") String anUniversitar,
-                                        StudentDto newStudent) {
-        return studentService.updateCaminePreferate(studentId, anUniversitar, newStudent, false);
-    }
-
-    @RequestMapping(value = "/camine-update/{studentId}/{anUniversitar}", method = RequestMethod.POST, params = "action=add-more")
-    public String addAnotherCaminPreferat(@PathVariable("studentId") Long studentId,
-                                          @PathVariable("anUniversitar") String anUniversitar,
-                                          StudentDto newStudent) {
-        return studentService.updateCaminePreferate(studentId, anUniversitar, newStudent, true);
-    }
-
     @RequestMapping(value = "/camine-update/delete-clear-camin-preferat/{studentId}/{anUniversitar}/{option}")
     public String clearCaminPreferat(@PathVariable("studentId") Long studentId,
                                      @PathVariable("anUniversitar") String anUniversitar,
@@ -94,14 +80,14 @@ public class MyPageController {
     @RequestMapping(value = "/camere-update/delete-optiune-camera/{studentId}/{anUniversitar}/{option}")
     public String clearCameraPreferata(@PathVariable("studentId") Long studentId,
                                        @PathVariable("anUniversitar") String anUniversitar,
-                                       @PathVariable("option") String indexOptiuneString) {
-        return studentService.clearCamerePreferate(studentId, indexOptiuneString, anUniversitar, false);
+                                       @PathVariable("option") String numarCamera) {
+        return studentService.clearCamerePreferate(studentId, numarCamera, anUniversitar, false);
     }
 
     @RequestMapping(path = "/camere-clear/{studentId}/{anUniversitar}")
     public String clearCamerePreferate(@PathVariable("studentId") Long studentId,
                                        @PathVariable("anUniversitar") String anUniversitar) {
-        return studentService.clearCamerePreferate(studentId, null, anUniversitar, false);
+        return studentService.clearCamerePreferate(studentId, null, anUniversitar, true);
     }
 
     @GetMapping(path = "/friend-tokens-edit/{studentId}")

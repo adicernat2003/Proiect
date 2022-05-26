@@ -74,7 +74,7 @@
                     <h4 style="display: inline" th:text="'Optiunea numarul ' + ${iter.count} + ': ' + ${camera}"></h4>
                     <a class="btn btn-outline-warning"
                        th:href="@{/student/mypage/camere-update/delete-optiune-camera/{studentId}/{anUniversitar}/{option}(studentId = ${selectedStudentById.getId()},
-                    anUniversitar = ${selectedStudentById.getAnUniversitar}, option = ${iter.index})}"><i
+                    anUniversitar = ${selectedStudentById.getAnUniversitar}, option = ${camera})}"><i
                             class="fas fa-user-times ml-2"></i></a>
                 </div>
             </tr>

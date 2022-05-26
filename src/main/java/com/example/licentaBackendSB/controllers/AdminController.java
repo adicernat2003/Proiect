@@ -5,6 +5,7 @@ import com.example.licentaBackendSB.managers.Manager;
 import com.example.licentaBackendSB.model.dtos.StudentDto;
 import com.example.licentaBackendSB.model.entities.Student;
 import com.example.licentaBackendSB.others.LoggedAccount;
+import com.example.licentaBackendSB.services.AccommodationService;
 import com.example.licentaBackendSB.services.SessionService;
 import com.example.licentaBackendSB.services.StudentService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,22 @@ public class AdminController {
     private final StudentService studentService;
     private final StudentConverter studentConverter;
     private final SessionService sessionService;
+    private final AccommodationService accommodationService;
     private final Manager manager;
+
+    @RequestMapping("/make-friends/{anUniversitar}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
+    public String makeFriends(@PathVariable String anUniversitar, Model model) {
+        studentService.makeFriends(anUniversitar);
+        return this.getStudents(anUniversitar, model);
+    }
+
+    @RequestMapping("/accommodate/{anUniversitar}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
+    public String accommodateStudents(@PathVariable String anUniversitar, Model model) {
+        accommodationService.accommodateStudents(Integer.parseInt(anUniversitar));
+        return this.getStudents(anUniversitar, model);
+    }
 
     /* ~~~~~~~~~~~ AdminView ~~~~~~~~~~~ */
     @GetMapping

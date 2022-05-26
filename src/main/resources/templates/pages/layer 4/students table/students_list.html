@@ -49,6 +49,18 @@
                     </li>
                 </div>
 
+                <div>
+                    <a th:href="@{/admin/accommodate/{anUniversitar}(anUniversitar=${anUniversitar})}">
+                        Accommodate
+                    </a>
+                </div>
+
+                <div>
+                    <a th:href="@{/admin/make-friends/{anUniversitar}(anUniversitar=${anUniversitar})}">
+                        Make Friends
+                    </a>
+                </div>
+
                 <div th:switch="${isAdmin}">
                     <li class="nav-item" th:case="'admin'">
                         <form th:action="@{/admin/students}">

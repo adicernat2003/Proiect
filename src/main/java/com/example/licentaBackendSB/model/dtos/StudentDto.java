@@ -35,9 +35,9 @@ public class StudentDto {
     private Boolean isMasterand;
     private List<String> numarLocuriCamera;
     private List<String> friends;
-    private List<String> caminePreferate;
     private List<String> camerePreferate;
     private Integer prioritate;
+    private String cameraRepartizata;
 
     @Override
     public String toString() {

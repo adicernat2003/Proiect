@@ -80,7 +80,6 @@ public class Manager {
         return cameraRepository.findAllByAnUniversitar(student.getAnUniversitar())
                 .stream()
                 .filter(camera -> !student.getPreferinte().values().stream().flatMap(preferinta -> preferinta.getCamere().stream()).toList().contains(camera))
-                //.filter(camera -> !student.getCamerePreferate().contains(camera))
                 .map(camera -> camera.getNumarCamera() + ", " + stringUtils.mapIntegerNumarPersoaneCameraToString(camera.getNumarTotalPersoane()))
                 .toList();
     }

@@ -7,9 +7,9 @@ public interface Constants {
     String P23 = "P23";
     Integer ZERO = 0;
     Integer DEFAULT_YEAR = 2021;
-    Integer DEFAULT_CAMIN_CAPACITY = 100;
-    Integer DEFAULT_NUMBER_OF_ROOMS = 40;
-    Integer DEFAULT_NUMBER_OF_EACH_KIND_OF_ROOM = 10;
+    Integer DEFAULT_CAMIN_CAPACITY = 10;
+    Integer DEFAULT_NUMBER_OF_ROOMS = 4;
+    Integer DEFAULT_NUMBER_OF_EACH_KIND_OF_ROOM = 1;
 
     String O_PERSOANA = "O persoana";
     String DOUA_PERSOANE = "Doua persoane";

@@ -8,6 +8,7 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.Hibernate;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class Camin extends BaseEntity implements Comparable<Camin> {
     private Integer nrCamereTreiStudenti = DEFAULT_NUMBER_OF_EACH_KIND_OF_ROOM;
     private Integer nrCamerePatruStudenti = DEFAULT_NUMBER_OF_EACH_KIND_OF_ROOM;
 
-    @OneToMany(mappedBy = "camin")
+    @OneToMany(mappedBy = "camin", fetch = FetchType.EAGER)
     private List<Camera> camere = new ArrayList<>();
 
     @Override
@@ -53,5 +54,12 @@ public class Camin extends BaseEntity implements Comparable<Camin> {
     @Override
     public int compareTo(Camin o) {
         return numeCamin.compareTo(o.numeCamin);
+    }
+
+    @Override
+    public String toString() {
+        return "Camin{" +
+                "numeCamin='" + numeCamin + '\'' +
+                '}';
     }
 }

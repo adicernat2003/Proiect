@@ -30,7 +30,7 @@ public class Student extends BaseEntity implements Comparable<Student> {
     @Transient
     public static final long startIndexing = 1;
     @Transient
-    public static final long endIndexing = 10;
+    public static final long endIndexing = 40;
 
     private String nume;
     private String prenume;
@@ -46,20 +46,23 @@ public class Student extends BaseEntity implements Comparable<Student> {
     private Integer prioritate;
     private Double medie;
 
-    @ElementCollection
-    private final List<String> mUndesiredAccommodation = new ArrayList<>();
-
     @Enumerated(EnumType.STRING)
     private Master master;
 
     @Enumerated(EnumType.STRING)
     private Gender genSexual;
 
+    @OneToMany(mappedBy = "student", fetch = FetchType.EAGER)
+    private Map<Camin, Preferinta> preferinte = new TreeMap<>();
+
     @ManyToOne
     private Camera cameraRepartizata;
 
-    @OneToMany(mappedBy = "student")
-    private Map<Camin, Preferinta> preferinte = new TreeMap<>();
+    @ManyToMany
+    @JoinTable(name = "student_undesired_accomodation", joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "camin_id", referencedColumnName = "id"))
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private final List<Camin> mUndesiredAccommodation = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(name = "student_friends", joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"),
@@ -224,7 +227,7 @@ public class Student extends BaseEntity implements Comparable<Student> {
             return this.getPrioritate() - o.getPrioritate();
         }
         if (!Objects.equals(this.medie, o.medie)) {
-            return -Double.compare(this.medie, o.medie);
+            return -Double.compare(this.getMedie(), o.getMedie());
         }
 //        if (this.mNumberOfOutstandingExams != that.mNumberOfOutstandingExams) {
 //            return this.mNumberOfOutstandingExams - that.mNumberOfOutstandingExams;
@@ -233,7 +236,7 @@ public class Student extends BaseEntity implements Comparable<Student> {
     }
 
     public String getFullName() {
-        return this.nume + this.prenume;
+        return this.getNume() + this.getPrenume();
     }
 }
 

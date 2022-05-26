@@ -20,4 +20,7 @@ public interface CameraRepository extends JpaRepository<Camera, Long> {
 
     @Query(nativeQuery = true, value = "select * from camera c where c.id IN (select pc.camera_id from preferinta_camera pc where pc.preferinta_id = ?1)")
     List<Camera> getAllCamereByPreferinta(Long preferintaId);
+
+    @Query(nativeQuery = true, value = "select * from camera c where c.id IN (select scp.camera_id from student_camera_preferata scp where scp.student_id = ?1)")
+    List<Camera> getAllPreferredCamereByStudent(Long studentId);
 }

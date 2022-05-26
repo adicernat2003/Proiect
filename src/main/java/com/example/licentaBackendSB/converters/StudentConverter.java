@@ -2,6 +2,7 @@ package com.example.licentaBackendSB.converters;
 
 import com.example.licentaBackendSB.model.dtos.StudentDto;
 import com.example.licentaBackendSB.model.entities.Student;
+import com.example.licentaBackendSB.services.CameraService;
 import com.example.licentaBackendSB.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 public class StudentConverter {
 
     private final StringUtils stringUtils;
+    private final CameraService cameraService;
 
     public StudentDto mapStudentEntityToDto(Student student) {
         return StudentDto.builder()
@@ -32,15 +34,11 @@ public class StudentConverter {
                 .friends(student.getFriends() != null ? student.getFriends().stream()
                         .map(friend -> stringUtils.concatenateStrings(friend.getNume(), friend.getPrenume()))
                         .toList() : null)
-                /*
-                               .caminePreferate(student.getCaminePreferate() != null ? student.getCaminePreferate().stream()
-                        .map(Camin::getNumeCamin)
-                        .toList() : null)
-                .camerePreferate(student.getCamerePreferate() != null ? student.getCamerePreferate().stream()
-                        .map(Camera::getNumarCamera)
-                        .toList() : null)
-                 */
+                .camerePreferate(cameraService.getAllCamerePreferredByStudent(student.getId()).stream()
+                        .map(camera -> camera.getNumarCamera() + ", " + stringUtils.mapIntegerNumarPersoaneCameraToString(camera.getNumarTotalPersoane()))
+                        .toList())
                 .prioritate(student.getPrioritate())
+                .cameraRepartizata(student.getCameraRepartizata() != null ? student.getCameraRepartizata().getNumarCamera() : "")
                 .build();
     }
 

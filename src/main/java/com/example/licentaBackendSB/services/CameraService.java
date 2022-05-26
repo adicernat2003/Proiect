@@ -94,4 +94,8 @@ public class CameraService {
     public List<Camera> getAllCamereOfPreferinta(Preferinta preferinta) {
         return cameraRepository.getAllCamereByPreferinta(preferinta.getId());
     }
+
+    public List<Camera> getAllCamerePreferredByStudent(Long studentId) {
+        return cameraRepository.getAllPreferredCamereByStudent(studentId);
+    }
 }
