@@ -36,8 +36,10 @@ public class StudentDto {
     private List<String> numarLocuriCamera;
     private List<String> friends;
     private List<String> camerePreferate;
+    private List<String> camineNedorite;
     private Integer prioritate;
     private String cameraRepartizata;
+    private String caminRepartizat;
 
     @Override
     public String toString() {

@@ -33,34 +33,46 @@ public class MyPageController {
     }
 
     @PostMapping(value = {"/camine-update/{studentId}/{anUniversitar}", "/friend-tokens-update/{studentId}/{anUniversitar}",
-            "/camere-update/{studentId}/{anUniversitar}"}, params = "action=cancel")
+            "/camere-update/{studentId}/{anUniversitar}", "/camine-nedorite-update/{studentId}/{anUniversitar}"}, params = "action=cancel")
     public String redirectToMyPage(@PathVariable("anUniversitar") String anUniversitar) {
         return studentService.redirectToMyPage(anUniversitar);
     }
 
-    @GetMapping(path = "/camine-edit/{studentId}")
-    public String editCaminePreferate(@PathVariable("studentId") Long studentId, Model model) {
-        return studentService.editCaminePreferate(studentId, model);
-    }
-
-    @RequestMapping(value = "/camine-update/delete-clear-camin-preferat/{studentId}/{anUniversitar}/{option}")
-    public String clearCaminPreferat(@PathVariable("studentId") Long studentId,
-                                     @PathVariable("anUniversitar") String anUniversitar,
-                                     @PathVariable("option") String indexOptiuneString) {
-        //return studentService.clearCaminePreferate(studentId, indexOptiuneString, anUniversitar, false);
-        return null;
-    }
-
-    @RequestMapping(path = "/camine-clear/{studentId}/{anUniversitar}")
-    public String clearCaminePreferate(@PathVariable("studentId") Long studentId,
-                                       @PathVariable("anUniversitar") String anUniversitar) {
-        //return studentService.clearCaminePreferate(studentId, null, anUniversitar, true);
-        return null;
+    @GetMapping(path = "/camine-nedorite-edit/{studentId}")
+    public String editCamineNedorite(@PathVariable("studentId") Long studentId, Model model) {
+        return studentService.editCamineNedorite(studentId, model);
     }
 
     @GetMapping(path = "/camere-edit/{studentId}")
     public String editCamerePreferate(@PathVariable("studentId") Long studentId, Model model) {
         return studentService.editOptiuniCamereCamin(studentId, model);
+    }
+
+    @RequestMapping(value = "/camine-nedorite-update/{studentId}/{anUniversitar}", method = RequestMethod.POST, params = "action=save")
+    public String updateCamineNedorite(@PathVariable("studentId") Long studentId,
+                                       @PathVariable("anUniversitar") String anUniversitar,
+                                       StudentDto newStudent) {
+        return studentService.updateCamineNedorite(studentId, anUniversitar, newStudent, false);
+    }
+
+    @RequestMapping(value = "/camine-nedorite-update/{studentId}/{anUniversitar}", method = RequestMethod.POST, params = "action=add-more")
+    public String addAnotherCaminNedorit(@PathVariable("studentId") Long studentId,
+                                         @PathVariable("anUniversitar") String anUniversitar,
+                                         StudentDto newStudent) {
+        return studentService.updateCamineNedorite(studentId, anUniversitar, newStudent, true);
+    }
+
+    @RequestMapping(value = "/camine-nedorite-update/delete-clear-camin-nedorit/{studentId}/{anUniversitar}/{option}")
+    public String clearCaminNedorit(@PathVariable("studentId") Long studentId,
+                                    @PathVariable("anUniversitar") String anUniversitar,
+                                    @PathVariable("option") String numeCaminNedorit) {
+        return studentService.clearCamineNedorite(studentId, numeCaminNedorit, anUniversitar, false);
+    }
+
+    @RequestMapping(path = "/camine-nedorite-clear/{studentId}/{anUniversitar}")
+    public String clearCamineNedorite(@PathVariable("studentId") Long studentId,
+                                      @PathVariable("anUniversitar") String anUniversitar) {
+        return studentService.clearCamineNedorite(studentId, null, anUniversitar, true);
     }
 
     @RequestMapping(value = "/camere-update/{studentId}/{anUniversitar}", method = RequestMethod.POST, params = "action=save")

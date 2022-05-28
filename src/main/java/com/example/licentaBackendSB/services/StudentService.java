@@ -19,6 +19,8 @@ import java.util.*;
 @Slf4j
 public class StudentService {
 
+    private final static Random random = new Random();
+
     //Fields
     private final StudentRepository studentRepository;
     private final StudentAccountRepository studentAccountRepository;
@@ -201,6 +203,7 @@ public class StudentService {
             model.addAttribute("anUniversitar", anUniversitar);
             model.addAttribute("optiuniCamine", stringUtils.mapCamineToNumeCamie(infoStudent.getPreferinte().keySet()));
             model.addAttribute("optiuniCamere", stringUtils.mapCamereToNumarCamere(new ArrayList(infoStudent.getPreferinte().values())));
+            model.addAttribute("camineNedorite", infoStudent.getMUndesiredAccommodation().stream().map(Camin::getNumeCamin).toList());
         }
         return "pages/layer 4/info pages/student/mypage";
     }
@@ -403,54 +406,70 @@ public class StudentService {
     }
 
     public void setAccommodation(Long studentId, Long accommodationId) {
+
         Student student = studentRepository.getById(studentId);
         Camera accommodation = cameraRepository.getById(accommodationId);
         List<Preferinta> preferinte = preferintaRepository.findAllPreferencesOfStudent(student.getId());
 
+        Camera finalAccommodation1 = accommodation;
         if (student.getCameraRepartizata() != null && accommodation.getCamin().equals(student.getCameraRepartizata().getCamin())
                 && preferinte.stream()
                 .flatMap(preferinta -> preferinta.getCamere()
                         .stream())
-                .noneMatch(camera -> camera.equals(accommodation))) {
-            System.out.printf("No point in moving %s from %s to %s\n", student.getFullName(), student.getCameraRepartizata(), accommodation);
+                .noneMatch(camera -> camera.equals(finalAccommodation1))) {
+            System.out.printf("No point in moving %s from %s to %s\n", student.getFullName(), student.getCameraRepartizata().getNumarCamera(), accommodation.getNumarCamera());
             return;
         }
 
+        Camera finalAccommodation = accommodation;
         if (student.getCameraRepartizata() != null && (!accommodation.getCamin().equals(student.getCameraRepartizata().getCamin()) ||
                 (accommodation.getCamin().equals(student.getCameraRepartizata().getCamin())
                         && preferinte.stream()
                         .flatMap(preferinta -> preferinta.getCamere().stream())
-                        .anyMatch(camera -> camera.equals(accommodation))))) {
-            System.out.printf("Moving %s from %s to %s...\n", student.getFullName(), student.getCameraRepartizata(), accommodation);
-            cameraService.removeStudent(accommodation.getId(), student);
-
+                        .anyMatch(camera -> camera.equals(finalAccommodation))))) {
+            System.out.printf("Moving %s from %s to %s...\n", student.getFullName(), student.getCameraRepartizata().getNumarCamera(), accommodation.getNumarCamera());
+            accommodation = cameraService.removeStudent(accommodation.getId(), student);
         }
-        student.setCameraRepartizata(accommodation);
 
-        cameraService.assignStudent(accommodationId, student);
+        student = cameraService.assignStudent(accommodationId, student);
 
-        preferinte.forEach(preferinta -> cameraService.getAllCamereOfPreferinta(preferinta).forEach(camera -> cameraService.removePreference(camera.getId(), student)));
-        studentRepository.save(student);
-        cameraRepository.save(accommodation);
+        student = studentRepository.save(student);
+
+        accommodation.setMAssignedStudents(accommodation.getMAssignedStudents().stream().distinct().toList());
+        accommodation = cameraRepository.save(accommodation);
+
+        for (Preferinta preferinta : preferinte) {
+            preferinta = preferintaRepository.getById(preferinta.getId());
+            List<Camera> camere = cameraService.getAllCamereOfPreferinta(preferinta);
+            for (Camera camera : camere) {
+                camera = cameraRepository.getById(camera.getId());
+                cameraService.removePreference(camera.getId(), student);
+            }
+        }
+
+        System.out.println("Camera " + accommodation.getNumarCamera() + " care are " + accommodation.getMAssignedStudents().size() + " studenti cazati l-a cazat pe studentul " + student.getFullName());
+        System.out.println("Studentii cazati sunt: " + accommodation.getMAssignedStudents());
     }
 
-    public void addAccommodationPreference(Long cameraId, Long studentId) {
-        Camera camera = cameraRepository.getById(cameraId);
+    public Student addAccommodationPreference(Long cameraId, Long studentId) {
         Student student = studentRepository.getById(studentId);
-        cameraService.setPrefferedBy(cameraId, student);
+        Camera camera = cameraService.setPrefferedBy(cameraId, student);
 
         List<Preferinta> preferinte = preferintaRepository.findAllPreferencesOfStudent(student.getId());
         for (Preferinta preferinta : preferinte) {
+            preferinta = preferintaRepository.getById(preferinta.getId());
             if (camera.getCamin().equals(caminService.getCaminOfPreferinta(preferinta))) {
                 preferinta.getCamere().add(camera);
                 preferintaRepository.save(preferinta);
-                return;
+                System.out.println(preferinta.getId() + " interior " + camera.getId());
+                return student;
             }
         }
         Preferinta preferintaNoua = new Preferinta(student, Arrays.asList(camera));
         student.getPreferinte().put(caminService.getCaminOfPreferinta(preferintaNoua), preferintaNoua);
         preferintaRepository.save(preferintaNoua);
-        studentRepository.save(student);
+        System.out.println(preferintaNoua.getId() + " exterior " + camera.getId());
+        return studentRepository.save(student);
     }
 
     public void addAccommodationPreferenceEmptyRooms(Long caminId, Long studentId) {
@@ -472,8 +491,7 @@ public class StudentService {
     public void addPriorityAccommodationPreference(Long caminId, Long cameraId, Long studentId) {
         Camin camin = caminRepository.getById(caminId);
         Student student = studentRepository.getById(studentId);
-        Camera camera = cameraRepository.getById(cameraId);
-        cameraService.setPrefferedBy(cameraId, student);
+        Camera camera = cameraService.setPrefferedBy(cameraId, student);
         Preferinta preferinta = null;
         List<Preferinta> preferinte = preferintaRepository.findAllPreferencesOfStudent(student.getId());
 
@@ -502,17 +520,18 @@ public class StudentService {
     }
 
     public void makeFriends(String anUniversitar) {
-        List<Student> studentsWithNoFriendsYet = this.getStudentsWithNoFriendsYet(anUniversitar);
-        for (Student student : studentsWithNoFriendsYet) {
-            int randomNumberOfFriends = new Random().nextInt(3);
+        List<Long> studentIdsWithNoFriendsYet = this.getStudentsWithNoFriendsYet(anUniversitar);
+        for (Long studentId : studentIdsWithNoFriendsYet) {
+            int randomNumberOfFriends = random.nextInt(4);
 
-            List<Student> studentsWithNoFriendsYetWithSameGenderAsSelectedStudent = this.getStudentsWithNoFriendsYet(student, studentsWithNoFriendsYet);
+            List<Student> studentsWithNoFriendsYetWithSameGenderAsSelectedStudent = this.getStudentsWithNoFriendsYet(studentId, studentIdsWithNoFriendsYet);
 
             if (studentsWithNoFriendsYetWithSameGenderAsSelectedStudent.size() < randomNumberOfFriends) {
                 randomNumberOfFriends = studentsWithNoFriendsYetWithSameGenderAsSelectedStudent.size();
             }
 
             for (int i = 0; i < randomNumberOfFriends; i++) {
+                Student student = studentRepository.getById(studentId);
                 if (randomNumberOfFriends <= student.getFriends().size()) {
                     break;
                 }
@@ -534,16 +553,120 @@ public class StudentService {
         }
     }
 
-    private List<Student> getStudentsWithNoFriendsYet(String anUniversitar) {
+    private List<Long> getStudentsWithNoFriendsYet(String anUniversitar) {
         return studentRepository.findAllByAnUniversitar(Integer.parseInt(anUniversitar))
                 .stream()
                 .filter(student -> student.getFriends().size() == 0)
+                .map(BaseEntity::getId)
                 .toList();
     }
 
-    private List<Student> getStudentsWithNoFriendsYet(Student student, List<Student> studentsWithNoFriendsYet) {
-        return studentsWithNoFriendsYet.stream()
+    private List<Student> getStudentsWithNoFriendsYet(Long studentId, List<Long> studentIdsWithNoFriendsYet) {
+        Student student = studentRepository.getById(studentId);
+        return studentIdsWithNoFriendsYet.stream()
+                .map(studentRepository::getById)
                 .filter(s -> student.getGenSexual().equals(s.getGenSexual()) && !s.equals(student) && s.getFriends().size() == 0)
                 .toList();
     }
+
+    public void insertRandomUndesiredCamineForEachStudent(String anUniversitar) {
+        List<Long> studentIds = studentRepository.findAllIdsOfStudendsByAnUniversitar(Integer.parseInt(anUniversitar));
+        List<Camin> camine = caminRepository.findAllByAnUniversitar(Integer.parseInt(anUniversitar));
+        for (Long studentId : studentIds) {
+            int randomNumberOfCamine = random.nextInt(camine.size());
+            Student student = studentRepository.getById(studentId);
+            while (randomNumberOfCamine > 0) {
+                if (Boolean.TRUE.equals(student.getAlreadySelectedUndesiredCamine())) {
+                    break;
+                }
+                Camin randomCamin = camine.get(random.nextInt(camine.size()));
+
+                if (student.getMUndesiredAccommodation().contains(randomCamin) || student.getPreferinte().containsKey(randomCamin)) {
+                    continue;
+                }
+
+                student.getMUndesiredAccommodation().add(randomCamin);
+
+                randomNumberOfCamine--;
+            }
+            if (Boolean.FALSE.equals(student.getAlreadySelectedUndesiredCamine()) && randomNumberOfCamine > 0) {
+                student.setAlreadySelectedUndesiredCamine(true);
+            }
+            studentRepository.save(student);
+        }
+    }
+
+    public void insertRandomPreferinteForEachStudent(String anUniversitar) {
+        List<Long> studentIds = studentRepository.findAllIdsOfStudendsByAnUniversitar(Integer.parseInt(anUniversitar));
+        for (Long studentId : studentIds) {
+            int randomNumberOfPreferences = random.nextInt(6);
+            Student student = studentRepository.getById(studentId);
+            while (randomNumberOfPreferences > 0) {
+                if (Boolean.TRUE.equals(student.getAlreadySelectedPreferences())) {
+                    break;
+                }
+                List<Camin> camine = caminRepository.findAllByAnUniversitar(Integer.parseInt(anUniversitar));
+                Camin randomCamin = caminRepository.getById(camine.get(random.nextInt(camine.size())).getId());
+
+                if (student.getMUndesiredAccommodation().contains(randomCamin)) {
+                    continue;
+                }
+
+                Camera randomCamera = cameraRepository.getById(randomCamin.getCamere().get(random.nextInt(randomCamin.getCamere().size())).getId());
+
+                if (student.getPreferinte().values().stream().flatMap(preferinta -> preferinta.getCamere().stream()).toList().contains(randomCamera)) {
+                    continue;
+                }
+
+                student = this.addAccommodationPreference(randomCamera.getId(), student.getId());
+
+                randomNumberOfPreferences--;
+            }
+            if (Boolean.FALSE.equals(student.getAlreadySelectedPreferences()) && randomNumberOfPreferences > 0) {
+                student.setAlreadySelectedPreferences(true);
+            }
+            studentRepository.save(student);
+        }
+    }
+
+    public String editCamineNedorite(Long studentId, Model model) {
+        Student selectedStudent = this.getStudentById(studentId);
+        StudentDto studentDto = studentConverter.mapStudentEntityToDto(selectedStudent);
+        model.addAttribute("selectedStudentById", studentDto);
+        model.addAttribute("listOfCamineNedorite", manager.getListOfCamineNedoriteForStudent(selectedStudent));
+        return "pages/layer 4/info pages/student/crud mypage/update_camine_nedorite";
+    }
+
+    public String updateCamineNedorite(Long studentId, String anUniversitar, StudentDto newStudent, boolean addAnotherCaminNedorit) {
+        Student student = this.getStudentById(studentId);
+        if (newStudent.getCamineNedorite() != null && !newStudent.getCamineNedorite().isEmpty()) {
+            for (String numeCaminNedorit : newStudent.getCamineNedorite()) {
+                Camin caminNedorit = caminRepository.findCaminByNumeCaminAndAnUniversitar(numeCaminNedorit, Integer.parseInt(anUniversitar)).get();
+                student.getMUndesiredAccommodation().add(caminNedorit);
+            }
+            if (Boolean.FALSE.equals(student.getAlreadySelectedUndesiredCamine())) {
+                student.setAlreadySelectedUndesiredCamine(true);
+            }
+            studentRepository.save(student);
+            if (Boolean.TRUE.equals(addAnotherCaminNedorit)) {
+                return "redirect:/student/mypage/camine-nedorite-edit/" + studentId;
+            }
+        }
+        return "redirect:/student/mypage/" + anUniversitar;
+    }
+
+    public String clearCamineNedorite(Long studentId, String numeCaminNedorit, String anUniversitar, boolean clearAllCamineNedorite) {
+        Student student = this.getStudentById(studentId);
+        if (Boolean.TRUE.equals(clearAllCamineNedorite)) {
+            student.getMUndesiredAccommodation().clear();
+            studentRepository.save(student);
+            return "redirect:/student/mypage/" + anUniversitar;
+        } else {
+            Camin caminNedorit = caminRepository.findCaminByNumeCaminAndAnUniversitar(numeCaminNedorit, Integer.parseInt(anUniversitar)).get();
+            student.getMUndesiredAccommodation().remove(caminNedorit);
+            studentRepository.save(student);
+            return "redirect:/student/mypage/camine-nedorite-edit/" + studentId;
+        }
+    }
+
 }

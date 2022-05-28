@@ -146,9 +146,24 @@
                        th:href="@{/student/mypage/camere-clear/{studentId}/{anUniversitar}(studentId=${infoStudent.getId()}, anUniversitar = ${infoStudent.getAnUniversitar()})}"><i
                         class="fas fa-user-times ml-2"></i></a></td>
             </h3>
+
+            <h3><b>Camine in care nu as dori sa stau: </b> <span th:text="${camineNedorite}"></span>
+                <td><a class="btn btn-outline-success"
+                       th:href="@{/student/mypage/camine-nedorite-edit/{studentId}/(studentId=${infoStudent.getId()})}"><i
+                        class="fas fa-user-edit ml-2"></i></a></td>
+                <td><a class="btn btn-outline-warning"
+                       th:href="@{/student/mypage/camine-nedorite-clear/{studentId}/{anUniversitar}(studentId=${infoStudent.getId()}, anUniversitar = ${infoStudent.getAnUniversitar()})}"><i
+                        class="fas fa-user-times ml-2"></i></a></td>
+            </h3>
+
             <h3>
                 <b>Camin repartizat: - </b>
-                <!-- todo: pune caminul repartizat aici, adica faci call in db in tabelul cu caminul corespunzator -->
+                <td th:text="${infoStudent.cameraRepartizata != null ? infoStudent.cameraRepartizata.camin.numeCamin  : ''}"></td>
+            </h3>
+
+            <h3>
+                <b>Camera repartizata: - </b>
+                <td th:text="${infoStudent.cameraRepartizata != null ? infoStudent.cameraRepartizata  : ''}"></td>
             </h3>
             <!--                        <span th:if="${infoStudent.getCaminPreferat() != 'null'}">-->
             <!--                            <div th:switch="${infoStudent.getCaminPreferat()}">-->

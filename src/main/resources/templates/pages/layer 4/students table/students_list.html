@@ -49,16 +49,36 @@
                     </li>
                 </div>
 
-                <div>
-                    <a th:href="@{/admin/accommodate/{anUniversitar}(anUniversitar=${anUniversitar})}">
-                        Accommodate
-                    </a>
+                <div th:switch="${isAdmin}">
+                    <li class="nav-item" th:case="'admin'">
+                        <a aria-current="page" class="nav-link"
+                           th:href="@{/admin/accommodate/{anUniversitar}(anUniversitar=${anUniversitar})}">Accommodate
+                            Students</a>
+                    </li>
                 </div>
 
-                <div>
-                    <a th:href="@{/admin/make-friends/{anUniversitar}(anUniversitar=${anUniversitar})}">
-                        Make Friends
-                    </a>
+                <div th:switch="${isAdmin}">
+                    <li class="nav-item" th:case="'admin'">
+                        <a aria-current="page" class="nav-link"
+                           th:href="@{/admin/make-friends/{anUniversitar}(anUniversitar=${anUniversitar})}">Make
+                            Friends</a>
+                    </li>
+                </div>
+
+                <div th:switch="${isAdmin}">
+                    <li class="nav-item" th:case="'admin'">
+                        <a aria-current="page" class="nav-link"
+                           th:href="@{/admin/insert-undesired-camine/{anUniversitar}(anUniversitar=${anUniversitar})}">Insert
+                            random undesired camine for each student</a>
+                    </li>
+                </div>
+
+                <div th:switch="${isAdmin}">
+                    <li class="nav-item" th:case="'admin'">
+                        <a aria-current="page" class="nav-link"
+                           th:href="@{/admin/insert-preferinte/{anUniversitar}(anUniversitar=${anUniversitar})}">Insert
+                            random preferences for each student</a>
+                    </li>
                 </div>
 
                 <div th:switch="${isAdmin}">

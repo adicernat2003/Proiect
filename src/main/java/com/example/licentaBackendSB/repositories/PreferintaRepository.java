@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface PreferintaRepository extends JpaRepository<Preferinta, Long> {
 
-    @Query("select p from Preferinta p where p.student.id = ?1")
+    @Query("select p from Preferinta p where p.student.id = ?1 ORDER BY p.id")
     List<Preferinta> findAllPreferencesOfStudent(Long studentId);
 }

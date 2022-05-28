@@ -58,8 +58,6 @@ public class Camin extends BaseEntity implements Comparable<Camin> {
 
     @Override
     public String toString() {
-        return "Camin{" +
-                "numeCamin='" + numeCamin + '\'' +
-                '}';
+        return numeCamin;
     }
 }

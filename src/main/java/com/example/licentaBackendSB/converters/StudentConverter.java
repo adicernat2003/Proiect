@@ -1,6 +1,7 @@
 package com.example.licentaBackendSB.converters;
 
 import com.example.licentaBackendSB.model.dtos.StudentDto;
+import com.example.licentaBackendSB.model.entities.Camin;
 import com.example.licentaBackendSB.model.entities.Student;
 import com.example.licentaBackendSB.services.CameraService;
 import com.example.licentaBackendSB.utils.StringUtils;
@@ -39,6 +40,8 @@ public class StudentConverter {
                         .toList())
                 .prioritate(student.getPrioritate())
                 .cameraRepartizata(student.getCameraRepartizata() != null ? student.getCameraRepartizata().getNumarCamera() : "")
+                .camineNedorite(student.getMUndesiredAccommodation().stream().map(Camin::getNumeCamin).toList())
+                .caminRepartizat(student.getCameraRepartizata() != null ? student.getCameraRepartizata().getCamin().getNumeCamin() : "")
                 .build();
     }
 

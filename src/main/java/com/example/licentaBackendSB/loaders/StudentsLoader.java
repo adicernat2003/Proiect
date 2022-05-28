@@ -81,7 +81,8 @@ public class StudentsLoader implements CommandLineRunner {
         Gender randomGender = doBandCNPandGenderRandomizer.getGender();
         String randomCNP = doBandCNPandGenderRandomizer.getCNP(randomDoB, randomGender);
 
-        return Student.builder()
+
+        return new Student().toBuilder()
                 .nume(randomNume)
                 .prenume(randomPrenume)
                 .grupa(group)
@@ -107,7 +108,7 @@ public class StudentsLoader implements CommandLineRunner {
         Gender randomGender = doBandCNPandGenderRandomizer.getGender();
         String randomCNP = doBandCNPandGenderRandomizer.getCNP(randomDoB, randomGender);
 
-        return Student.builder()
+        return new Student().toBuilder()
                 .nume(randomNume)
                 .prenume(randomPrenume)
                 .an(this.getRandomYearForMaster())

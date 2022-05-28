@@ -28,6 +28,20 @@ public class AdminController {
     private final AccommodationService accommodationService;
     private final Manager manager;
 
+    @RequestMapping("/insert-preferinte/{anUniversitar}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
+    public String insertRandomPreferinteForEachStudent(@PathVariable String anUniversitar, Model model) {
+        studentService.insertRandomPreferinteForEachStudent(anUniversitar);
+        return this.getStudents(anUniversitar, model);
+    }
+
+    @RequestMapping("/insert-undesired-camine/{anUniversitar}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
+    public String insertRandomUndesiredCamineForEachStudent(@PathVariable String anUniversitar, Model model) {
+        studentService.insertRandomUndesiredCamineForEachStudent(anUniversitar);
+        return this.getStudents(anUniversitar, model);
+    }
+
     @RequestMapping("/make-friends/{anUniversitar}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
     public String makeFriends(@PathVariable String anUniversitar, Model model) {

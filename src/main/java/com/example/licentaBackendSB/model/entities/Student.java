@@ -41,6 +41,8 @@ public class Student extends BaseEntity implements Comparable<Student> {
     private String judet;
     private Boolean isCazSpecial = Boolean.FALSE;
     private Boolean isCazat = Boolean.FALSE;
+    private Boolean alreadySelectedUndesiredCamine = Boolean.FALSE;
+    private Boolean alreadySelectedPreferences = Boolean.FALSE;
     private Boolean isMasterand;
     private Integer an;
     private Integer prioritate;
@@ -128,21 +130,6 @@ public class Student extends BaseEntity implements Comparable<Student> {
 
     //Sorting Algorithms returning execution time ----------------------------------------------------------------------
 
-    public static long listSort(List<Student> tmp) {
-        long timeStarted, timeEnded;
-
-        timeStarted = System.nanoTime();
-        tmp.sort(new Comparator<Student>() {
-            @Override
-            public int compare(Student o1, Student o2) {
-                return o2.getMedie().compareTo(o1.getMedie());
-            }
-        });
-        timeEnded = System.nanoTime();
-        //System.out.println("List.sort: sorting time => " + (timeEnded - timeStarted) + " ns");
-        return (timeEnded - timeStarted);
-    }
-
     public static long quickSort(List<Student> tmp) {
         long timeStarted, timeEnded;
 
@@ -229,9 +216,7 @@ public class Student extends BaseEntity implements Comparable<Student> {
         if (!Objects.equals(this.medie, o.medie)) {
             return -Double.compare(this.getMedie(), o.getMedie());
         }
-//        if (this.mNumberOfOutstandingExams != that.mNumberOfOutstandingExams) {
-//            return this.mNumberOfOutstandingExams - that.mNumberOfOutstandingExams;
-//        }
+
         return this.getFullName().compareTo(o.getFullName());
     }
 
