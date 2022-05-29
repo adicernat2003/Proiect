@@ -7,8 +7,8 @@ import javax.persistence.*;
 @Entity
 @Table
 @Getter
-@Setter// for getters/setters
-@AllArgsConstructor // for constructor
+@Setter
+@AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @ToString

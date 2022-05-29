@@ -21,14 +21,12 @@ import static com.example.licentaBackendSB.enums.Session.CAMIN;
 @RequiredArgsConstructor
 public class CamineController {
 
-    //Fields
     private final CaminService caminService;
     private final CaminConverter caminConverter;
     private final Manager manager;
     private final SessionService sessionService;
     private final StudentService studentService;
 
-    /* ~~~~~~~~~~~ Get Camine View ~~~~~~~~~~~ */
     @GetMapping("/{anUniversitar}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
     public String getCaminePage(@PathVariable String anUniversitar, Model model) {
@@ -58,7 +56,6 @@ public class CamineController {
         return "pages/layer 4/camine/tables/studentCaminList";
     }
 
-    /* ~~~~~~~~~~~ Get Camin knowing ID ~~~~~~~~~~~ */
     @GetMapping(path = "/edit/{caminId}")
     @PreAuthorize("hasAuthority('student:write')")
     public String editCamin(@PathVariable("caminId") Long caminId, Model model) {
@@ -69,14 +66,12 @@ public class CamineController {
         return "pages/layer 4/camine/crud camine/update_info_camin";
     }
 
-    /* ~~~~~~~~~~~ Update Camin and Redirect to Camine Page ~~~~~~~~~~~ */
     @PostMapping(path = "/update/{caminId}")
     @PreAuthorize("hasAuthority('student:write')")
     public String updateCamin(@PathVariable("caminId") Long caminId, CaminDto newCamin) {
         return "redirect:/admin/camine/" + caminService.updateCamin(caminId, newCamin);
     }
 
-    /* ~~~~~~~~~~~ Clear Fields and Update with 0 and Redirect to Camine Page ~~~~~~~~~~~ */
     @GetMapping(path = "/clear/{caminId}")
     public String clearCamin(@PathVariable("caminId") Long caminId) {
         return "redirect:/admin/camine/" + caminService.clearCamin(caminId);

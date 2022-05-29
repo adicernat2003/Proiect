@@ -17,4 +17,9 @@ public interface PreferintaRepository extends JpaRepository<Preferinta, Long> {
     @Modifying
     @Transactional
     void deleteRowFromPreferintaCamera(Long preferintaId, Long cameraId);
+
+    @Query(nativeQuery = true, value = "update preferinta p set p.preferinte_key = ?1 where p.id = ?2")
+    @Modifying
+    @Transactional
+    void updateCaminOfPreferinta(Long caminId, Long preferintaId);
 }

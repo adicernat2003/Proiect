@@ -30,12 +30,12 @@ import static com.example.licentaBackendSB.model.entities.Student.startIndexing;
 @Order(1)
 public class StudentsLoader implements CommandLineRunner {
 
+    public static List<Student> studentsDB;
+
     private final StudentRepository studentRepository;
     private final DoBandCNPandGenderRandomizer doBandCNPandGenderRandomizer;
     private final CountyManager countyManager;
     private final Manager manager;
-
-    public static List<Student> studentsDB;
 
     @Override
     public void run(String... args) {
@@ -88,13 +88,12 @@ public class StudentsLoader implements CommandLineRunner {
                 .grupa(group)
                 .serie(ygsRandomizer.getRandomSeries())
                 .an(year)
-                .medie((1D + (10D - 1D) * random.nextDouble()))
+                .medie(manager.getRandomMedie())
                 .zi_de_nastere(randomDoB)
                 .cnp(randomCNP)
                 .genSexual(randomGender)
                 .judet(countyManager.getCountyFromTwoDigitCode(randomCNP.substring(7, 9)))
                 .isCazSpecial(Boolean.FALSE)
-                .anUniversitar(2021)
                 .isMasterand(Boolean.FALSE)
                 .prioritate(manager.getRandomPrioritate())
                 .build();
@@ -112,13 +111,12 @@ public class StudentsLoader implements CommandLineRunner {
                 .nume(randomNume)
                 .prenume(randomPrenume)
                 .an(this.getRandomYearForMaster())
-                .medie((1D + (10D - 1D) * random.nextDouble()))
+                .medie(manager.getRandomMedie())
                 .zi_de_nastere(randomDoB)
                 .cnp(randomCNP)
                 .genSexual(randomGender)
                 .judet(countyManager.getCountyFromTwoDigitCode(randomCNP.substring(7, 9)))
                 .isCazSpecial(Boolean.FALSE)
-                .anUniversitar(2021)
                 .isMasterand(Boolean.TRUE)
                 .master(this.getRandomMaster())
                 .prioritate(manager.getRandomPrioritate())

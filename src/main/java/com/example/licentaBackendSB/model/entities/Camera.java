@@ -16,18 +16,22 @@ import java.util.*;
 @Entity
 @Table(name = "camera")
 @Getter
-@Setter// for getters/setters
-@AllArgsConstructor // for constructor
+@Setter
+@AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true)
-public class Camera extends BaseEntity implements Comparable<Camera> {
+public class Camera extends BaseEntityForIdsAndAnUniversitar implements Comparable<Camera> {
+
     private String numarCamera;
     private Integer numarTotalPersoane;
 
     @Enumerated(EnumType.STRING)
     private Gender mAssignedGender;
 
-    @OneToMany(mappedBy = "cameraRepartizata", fetch = FetchType.EAGER)
+    @ManyToOne
+    private Camin camin;
+
+    @OneToMany(mappedBy = "cameraRepartizata")
     private List<Student> mAssignedStudents = new ArrayList<>();
 
     @ManyToMany
@@ -35,9 +39,6 @@ public class Camera extends BaseEntity implements Comparable<Camera> {
             inverseJoinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"))
     @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<Student> mPreferedBy = new TreeSet<>();
-
-    @ManyToOne
-    private Camin camin;
 
     @Override
     public boolean equals(Object o) {
@@ -59,6 +60,5 @@ public class Camera extends BaseEntity implements Comparable<Camera> {
         }
         return this.numarCamera.compareTo(camera.numarCamera);
     }
-
 
 }

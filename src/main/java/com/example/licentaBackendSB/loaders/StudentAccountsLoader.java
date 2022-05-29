@@ -2,7 +2,6 @@ package com.example.licentaBackendSB.loaders;
 
 import com.example.licentaBackendSB.model.entities.Student;
 import com.example.licentaBackendSB.model.entities.StudentAccount;
-import com.example.licentaBackendSB.others.randomizers.DoBandCNPandGenderRandomizer;
 import com.example.licentaBackendSB.repositories.StudentAccountRepository;
 import com.example.licentaBackendSB.services.StudentAccountService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,6 @@ public class StudentAccountsLoader implements CommandLineRunner {
 
     private final StudentAccountRepository studentAccountRepository;
     private final StudentAccountService studentAccountService;
-    private final DoBandCNPandGenderRandomizer doBandCNPandGenderRandomizer;
 
     public static List<StudentAccount> studentAccountsDB;
 

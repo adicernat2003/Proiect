@@ -21,7 +21,6 @@ import static com.example.licentaBackendSB.enums.Session.STUDENT;
 @RequiredArgsConstructor
 public class AdminController {
 
-    //Field
     private final StudentService studentService;
     private final StudentConverter studentConverter;
     private final SessionService sessionService;
@@ -56,7 +55,6 @@ public class AdminController {
         return this.getStudents(anUniversitar, model);
     }
 
-    /* ~~~~~~~~~~~ AdminView ~~~~~~~~~~~ */
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
     public String getAdminView(Model model) {
@@ -67,7 +65,6 @@ public class AdminController {
         return "pages/layer 3/admin";
     }
 
-    /* ~~~~~~~~~~~ Student List ~~~~~~~~~~~ */
     @GetMapping("/students/{anUniversitar}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
     public String getStudents(@PathVariable String anUniversitar, Model model) {
@@ -79,14 +76,12 @@ public class AdminController {
         return "pages/layer 4/students table/students_list";
     }
 
-    /* ~~~~~~~~~~~ Student List ~~~~~~~~~~~ */
     @RequestMapping("/students")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
     public String getSelectedYearStudents(@RequestParam(required = false, name = "year") String year) {
         return "redirect:/admin/students/" + year;
     }
 
-    /* ~~~~~~~~~~~ Dev Admin Page ~~~~~~~~~~~ */
     @GetMapping("/devAdminPage")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
     public String getDevAdminPage(Model model) {
@@ -94,25 +89,6 @@ public class AdminController {
         return "pages/layer 4/info pages/developer/devAdminPage";
     }
 
-    /* ~~~~~~~~~~~ Register New Admin/Assistant ~~~~~~~~~~~ */
-//    @PostMapping
-//    @PreAuthorize("hasAuthority('student:write')")
-//    public void registerNewStudent(@RequestBody Student student)
-//    {
-//        System.out.println("POST: registerNewStudent");
-//        studentService.addNewStudent(student);
-//    }
-
-    /* ~~~~~~~~~~~ Register New Student ~~~~~~~~~~~ */
-//    @PostMapping
-//    @PreAuthorize("hasAuthority('student:write')")
-//    public void registerNewStudent(@RequestBody Student student)
-//    {
-//        System.out.println("POST: registerNewStudent");
-//        studentService.addNewStudent(student);
-//    }
-
-    /* ~~~~~~~~~~~ DELETE Student ~~~~~~~~~~~ */
     @GetMapping(path = "/students/{anUniversitar}/delete/{studentId}")
     @PreAuthorize("hasAuthority('student:write')")
     public String deleteStudent(@PathVariable(value = "anUniversitar") String anUniversitar,
@@ -122,7 +98,6 @@ public class AdminController {
         return "redirect:/admin/students/" + anUniversitar;
     }
 
-    /* ~~~~~~~~~~~ Get Student knowing ID ~~~~~~~~~~~ */
     @GetMapping(path = "/students/{anUniversitar}/edit/{studentId}")
     @PreAuthorize("hasAuthority('student:write')")
     public String editStudent(@PathVariable(value = "anUniversitar") String anUniversitar,
@@ -134,8 +109,6 @@ public class AdminController {
         return "pages/layer 4/students table/crud students/update_student";
     }
 
-    //TODO: sa nu updatezi chiar orice
-    /* ~~~~~~~~~~~ Update Student and Redirect to Student List ~~~~~~~~~~~ */
     @PostMapping(path = "/students/{anUniversitar}/update/{studentId}")
     @PreAuthorize("hasAuthority('student:write')")
     public String updateStudent(@PathVariable(value = "anUniversitar") String anUniversitar,
@@ -149,7 +122,6 @@ public class AdminController {
         return "redirect:/admin/students/" + anUniversitar;
     }
 
-    /* ~~~~~~~~~~~ Update Student and Redirect to Student List ~~~~~~~~~~~ */
     @RequestMapping(path = "/students/{anUniversitar}/setFlag/{studentId}")
     @PreAuthorize("hasAuthority('student:write')")
     public String updateFlag(@PathVariable(value = "anUniversitar") String anUniversitar,

@@ -16,4 +16,7 @@ public interface Constants {
     String TREI_PERSOANE = "Trei persoane";
     String PATRU_PERSOANE = "Patru persoane";
 
+    String STUDENT = "STUDENT";
+    String ADMIN = "ADMIN";
+    String ASSISTANT = "ASSISTANT";
 }

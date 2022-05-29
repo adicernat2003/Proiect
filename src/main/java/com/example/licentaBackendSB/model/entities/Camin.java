@@ -8,7 +8,6 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.Hibernate;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.ArrayList;
@@ -18,13 +17,13 @@ import java.util.Objects;
 import static com.example.licentaBackendSB.constants.Constants.*;
 
 @Entity
-@Table
+@Table(name = "camin")
 @Getter
-@Setter// for getters/setters
-@AllArgsConstructor // for constructor
+@Setter
+@AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder(toBuilder = true) // for building an instance of Camin
-public class Camin extends BaseEntity implements Comparable<Camin> {
+@SuperBuilder(toBuilder = true)
+public class Camin extends BaseEntityForIdsAndAnUniversitar implements Comparable<Camin> {
 
     private String numeCamin;
     private Integer capacitate = DEFAULT_CAMIN_CAPACITY;
@@ -34,7 +33,7 @@ public class Camin extends BaseEntity implements Comparable<Camin> {
     private Integer nrCamereTreiStudenti = DEFAULT_NUMBER_OF_EACH_KIND_OF_ROOM;
     private Integer nrCamerePatruStudenti = DEFAULT_NUMBER_OF_EACH_KIND_OF_ROOM;
 
-    @OneToMany(mappedBy = "camin", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "camin")
     private List<Camera> camere = new ArrayList<>();
 
     @Override
@@ -49,7 +48,6 @@ public class Camin extends BaseEntity implements Comparable<Camin> {
     public int hashCode() {
         return 0;
     }
-
 
     @Override
     public int compareTo(Camin o) {

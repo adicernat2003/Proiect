@@ -17,11 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 public class StudentController {
 
-    //Field
     private final StudentService studentService;
     private final StudentAccountService studentAccountService;
 
-    /* ~~~~~~~~~~~ StudentView ~~~~~~~~~~~ */
     @GetMapping
     @PreAuthorize("hasRole('ROLE_STUDENT')")
     public String getStudentView(Model model) {
@@ -36,8 +34,6 @@ public class StudentController {
         return "pages/layer 3/student";
     }
 
-    /* ~~~~~~~~~~~ Get list of Students ~~~~~~~~~~~ */
-    //Metoda pentru a afisa toti studentii din baza de date
     @GetMapping("/students/{anUniversitar}")
     @PreAuthorize("hasRole('ROLE_STUDENT')")
     public String getStudents(@PathVariable Integer anUniversitar, Model model) {
@@ -47,10 +43,9 @@ public class StudentController {
         return "pages/layer 4/students table/students_list";
     }
 
-    /* ~~~~~~~~~~~ Get devStudentPage View ~~~~~~~~~~~ */
     @GetMapping("/devStudentPage")
     @PreAuthorize("hasRole('ROLE_STUDENT')")
-    public String getDevStudentPage(Model model) {
+    public String getDevStudentPage() {
         return "pages/layer 4/info pages/developer/devStudentPage";
     }
 }

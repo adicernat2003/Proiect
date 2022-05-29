@@ -78,10 +78,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    @Bean       //will be instantiated for us
+    @Bean
     protected UserDetailsService userDetailsService() {
 
-        //Aici cream 3 conturi de baza, hardcodate pt situatii de urgenta
         UserDetails userUser = User.builder()
                 .username("checu")
                 .password(passwordEncoder.encode("1233"))
@@ -100,10 +99,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorities(ASSISTANT.getGrantedAuthorities())
                 .build();
 
-        //Introducem conturile intr-o lista de conturi pe care o vom trimite spre securitate
         List<UserDetails> accounts = new ArrayList<>(List.of(userUser, adminUser, assistantUser));
-
-        //Prelucram tabelul cu conturi pt studenti astfel incat sa cream conturi pt toti studentii
 
         studentsDB = studentRepository.findAll();
         studentAccountsDB = studentAccountRepository.findAll();
@@ -125,8 +121,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .build());
             }
         }
-
-        //todo: va trebui sa avem inca 2 tabele pt admini si asistenti
 
         return new InMemoryUserDetailsManager(accounts);
     }

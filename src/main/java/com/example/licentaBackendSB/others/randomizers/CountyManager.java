@@ -64,7 +64,6 @@ public class CountyManager {
         counties.putIfAbsent(44, "București - Sector 4");
         counties.putIfAbsent(45, "București - Sector 5");
         counties.putIfAbsent(46, "București - Sector 6");
-        //nu exista 47,48,49,50
         counties.putIfAbsent(51, "Călărași ");
         counties.putIfAbsent(52, "Giurgiu");
 

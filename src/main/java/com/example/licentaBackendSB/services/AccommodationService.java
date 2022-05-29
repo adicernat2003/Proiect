@@ -51,11 +51,11 @@ public class AccommodationService {
 
         while (!mStudentsToPlace.isEmpty()) {
             Student student = mStudentsToPlace.pollFirst();
-            student = studentRepository.getById(student.getId());
-            System.out.println("Accommodating " + student.getFullName() + "...");
+            student = studentRepository.getById(Objects.requireNonNull(student).getId());
+            log.info("Accommodating " + student.getFullName() + "...");
             List<Camin> camine = caminRepository.findAllByAnUniversitar(anUniversitar);
             Set<Camin> buildingsToTry = new TreeSet<>(camine);
-            studentService.getHatedList(student.getId()).forEach(buildingsToTry::remove);
+            caminRepository.getAllUndesiredCamineOfStudent(student.getId()).forEach(buildingsToTry::remove);
             System.out.printf("Accommodating %s (%s), buildings to try: %s\n", student.getFullName(), student.getCnp(), buildingsToTry);
             System.out.print("==================================================================\n");
             boolean accommodated = false;
@@ -236,7 +236,7 @@ public class AccommodationService {
 
         while (!mGlobalRedistributionList.isEmpty()) {
             Student student = mGlobalRedistributionList.pollFirst();
-            student = studentRepository.getById(student.getId());
+            student = studentRepository.getById(Objects.requireNonNull(student).getId());
             System.out.printf("Redistributing %s (%s),...\n", student.getFullName(), student.getCnp());
             System.out.print("==================================================================\n");
             boolean accommodated = false;
@@ -244,7 +244,7 @@ public class AccommodationService {
             for (Student colleague : friends) {
                 System.out.printf("\tWants to live with %s (%s)... ", colleague.getFullName(), colleague.getCnp());
                 if (colleague.getCameraRepartizata() != null && !cameraService.isFull(colleague.getCameraRepartizata().getId())
-                        && !studentService.getHatedList(student.getId()).contains(colleague.getCameraRepartizata().getCamin())) {
+                        && !caminRepository.getAllUndesiredCamineOfStudent(student.getId()).contains(colleague.getCameraRepartizata().getCamin())) {
                     System.out.printf("\t\tSolution found! Room: %s\n", colleague.getCameraRepartizata().getNumarCamera());
                     studentService.setAccommodation(student.getId(), colleague.getCameraRepartizata().getId());
                     accommodated = true;
@@ -257,7 +257,7 @@ public class AccommodationService {
             if (!accommodated) {
                 for (Camin camin : mBuildings.values()) {
                     camin = caminRepository.getById(camin.getId());
-                    if (studentService.getHatedList(student.getId()).contains(camin)) {
+                    if (caminRepository.getAllUndesiredCamineOfStudent(student.getId()).contains(camin)) {
                         continue;
                     }
                     System.out.printf("\tLooking for empty room in %s... ", camin);
@@ -282,7 +282,7 @@ public class AccommodationService {
                 for (Camin camin : mBuildings.values()) {
                     camin = caminRepository.getById(camin.getId());
                     System.out.printf("\tTrying %s... ", camin);
-                    if (caminService.hasSpotForGender(camin.getId(), student.getGenSexual()) && !studentService.getHatedList(student.getId()).contains(camin)) {
+                    if (caminService.hasSpotForGender(camin.getId(), student.getGenSexual()) && !caminRepository.getAllUndesiredCamineOfStudent(student.getId()).contains(camin)) {
                         Camera camera = caminService.getSpotForGender(camin.getId(), student.getGenSexual());
                         studentService.setAccommodation(student.getId(), camera.getId());
                         System.out.printf("Solution found! Room: %s\n", camera.getNumarCamera());

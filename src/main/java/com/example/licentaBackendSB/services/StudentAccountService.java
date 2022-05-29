@@ -12,46 +12,42 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static com.example.licentaBackendSB.constants.Constants.STUDENT;
+
 @Service
 @RequiredArgsConstructor
 public class StudentAccountService {
 
-    //Field
     private final StudentAccountRepository studentAccountRepository;
     private final DoBandCNPandGenderRandomizer doBandCNPandGenderRandomizer;
 
-    /*  ~~~~~~~~~~~ Get Logged Account from Current Session ~~~~~~~~~~~ */
     public StudentAccount getLoggedStudentAccount() {
-        StudentAccount result = new StudentAccount();
         LoggedAccount loggedAccount = new LoggedAccount();
 
         List<StudentAccount> studentAccountsDB = studentAccountRepository.findAll();
         return studentAccountsDB.stream()
                 .filter(studentAccount -> studentAccount.getCnp().equals(loggedAccount.getLoggedUsername()))
                 .findFirst()
-                .get();
+                .orElse(null);
     }
 
-    /*  ~~~~~~~~~~~ Update Student ~~~~~~~~~~~ */
     public void updateStudent(String studentCnp, StudentDto newStudent) {
         Optional<StudentAccount> studentAccountOptional = studentAccountRepository.findByCnp(studentCnp);
         if (studentAccountOptional.isPresent()) {
             StudentAccount foundStudent = studentAccountOptional.get();
-            /** update nume*/
+
             if (newStudent.getNume() != null
                     && newStudent.getNume().length() > 0
                     && !foundStudent.getNume().equals(newStudent.getNume())) {
                 foundStudent.setNume(newStudent.getNume());
             }
 
-            /** update prenume*/
             if (newStudent.getPrenume() != null
                     && newStudent.getPrenume().length() > 0
                     && !foundStudent.getPrenume().equals(newStudent.getPrenume())) {
                 foundStudent.setPrenume(newStudent.getPrenume());
             }
 
-            /** update cnp*/
             if (newStudent.getCnp() != null
                     && newStudent.getCnp().length() > 0
                     && !foundStudent.getCnp().equals(newStudent.getCnp())) {
@@ -59,7 +55,6 @@ public class StudentAccountService {
                 foundStudent.setUsername(newStudent.getCnp());
             }
 
-            /** update zi_de_nastere*/
             if (newStudent.getZi_de_nastere() != null
                     && newStudent.getZi_de_nastere().length() > 0
                     && !foundStudent.getZi_de_nastere().equals(newStudent.getZi_de_nastere())) {
@@ -81,7 +76,7 @@ public class StudentAccountService {
                 .username(student.getCnp())
                 .password(doBandCNPandGenderRandomizer.splitDoBbyDot(student.getZi_de_nastere()))
                 .cnp(student.getCnp())
-                .autoritate("STUDENT")
+                .autoritate(STUDENT)
                 .isActive(Boolean.TRUE)
                 .build();
     }

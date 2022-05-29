@@ -25,7 +25,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.example.licentaBackendSB.constants.Constants.DEFAULT_YEAR;
+import static com.example.licentaBackendSB.constants.Constants.*;
 import static com.example.licentaBackendSB.enums.AnDeStudiu.*;
 import static com.example.licentaBackendSB.enums.Session.CAMIN;
 import static com.example.licentaBackendSB.managers.Manager.random;
@@ -149,7 +149,7 @@ public class SessionService {
                 .nume(studentFromPreviousYear.getNume())
                 .prenume(studentFromPreviousYear.getPrenume())
                 .an(ONE.getValue())
-                .medie((1D + (10D - 1D) * random.nextDouble()))
+                .medie(manager.getRandomMedie())
                 .cnp(studentFromPreviousYear.getCnp())
                 .zi_de_nastere(studentFromPreviousYear.getZi_de_nastere())
                 .judet(studentFromPreviousYear.getJudet())
@@ -175,7 +175,7 @@ public class SessionService {
                 .nume(studentFromPreviousYear.getNume())
                 .prenume(studentFromPreviousYear.getPrenume())
                 .an(TWO.getValue())
-                .medie((1D + (10D - 1D) * random.nextDouble()))
+                .medie(manager.getRandomMedie())
                 .cnp(studentFromPreviousYear.getCnp())
                 .zi_de_nastere(studentFromPreviousYear.getZi_de_nastere())
                 .judet(studentFromPreviousYear.getJudet())
@@ -202,7 +202,7 @@ public class SessionService {
                 .grupa(this.getNewGrupaForFirstOrThirdYear(ONE))
                 .serie(ygsRandomizer.getRandomSeries())
                 .an(ONE.getValue())
-                .medie((1D + (10D - 1D) * random.nextDouble()))
+                .medie(manager.getRandomMedie())
                 .zi_de_nastere(randomDoB)
                 .cnp(randomCNP)
                 .genSexual(randomGender)
@@ -221,7 +221,7 @@ public class SessionService {
                 .grupa(this.getNewGrupaForFirstOrThirdYear(THREE))
                 .serie(ygsRandomizer.getRandomSeries())
                 .an(THREE.getValue())
-                .medie((1D + (10D - 1D) * random.nextDouble()))
+                .medie(manager.getRandomMedie())
                 .cnp(studentFromPreviousYear.getCnp())
                 .zi_de_nastere(studentFromPreviousYear.getZi_de_nastere())
                 .judet(studentFromPreviousYear.getJudet())
@@ -240,7 +240,7 @@ public class SessionService {
                 .grupa(this.incrementAndGetNewGrupaForSecondAndFourthYear(studentFromPreviousYear.getGrupa()))
                 .serie(studentFromPreviousYear.getSerie())
                 .an(ONE.getValue().equals(studentFromPreviousYear.getAn()) ? TWO.getValue() : FOUR.getValue())
-                .medie((1D + (10D - 1D) * random.nextDouble()))
+                .medie(manager.getRandomMedie())
                 .cnp(studentFromPreviousYear.getCnp())
                 .zi_de_nastere(studentFromPreviousYear.getZi_de_nastere())
                 .judet(studentFromPreviousYear.getJudet())
@@ -281,39 +281,35 @@ public class SessionService {
     }
 
     private void createCamineNoiOfAnUniversitar(Integer anUniversitar) {
-        List<Camin> camine = new ArrayList<>();
-
-        camine.add(new Camin().toBuilder()
-                .numeCamin("Leu A")
+        caminRepository.save(new Camin().toBuilder()
+                .numeCamin(LEU_A)
                 .anUniversitar(anUniversitar)
                 .build());
 
-        camine.add(new Camin().toBuilder()
-                .numeCamin("Leu C")
+        caminRepository.save(new Camin().toBuilder()
+                .numeCamin(LEU_C)
                 .anUniversitar(anUniversitar)
                 .build());
 
-        camine.add(new Camin().toBuilder()
-                .numeCamin("P20")
+        caminRepository.save(new Camin().toBuilder()
+                .numeCamin(P20)
                 .anUniversitar(anUniversitar)
                 .build());
 
-        camine.add(new Camin().toBuilder()
-                .numeCamin("P23")
+        caminRepository.save(new Camin().toBuilder()
+                .numeCamin(P23)
                 .anUniversitar(anUniversitar)
                 .build());
 
-        caminRepository.saveAll(camine);
     }
 
     private void createCamereNoiOfAnUniversitar(Integer anUniversitar) {
-        List<Camera> camere = new ArrayList<>();
         List<Camin> camine = caminRepository.findAllByAnUniversitar(anUniversitar);
         for (Camin camin : camine) {
             List<Object[]> optiuniCamere = caminRepository.getAllCamereOptiuniByNumeCaminAndAnUniversitar(camin.getNumeCamin(), DEFAULT_YEAR);
             for (int j = 0; j < 4; j++) {
                 for (int i = 0; i < (Integer) optiuniCamere.get(0)[j]; i++) {
-                    camere.add(new Camera().toBuilder()
+                    cameraRepository.save(new Camera().toBuilder()
                             .anUniversitar(camin.getAnUniversitar())
                             .numarTotalPersoane(j + 1)
                             .camin(camin)
@@ -322,7 +318,6 @@ public class SessionService {
                 }
             }
         }
-        cameraRepository.saveAll(camere);
     }
 
 }

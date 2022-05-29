@@ -11,15 +11,17 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.licentaBackendSB.constants.Constants.*;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
 @Order(3)
 public class CamineLoader implements CommandLineRunner {
 
-    private final CaminRepository caminRepository;
-
     public static List<Camin> camineDB;
+
+    private final CaminRepository caminRepository;
 
     @Override
     public void run(String... args) {
@@ -37,23 +39,19 @@ public class CamineLoader implements CommandLineRunner {
         List<Camin> hardcodedListOfCamine = new ArrayList<>();
 
         hardcodedListOfCamine.add(new Camin().toBuilder()
-                .numeCamin("Leu A")
-                .anUniversitar(2021)
+                .numeCamin(LEU_A)
                 .build());
 
         hardcodedListOfCamine.add(new Camin().toBuilder()
-                .numeCamin("Leu C")
-                .anUniversitar(2021)
+                .numeCamin(LEU_C)
                 .build());
 
         hardcodedListOfCamine.add(new Camin().toBuilder()
-                .numeCamin("P20")
-                .anUniversitar(2021)
+                .numeCamin(P20)
                 .build());
 
         hardcodedListOfCamine.add(new Camin().toBuilder()
-                .numeCamin("P23")
-                .anUniversitar(2021)
+                .numeCamin(P23)
                 .build());
 
         return hardcodedListOfCamine;

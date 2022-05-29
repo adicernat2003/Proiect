@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 public class IndexPageController {
 
-    //Fields
     private final StudentAccountService studentAccountService;
 
     @GetMapping("login")
@@ -24,7 +23,6 @@ public class IndexPageController {
 
     @GetMapping("menu")
     public String getMenuView(Model model) {
-        //Preluam userul din sesiunea actuala si il cautam in baza de date sa scoatem numele si prenumele
         LoggedAccount loggedAccount = new LoggedAccount();
         Boolean isLoggedStandardAcc = loggedAccount.checkIfStandardAccLogged();
 

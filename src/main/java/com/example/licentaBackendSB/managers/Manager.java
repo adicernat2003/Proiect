@@ -18,19 +18,20 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.stream.IntStream;
 
-import static com.example.licentaBackendSB.constants.Constants.*;
+import static com.example.licentaBackendSB.constants.Constants.DEFAULT_YEAR;
 
 @Component
 @RequiredArgsConstructor
 @Transactional(Transactional.TxType.REQUIRED)
 public class Manager {
 
+    public static final Random random = new Random();
+
     private final StudentRepository studentRepository;
     private final StudentConverter studentConverter;
     private final StringUtils stringUtils;
     private final CaminRepository caminRepository;
     private final CameraRepository cameraRepository;
-    public static final Random random = new Random();
 
     public Integer getRandomPrioritate() {
         return random.nextInt(0, 5);
@@ -41,8 +42,12 @@ public class Manager {
         return numeCamin.toUpperCase() + "-" + roomNum;
     }
 
+    public Double getRandomMedie() {
+        return 1D + (10D - 1D) * random.nextDouble();
+    }
+
     public List<Integer> getListOfYears(Integer anUniversitar) {
-        return IntStream.rangeClosed(2021, 2099)
+        return IntStream.rangeClosed(DEFAULT_YEAR, 2099)
                 .boxed()
                 .filter(an -> !an.equals(anUniversitar))
                 .toList();
@@ -80,7 +85,7 @@ public class Manager {
         return cameraRepository.findAllByAnUniversitar(student.getAnUniversitar())
                 .stream()
                 .filter(camera -> !cameraRepository.getAllCamerePreferateOfStudent(student.getId()).contains(camera)
-                        || !caminRepository.getAllUndesiredCamineOfStudent(student.getId()).contains(camera.getCamin()))
+                        && !caminRepository.getAllUndesiredCamineOfStudent(student.getId()).contains(camera.getCamin()))
                 .map(camera -> camera.getNumarCamera() + ", " + stringUtils.mapIntegerNumarPersoaneCameraToString(camera.getNumarTotalPersoane()))
                 .toList();
     }
@@ -88,15 +93,8 @@ public class Manager {
     public List<String> getListOfCamineNedoriteForStudent(Student student) {
         return caminRepository.findAllByAnUniversitar(student.getAnUniversitar())
                 .stream()
-                .filter(camin -> !caminRepository.getAllUndesiredCamineOfStudent(student.getId()).contains(camin) || !caminRepository.getAllCamineOfStudentPreferences(student.getId()).contains(camin))
-                .map(Camin::getNumeCamin)
-                .toList();
-    }
-
-    public List<String> getListOfCaminePreferate(Student student) {
-        return caminRepository.findAllByAnUniversitar(student.getAnUniversitar())
-                .stream()
-                //.filter(camin -> !student.getCaminePreferate().contains(camin))
+                .filter(camin -> !caminRepository.getAllUndesiredCamineOfStudent(student.getId()).contains(camin)
+                        && !caminRepository.getAllCamineOfStudentPreferences(student.getId()).contains(camin))
                 .map(Camin::getNumeCamin)
                 .toList();
     }
@@ -111,10 +109,6 @@ public class Manager {
 
     private List<Student> getListOfAllStudentsBasedOnGender(Gender gender, Integer anUniversitar) {
         return studentRepository.findAllByGenSexualAndAnUniversitar(gender, anUniversitar);
-    }
-
-    public List<String> getListOptiuniCamere() {
-        return List.of(O_PERSOANA, DOUA_PERSOANE, TREI_PERSOANE, PATRU_PERSOANE);
     }
 
 }

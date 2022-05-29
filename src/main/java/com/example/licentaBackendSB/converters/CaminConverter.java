@@ -22,21 +22,4 @@ public class CaminConverter {
                 .capacitate(camin.getCapacitate())
                 .build();
     }
-
-    public Camin mapCaminDtoToEntity(CaminDto caminDto) {
-        return Camin.builder()
-                .anUniversitar(Integer.parseInt(caminDto.getAnUniversitar()))
-                .numeCamin(caminDto.getNumeCamin())
-                .id(caminDto.getId())
-                .capacitate(caminDto.getCapacitate())
-                .nrCamereDoiStudenti(caminDto.getNrCamereDoiStudenti())
-                .nrCamerePatruStudenti(caminDto.getNrCamerePatruStudenti())
-                .nrCamereTotal(caminDto.getNrCamereTotal())
-                .nrCamereTreiStudenti(caminDto.getNrCamereTreiStudenti())
-                .nrCamereUnStudent(caminDto.getNrCamereUnStudent())
-                .numeCamin(caminDto.getNumeCamin())
-                .capacitate(caminDto.getCapacitate())
-                .build();
-    }
-
 }

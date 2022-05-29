@@ -13,13 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table
+@Table(name = "preferinta")
 @Getter
-@Setter// for getters/setters
-@AllArgsConstructor // for constructor
+@Setter
+@AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder(toBuilder = true) // for building an instance of Camin
-public class Preferinta extends BaseEntity {
+@SuperBuilder(toBuilder = true)
+public class Preferinta extends BaseEntityForIdsAndAnUniversitar {
 
     @ManyToOne
     private Student student;

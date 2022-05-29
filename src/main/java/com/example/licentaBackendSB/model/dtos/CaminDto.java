@@ -12,6 +12,7 @@ import static com.example.licentaBackendSB.constants.Constants.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CaminDto {
+
     private Long id;
     private String anUniversitar;
     private String numeCamin;

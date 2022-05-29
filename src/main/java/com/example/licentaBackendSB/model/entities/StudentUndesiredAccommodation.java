@@ -7,8 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "preferinta_camera")
+@Table(name = "student_undesired_accommodation")
 @Getter
 @Setter
-public class PreferintaCamera extends BaseEntityForIds {
+public class StudentUndesiredAccommodation extends BaseEntityForIds {
 }

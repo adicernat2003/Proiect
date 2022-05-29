@@ -14,11 +14,9 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class MyPageController {
 
-    //Fields
     private final StudentService studentService;
     private final SessionService sessionService;
 
-    /* ~~~~~~~~~~~ Get MyPage View ~~~~~~~~~~~ */
     @GetMapping("/{anUniversitar}")
     @PreAuthorize("hasRole('ROLE_STUDENT')")
     public String getMyPage(@PathVariable String anUniversitar, Model model) {

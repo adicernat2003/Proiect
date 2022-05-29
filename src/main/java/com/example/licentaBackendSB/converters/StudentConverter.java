@@ -46,25 +46,4 @@ public class StudentConverter {
                 .caminRepartizat(student.getCameraRepartizata() != null ? student.getCameraRepartizata().getCamin().getNumeCamin() : "")
                 .build();
     }
-
-    public Student mapStudentDtoToEntity(StudentDto studentDto) {
-        return Student.builder()
-                .an(studentDto.getAn())
-                .anUniversitar(Integer.parseInt(studentDto.getAnUniversitar()))
-                .cnp(studentDto.getCnp())
-                .isCazSpecial(studentDto.getIsCazSpecial())
-                .genSexual(studentDto.getGenSexual())
-                .id(studentDto.getId())
-                .grupa(studentDto.getGrupa())
-                .judet(studentDto.getJudet())
-                .medie(studentDto.getMedie())
-                .nume(studentDto.getNume())
-                .prenume(studentDto.getPrenume())
-                .serie(studentDto.getSerie())
-                .zi_de_nastere(studentDto.getZi_de_nastere())
-                .master(studentDto.getMaster())
-                .isMasterand(studentDto.getIsMasterand())
-                .build();
-    }
-
 }

@@ -18,15 +18,13 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class CaminService {
-    //Fields
+
     private final CaminRepository caminRepository;
     private final CaminConverter caminConverter;
     private final CameraRepository cameraRepository;
     private final Manager manager;
     private final CameraService cameraService;
 
-    //Methods
-    /* Get all Camine */
     public List<CaminDto> getCamineByAnUniversitar(Integer anUniversitar) {
         return caminRepository.findAllByAnUniversitar(anUniversitar)
                 .stream()
@@ -43,7 +41,6 @@ public class CaminService {
         }
     }
 
-    /* Get Id of Camin to update Fields */
     public Camin getCaminById(Long caminId) {
         Optional<Camin> caminOptional = caminRepository.findById(caminId);
         if (caminOptional.isPresent()) {
@@ -53,24 +50,21 @@ public class CaminService {
         }
     }
 
-    /* Update Camin Fields */
     public Integer updateCamin(Long caminId, CaminDto newCamin) {
         Optional<Camin> caminOptional = caminRepository.findById(caminId);
         if (caminOptional.isPresent()) {
             Camin foundCamin = caminOptional.get();
-            /** update capacitate*/
+
             if (newCamin.getCapacitate() > 0
                     && !foundCamin.getCapacitate().equals(newCamin.getCapacitate())) {
                 foundCamin.setCapacitate(newCamin.getCapacitate());
             }
 
-            /** update nr camere total*/
             if (newCamin.getNrCamereTotal() > 0
                     && !foundCamin.getNrCamereTotal().equals(newCamin.getNrCamereTotal())) {
                 foundCamin.setNrCamereTotal(newCamin.getNrCamereTotal());
             }
 
-            /** update nr camere cu un student*/
             if (newCamin.getNrCamereUnStudent() > 0
                     && !foundCamin.getNrCamereUnStudent().equals(newCamin.getNrCamereUnStudent())) {
                 if (newCamin.getNrCamereUnStudent() > foundCamin.getNrCamereUnStudent()) {
@@ -81,7 +75,6 @@ public class CaminService {
                 foundCamin.setNrCamereUnStudent(newCamin.getNrCamereUnStudent());
             }
 
-            /** update nr camere cu doi student*/
             if (newCamin.getNrCamereDoiStudenti() > 0
                     && !foundCamin.getNrCamereDoiStudenti().equals(newCamin.getNrCamereDoiStudenti())) {
                 if (newCamin.getNrCamereDoiStudenti() > foundCamin.getNrCamereDoiStudenti()) {
@@ -92,7 +85,6 @@ public class CaminService {
                 foundCamin.setNrCamereDoiStudenti(newCamin.getNrCamereDoiStudenti());
             }
 
-            /** update nr camere cu trei student*/
             if (newCamin.getNrCamereTreiStudenti() > 0
                     && !foundCamin.getNrCamereTreiStudenti().equals(newCamin.getNrCamereTreiStudenti())) {
                 if (newCamin.getNrCamereTreiStudenti() > foundCamin.getNrCamereTreiStudenti()) {
@@ -103,7 +95,6 @@ public class CaminService {
                 foundCamin.setNrCamereTreiStudenti(newCamin.getNrCamereTreiStudenti());
             }
 
-            /** update nr camere cu patru student*/
             if (newCamin.getNrCamerePatruStudenti() > 0
                     && !foundCamin.getNrCamerePatruStudenti().equals(newCamin.getNrCamerePatruStudenti())) {
                 if (newCamin.getNrCamerePatruStudenti() > foundCamin.getNrCamerePatruStudenti()) {
@@ -119,7 +110,6 @@ public class CaminService {
         }
     }
 
-    /* Clear Camin Fields and update them with 0 */
     public Integer clearCamin(Long caminId) {
         Optional<Camin> caminOptional = caminRepository.findById(caminId);
         if (caminOptional.isPresent()) {
@@ -161,17 +151,6 @@ public class CaminService {
                 .build();
     }
 
-    public List<Camera> getCamere(Long caminId) {
-        return cameraRepository.findAllByCaminId(caminId);
-    }
-
-    public int getCapacity(Long caminId) {
-        List<Camera> camere = cameraRepository.findAllByCaminId(caminId);
-        return camere.stream()
-                .mapToInt(Camera::getNumarTotalPersoane)
-                .sum();
-    }
-
     public int getAllFreeSpots(Long caminId) {
         List<Camera> camere = cameraRepository.findAllByCaminId(caminId);
         return camere.stream()
@@ -190,7 +169,7 @@ public class CaminService {
         return camere.stream()
                 .filter(camera -> !cameraService.isFull(camera.getId()) && ((camera.getMAssignedGender() != null ? camera.getMAssignedGender() : gender).equals(gender)))
                 .findAny()
-                .get();
+                .orElse(null);
     }
 
     public int getFreeSpots(Long caminId, Gender gender) {
@@ -210,13 +189,6 @@ public class CaminService {
     }
 
     public Camin getCaminOfPreferinta(Preferinta preferinta) {
-        Optional<Camera> cameraOptional = preferinta.getCamere()
-                .stream()
-                .findFirst();
-        if (cameraOptional.isPresent()) {
-            Long caminId = cameraOptional.get().getCamin().getId();
-            return caminRepository.getCaminById(caminId);
-        }
-        return null;
+        return caminRepository.getCaminOfPreferinta(preferinta.getId());
     }
 }

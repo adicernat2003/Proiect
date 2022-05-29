@@ -5,6 +5,7 @@ import com.example.licentaBackendSB.model.entities.Camin;
 import com.example.licentaBackendSB.model.entities.Preferinta;
 import com.example.licentaBackendSB.model.entities.Student;
 import com.example.licentaBackendSB.repositories.CameraRepository;
+import com.example.licentaBackendSB.repositories.CaminRepository;
 import com.example.licentaBackendSB.repositories.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,11 +18,12 @@ public class CameraService {
 
     private final CameraRepository cameraRepository;
     private final StudentRepository studentRepository;
+    private final CaminRepository caminRepository;
 
     public int getAvailableSpots(Long cameraId) {
         Camera camera = cameraRepository.getById(cameraId);
-        long numberOfStudentsAccommodatedToCamera = cameraRepository.getAllStudentsAccommodatedToCamera(cameraId).size();
-        return (int) (camera.getNumarTotalPersoane() - numberOfStudentsAccommodatedToCamera);
+        int numberOfStudentsAccommodatedToCamera = cameraRepository.getAllStudentsAccommodatedToCamera(cameraId).size();
+        return camera.getNumarTotalPersoane() - numberOfStudentsAccommodatedToCamera;
     }
 
     public boolean isEmpty(Long cameraId) {
@@ -32,7 +34,7 @@ public class CameraService {
 
     public boolean isFull(Long cameraId) {
         Camera camera = cameraRepository.getById(cameraId);
-        long numberOfStudentsAccommodatedToCamera = cameraRepository.getAllStudentsAccommodatedToCamera(cameraId).size();
+        int numberOfStudentsAccommodatedToCamera = cameraRepository.getAllStudentsAccommodatedToCamera(cameraId).size();
         System.out.println(camera.getNumarCamera() + " are " + numberOfStudentsAccommodatedToCamera + " studenti cazati momentan, maximul este de " + camera.getNumarTotalPersoane());
         return numberOfStudentsAccommodatedToCamera == camera.getNumarTotalPersoane();
     }
@@ -42,7 +44,6 @@ public class CameraService {
             throw new RuntimeException("Unable to assign student to full room ");
         }
         Camera camera = cameraRepository.getById(cameraId);
-        student = studentRepository.getById(student.getId());
         if (camera.getMAssignedGender() != null && camera.getMAssignedGender() != student.getGenSexual()) {
             throw new RuntimeException("Unable to assign student " + student + " to room " + camera + ". Wrong gender.");
         }
@@ -53,14 +54,11 @@ public class CameraService {
     }
 
     public void removePreference(Long cameraId, Student student) {
-        Camera camera = cameraRepository.getById(cameraId);
-        cameraRepository.deleteRowFromStudentCameraPreferata(camera.getId(), student.getId());
-        // setare si pe preferinta
+        cameraRepository.deleteRowFromStudentCameraPreferata(cameraId, student.getId());
     }
 
     public boolean isIn(Long cameraId, Camin camin) {
-        Camera camera = cameraRepository.getById(cameraId);
-        return camera.getCamin().equals(camin);
+        return caminRepository.getCaminIdOfCamera(cameraId).equals(camin.getId());
     }
 
     public Camera setPrefferedBy(Long cameraId, Student student) {
