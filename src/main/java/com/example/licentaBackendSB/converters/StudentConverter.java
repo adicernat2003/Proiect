@@ -3,6 +3,7 @@ package com.example.licentaBackendSB.converters;
 import com.example.licentaBackendSB.model.dtos.StudentDto;
 import com.example.licentaBackendSB.model.entities.Camin;
 import com.example.licentaBackendSB.model.entities.Student;
+import com.example.licentaBackendSB.repositories.CaminRepository;
 import com.example.licentaBackendSB.services.CameraService;
 import com.example.licentaBackendSB.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ public class StudentConverter {
 
     private final StringUtils stringUtils;
     private final CameraService cameraService;
+    private final CaminRepository caminRepository;
 
     public StudentDto mapStudentEntityToDto(Student student) {
         return StudentDto.builder()
@@ -40,7 +42,7 @@ public class StudentConverter {
                         .toList())
                 .prioritate(student.getPrioritate())
                 .cameraRepartizata(student.getCameraRepartizata() != null ? student.getCameraRepartizata().getNumarCamera() : "")
-                .camineNedorite(student.getMUndesiredAccommodation().stream().map(Camin::getNumeCamin).toList())
+                .camineNedorite(caminRepository.getAllUndesiredCamineOfStudent(student.getId()).stream().map(Camin::getNumeCamin).toList())
                 .caminRepartizat(student.getCameraRepartizata() != null ? student.getCameraRepartizata().getCamin().getNumeCamin() : "")
                 .build();
     }

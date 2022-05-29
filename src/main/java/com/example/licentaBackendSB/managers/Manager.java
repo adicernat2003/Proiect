@@ -79,9 +79,8 @@ public class Manager {
     public List<String> getListOfCamerePreferateForStudent(Student student) {
         return cameraRepository.findAllByAnUniversitar(student.getAnUniversitar())
                 .stream()
-                .filter(camera -> !student.getPreferinte().values().stream()
-                        .flatMap(preferinta -> preferinta.getCamere().stream())
-                        .toList().contains(camera) || !student.getMUndesiredAccommodation().contains(camera.getCamin()))
+                .filter(camera -> !cameraRepository.getAllCamerePreferateOfStudent(student.getId()).contains(camera)
+                        || !caminRepository.getAllUndesiredCamineOfStudent(student.getId()).contains(camera.getCamin()))
                 .map(camera -> camera.getNumarCamera() + ", " + stringUtils.mapIntegerNumarPersoaneCameraToString(camera.getNumarTotalPersoane()))
                 .toList();
     }
@@ -89,7 +88,7 @@ public class Manager {
     public List<String> getListOfCamineNedoriteForStudent(Student student) {
         return caminRepository.findAllByAnUniversitar(student.getAnUniversitar())
                 .stream()
-                .filter(camin -> !student.getMUndesiredAccommodation().contains(camin) || !student.getPreferinte().containsKey(camin))
+                .filter(camin -> !caminRepository.getAllUndesiredCamineOfStudent(student.getId()).contains(camin) || !caminRepository.getAllCamineOfStudentPreferences(student.getId()).contains(camin))
                 .map(Camin::getNumeCamin)
                 .toList();
     }

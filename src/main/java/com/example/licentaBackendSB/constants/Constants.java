@@ -5,7 +5,7 @@ public interface Constants {
     String LEU_C = "Leu C";
     String P20 = "P20";
     String P23 = "P23";
-    Integer ZERO = 0;
+
     Integer DEFAULT_YEAR = 2021;
     Integer DEFAULT_CAMIN_CAPACITY = 10;
     Integer DEFAULT_NUMBER_OF_ROOMS = 4;

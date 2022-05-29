@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,30 +20,24 @@ public class CameraService {
 
     public int getAvailableSpots(Long cameraId) {
         Camera camera = cameraRepository.getById(cameraId);
-        return camera.getNumarTotalPersoane() - camera.getMAssignedStudents().size();
+        long numberOfStudentsAccommodatedToCamera = cameraRepository.getAllStudentsAccommodatedToCamera(cameraId).size();
+        return (int) (camera.getNumarTotalPersoane() - numberOfStudentsAccommodatedToCamera);
     }
 
     public boolean isEmpty(Long cameraId) {
         Camera camera = cameraRepository.getById(cameraId);
-        camera.setMAssignedStudents(camera.getMAssignedStudents().stream().distinct().toList());
-        camera = cameraRepository.save(camera);
-        return camera.getMAssignedStudents().isEmpty() && camera.getMAssignedGender() == null;
+        List<Student> listOfStudentsAccommodatedToCamera = cameraRepository.getAllStudentsAccommodatedToCamera(cameraId);
+        return listOfStudentsAccommodatedToCamera.isEmpty() && camera.getMAssignedGender() == null;
     }
 
     public boolean isFull(Long cameraId) {
         Camera camera = cameraRepository.getById(cameraId);
-        List<Student> students = studentRepository.findAllByAnUniversitar(2021);
-        Camera finalCamera = camera;
-        long count = students.stream()
-                .filter(student -> student.getCameraRepartizata() != null && student.getCameraRepartizata().equals(finalCamera))
-                .count();
-        camera.setMAssignedStudents(camera.getMAssignedStudents().stream().distinct().toList());
-        camera = cameraRepository.save(camera);
-        System.out.println(camera.getNumarCamera() + " are " + camera.getMAssignedStudents().size() + " studenti cazati momentan, maximul este de " + camera.getNumarTotalPersoane());
-        return camera.getMAssignedStudents().size() == camera.getNumarTotalPersoane() || camera.getNumarTotalPersoane().equals(count);
+        long numberOfStudentsAccommodatedToCamera = cameraRepository.getAllStudentsAccommodatedToCamera(cameraId).size();
+        System.out.println(camera.getNumarCamera() + " are " + numberOfStudentsAccommodatedToCamera + " studenti cazati momentan, maximul este de " + camera.getNumarTotalPersoane());
+        return numberOfStudentsAccommodatedToCamera == camera.getNumarTotalPersoane();
     }
 
-    public Student assignStudent(Long cameraId, Student student) {
+    public void assignStudent(Long cameraId, Student student) {
         if (this.isFull(cameraId)) {
             throw new RuntimeException("Unable to assign student to full room ");
         }
@@ -54,24 +47,14 @@ public class CameraService {
             throw new RuntimeException("Unable to assign student " + student + " to room " + camera + ". Wrong gender.");
         }
 
-        camera.getMAssignedStudents().add(student);
+        studentRepository.insertCameraRepartizataToStudent(cameraId, student.getId());
         camera.setMAssignedGender(student.getGenSexual());
-        camera = cameraRepository.save(camera);
-        student.setCameraRepartizata(camera);
-
-        return studentRepository.save(student);
-    }
-
-    public boolean isPrefferedBy(Long cameraId, Student student) {
-        Camera camera = cameraRepository.getById(cameraId);
-        return camera.getMPreferedBy().contains(student);
+        cameraRepository.save(camera);
     }
 
     public void removePreference(Long cameraId, Student student) {
-        student = studentRepository.getById(student.getId());
         Camera camera = cameraRepository.getById(cameraId);
-        camera.getMPreferedBy().remove(student);
-        cameraRepository.save(camera);
+        cameraRepository.deleteRowFromStudentCameraPreferata(camera.getId(), student.getId());
         // setare si pe preferinta
     }
 
@@ -81,23 +64,14 @@ public class CameraService {
     }
 
     public Camera setPrefferedBy(Long cameraId, Student student) {
-        Camera camera = cameraRepository.getById(cameraId);
-        camera.getMPreferedBy().add(student);
-        return cameraRepository.save(camera);
-        // setare si pe preferinta
-    }
-
-    public Optional<Student> getAssignedStudent(Long cameraId, int index) {
-        Camera camera = cameraRepository.getById(cameraId);
-        return index < camera.getMAssignedStudents().size() ? Optional.of(camera.getMAssignedStudents().get(index)) : Optional.empty();
+        cameraRepository.insertRowIntoStudentCameraPreferata(cameraId, student.getId());
+        return cameraRepository.getById(cameraId);
     }
 
     public Camera removeStudent(Long cameraId, Student student) {
+        cameraRepository.deleteRowFromStudentCameraPreferata(cameraId, student.getId());
         Camera camera = cameraRepository.getById(cameraId);
-        camera.getMPreferedBy().remove(student);
-        // setare si pe preferinta
-
-        if (camera.getMAssignedStudents().isEmpty()) {
+        if (cameraRepository.getAllStudentsAccommodatedToCamera(cameraId).isEmpty()) {
             camera.setMAssignedGender(null);
         }
         return cameraRepository.save(camera);

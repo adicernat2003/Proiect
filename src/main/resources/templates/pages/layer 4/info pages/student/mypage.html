@@ -130,7 +130,7 @@
             </h3>
             <h3>
                 <b>Colegi de camera cu care as vrea sa stau: </b><span
-                    th:text="${infoStudent.getFriends()}"></span>
+                    th:text="${friends}"></span>
                 <a class="btn btn-outline-primary"
                    th:href="@{/student/mypage/friend-tokens-edit/{studentId}(studentId=${infoStudent.getId()})}"><i
                         class="fas fa-user-edit ml-2"></i></a>

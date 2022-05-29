@@ -3,6 +3,8 @@ package com.example.licentaBackendSB.utils;
 import com.example.licentaBackendSB.model.entities.Camera;
 import com.example.licentaBackendSB.model.entities.Camin;
 import com.example.licentaBackendSB.model.entities.Preferinta;
+import com.example.licentaBackendSB.repositories.CameraRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -14,7 +16,11 @@ import static com.example.licentaBackendSB.constants.Constants.*;
 import static java.util.Objects.nonNull;
 
 @Component
+@AllArgsConstructor
 public class StringUtils {
+
+    private final CameraRepository cameraRepository;
+
     public static String shuffleString(String string) {
         List<String> letters = Arrays.asList(string.split(""));
         Collections.shuffle(letters);
@@ -75,7 +81,7 @@ public class StringUtils {
     public List<String> mapCamereToNumarCamere(List<Preferinta> preferinte) {
         return preferinte
                 .stream()
-                .flatMap(preferinta -> preferinta.getCamere().stream())
+                .flatMap(preferinta -> cameraRepository.getAllCamereOfPreferinta(preferinta.getId()).stream())
                 .map(Camera::getNumarCamera)
                 .toList();
     }

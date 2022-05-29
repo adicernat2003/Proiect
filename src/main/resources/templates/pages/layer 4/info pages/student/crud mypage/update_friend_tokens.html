@@ -50,38 +50,17 @@
                     <button name="action" type="submit" value="cancel">Back to my page</button>
                 </div>
             </form>
-            <div th:if="${firstOption} != null">
-                <h4 style="display: inline" th:if="${firstOption} != null"
-                    th:text="'Primul coleg ales: ' + ${firstOption}"></h4>
-                <a class="btn btn-outline-warning"
-                   th:href="@{/student/mypage/friend-tokens-update/delete-friend-token/{studentId}/{anUniversitar}/{option}(studentId = ${selectedStudentById.getId()},
-                    anUniversitar = ${selectedStudentById.getAnUniversitar}, option = 0)}"><i
-                        class="fas fa-user-times ml-2"></i></a>
-            </div>
-            <div th:if="${secondOption} != null">
-                <h4 style="display: inline" th:if="${secondOption} != null"
-                    th:text="'Al doilea coleg ales: ' + ${secondOption}"></h4>
-                <a class="btn btn-outline-warning"
-                   th:href="@{/student/mypage/friend-tokens-update/delete-friend-token/{studentId}/{anUniversitar}/{option}(studentId = ${selectedStudentById.getId()},
-                    anUniversitar = ${selectedStudentById.getAnUniversitar}, option = 1)}"><i
-                        class="fas fa-user-times ml-2"></i></a>
-            </div>
-            <div th:if="${thirdOption} != null">
-                <h4 style="display: inline" th:if="${thirdOption} != null"
-                    th:text="'Al treilea coleg ales: ' + ${thirdOption}"></h4>
-                <a class="btn btn-outline-warning"
-                   th:href="@{/student/mypage/friend-tokens-update/delete-friend-token/{studentId}/{anUniversitar}/{option}(studentId = ${selectedStudentById.getId()},
-                    anUniversitar = ${selectedStudentById.getAnUniversitar}, option = 2)}"><i
-                        class="fas fa-user-times ml-2"></i></a>
-            </div>
-            <div th:if="${fourthOption} != null">
-                <h4 style="display: inline" th:if="${fourthOption} != null"
-                    th:text="'Al patrulea coleg ales: ' + ${fourthOption}">></h4>
-                <a class="btn btn-outline-warning"
-                   th:href="@{/student/mypage/friend-tokens-update/delete-friend-token/{studentId}/{anUniversitar}/{option}(studentId = ${selectedStudentById.getId()},
-                    anUniversitar = ${selectedStudentById.getAnUniversitar}, option = 3)}"><i
-                        class="fas fa-user-times ml-2"></i></a>
-            </div>
+
+            <tr th:each="friend,iter : ${selectedStudentById.friends}">
+                <div>
+                    <h4 style="display: inline" th:text="'Optiunea numarul ' + ${iter.count} + ': ' + ${friend}"></h4>
+                    <a class="btn btn-outline-warning"
+                       th:href="@{/student/mypage/friend-tokens-update/delete-friend-token/{studentId}/{anUniversitar}/{option}(studentId = ${selectedStudentById.getId()},
+                    anUniversitar = ${selectedStudentById.getAnUniversitar}, option = ${friend})}"><i
+                            class="fas fa-user-times ml-2"></i></a>
+                </div>
+            </tr>
+
         </div>
     </div>
 </div>

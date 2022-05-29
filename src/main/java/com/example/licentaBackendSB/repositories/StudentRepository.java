@@ -23,6 +23,9 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     List<Student> findAllByAnUniversitar(Integer anUniversitar);
 
+    @Query(nativeQuery = true, value = "select * from student s where s.an_universitar = ?1 AND s.camera_repartizata_id IS null")
+    List<Student> findAllNecazatiByAnUniversitar(Integer anUniversitar);
+
     Optional<Student> getStudentByNumeAndPrenumeAndAnUniversitar(String nume, String prenume, Integer anUniversitar);
 
     @Query("SELECT MIN(s.anUniversitar) FROM Student s WHERE s.nume = ?1 AND s.prenume = ?2")
@@ -47,8 +50,31 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     @Query(nativeQuery = true, value = "select id from student_friends where student_id = ?1 AND friend_id = ?2")
     List<BigInteger> getIdsForPair(BigInteger studentId, BigInteger friendId);
 
+    @Query(nativeQuery = true, value = "update student s set s.camera_repartizata_id = ?1 where s.id = ?2")
     @Modifying
     @Transactional
-    @Query("delete from StudentFriends where id = ?1")
-    Integer deleteDuplicatesFromStudentFriends(Long id);
+    void insertCameraRepartizataToStudent(Long cameraId, Long studentId);
+
+    @Query(nativeQuery = true, value = "select * from student s where s.id IN (select scp.student_id from student_camera_preferata scp where scp.camera_id = ?1)")
+    List<Student> getAllStudentsThatPreferCamera(Long cameraId);
+
+    @Modifying
+    @Transactional
+    @Query(nativeQuery = true, value = "insert into student_undesired_accomodation values (null, ?1, ?2)")
+    void insertRowIntoStudentUndesiredAccomodation(Long studentId, Long caminId);
+
+    @Modifying
+    @Transactional
+    @Query(nativeQuery = true, value = "delete from student_undesired_accomodation sua where sua.student_id  = ?1")
+    void deleteAllUndesiredCamineOfStudent(Long studentId);
+
+    @Modifying
+    @Transactional
+    @Query(nativeQuery = true, value = "delete from student_undesired_accomodation sua where sua.student_id  = ?1 and sua.camin_id = ?2")
+    void deleteUndesiredCaminOfStudent(Long studentId, Long caminId);
+
+    @Query(nativeQuery = true, value = "update student s set s.already_selected_undesired_camine = ?1 where s.id = ?2")
+    @Modifying
+    @Transactional
+    void setAlreadySelectedUndesiredCamineOfStudent(boolean option, Long studentId);
 }

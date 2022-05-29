@@ -161,14 +161,6 @@ public class CaminService {
                 .build();
     }
 
-    public void addCamera(Long caminId, Camera camera) {
-        Camin camin = caminRepository.getById(caminId);
-        camin.getCamere().add(camera);
-        camera.setCamin(camin);
-        cameraRepository.save(camera);
-        caminRepository.save(camin);
-    }
-
     public List<Camera> getCamere(Long caminId) {
         return cameraRepository.findAllByCaminId(caminId);
     }

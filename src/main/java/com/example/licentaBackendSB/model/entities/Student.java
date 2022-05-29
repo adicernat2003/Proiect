@@ -40,7 +40,6 @@ public class Student extends BaseEntity implements Comparable<Student> {
     private String cnp;
     private String judet;
     private Boolean isCazSpecial = Boolean.FALSE;
-    private Boolean isCazat = Boolean.FALSE;
     private Boolean alreadySelectedUndesiredCamine = Boolean.FALSE;
     private Boolean alreadySelectedPreferences = Boolean.FALSE;
     private Boolean isMasterand;
