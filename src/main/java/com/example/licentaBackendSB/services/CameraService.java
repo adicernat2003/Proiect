@@ -8,12 +8,14 @@ import com.example.licentaBackendSB.repositories.CameraRepository;
 import com.example.licentaBackendSB.repositories.CaminRepository;
 import com.example.licentaBackendSB.repositories.StudentRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CameraService {
 
     private final CameraRepository cameraRepository;
@@ -35,7 +37,8 @@ public class CameraService {
     public boolean isFull(Long cameraId) {
         Camera camera = cameraRepository.getById(cameraId);
         int numberOfStudentsAccommodatedToCamera = cameraRepository.getAllStudentsAccommodatedToCamera(cameraId).size();
-        System.out.println(camera.getNumarCamera() + " are " + numberOfStudentsAccommodatedToCamera + " studenti cazati momentan, maximul este de " + camera.getNumarTotalPersoane());
+        log.info(camera.getNumarCamera() + " are " + (numberOfStudentsAccommodatedToCamera == 1
+                ? "1 student cazat" : numberOfStudentsAccommodatedToCamera + " studenti cazati") + " momentan, maximul este de " + camera.getNumarTotalPersoane());
         return numberOfStudentsAccommodatedToCamera == camera.getNumarTotalPersoane();
     }
 

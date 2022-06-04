@@ -329,7 +329,7 @@ public class StudentService {
         if (student.getCameraRepartizata() != null && accommodation.getCamin().equals(student.getCameraRepartizata().getCamin())
                 && cameraRepository.getAllCamerePreferateOfStudent(studentId).stream()
                 .noneMatch(camera -> camera.equals(finalAccommodation1))) {
-            System.out.printf("No point in moving %s from %s to %s\n", student.getFullName(), student.getCameraRepartizata().getNumarCamera(), accommodation.getNumarCamera());
+            log.info("No point in moving {} from {} to {}\n", student.getFullName(), student.getCameraRepartizata().getNumarCamera(), accommodation.getNumarCamera());
             return;
         }
 
@@ -338,7 +338,7 @@ public class StudentService {
                 (accommodation.getCamin().equals(student.getCameraRepartizata().getCamin())
                         && cameraRepository.getAllCamerePreferateOfStudent(studentId).stream()
                         .anyMatch(camera -> camera.equals(finalAccommodation))))) {
-            System.out.printf("Moving %s from %s to %s...\n", student.getFullName(), student.getCameraRepartizata().getNumarCamera(), accommodation.getNumarCamera());
+            log.info("Moving {} from {} to {}...\n", student.getFullName(), student.getCameraRepartizata().getNumarCamera(), accommodation.getNumarCamera());
             accommodation = cameraService.removeStudent(accommodation.getId(), student);
         }
 
@@ -353,7 +353,7 @@ public class StudentService {
             }
         }
 
-        log.info("Camera " + accommodation.getNumarCamera() + " care are " + cameraRepository.getAllStudentsAccommodatedToCamera(accommodation.getId()).size() + " studenti cazati l-a cazat pe studentul " + student.getFullName());
+        log.info("Camera " + accommodation.getNumarCamera() + " are acum " + cameraRepository.getAllStudentsAccommodatedToCamera(accommodation.getId()).size() + " studenti cazati!");
         log.info("Studentii cazati sunt: " + cameraRepository.getAllStudentsAccommodatedToCamera(accommodation.getId()));
     }
 
