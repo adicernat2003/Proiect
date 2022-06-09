@@ -11,8 +11,9 @@ import com.example.licentaBackendSB.repositories.StudentRepository;
 import com.example.licentaBackendSB.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -22,7 +23,7 @@ import static com.example.licentaBackendSB.constants.Constants.DEFAULT_YEAR;
 
 @Component
 @RequiredArgsConstructor
-@Transactional(Transactional.TxType.REQUIRED)
+@Transactional(propagation = Propagation.REQUIRED)
 public class Manager {
 
     public static final Random random = new Random();

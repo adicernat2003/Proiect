@@ -28,28 +28,28 @@ public class AdminController {
     private final Manager manager;
 
     @RequestMapping("/insert-preferinte/{anUniversitar}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public String insertRandomPreferinteForEachStudent(@PathVariable String anUniversitar, Model model) {
         studentService.insertRandomPreferinteForEachStudent(anUniversitar);
         return this.getStudents(anUniversitar, model);
     }
 
     @RequestMapping("/insert-undesired-camine/{anUniversitar}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public String insertRandomUndesiredCamineForEachStudent(@PathVariable String anUniversitar, Model model) {
         studentService.insertRandomUndesiredCamineForEachStudent(anUniversitar);
         return this.getStudents(anUniversitar, model);
     }
 
     @RequestMapping("/make-friends/{anUniversitar}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public String makeFriends(@PathVariable String anUniversitar, Model model) {
         studentService.makeFriends(anUniversitar);
         return this.getStudents(anUniversitar, model);
     }
 
     @RequestMapping("/accommodate/{anUniversitar}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public String accommodateStudents(@PathVariable String anUniversitar, Model model) {
         accommodationService.accommodateStudents(Integer.parseInt(anUniversitar));
         return this.getStudents(anUniversitar, model);

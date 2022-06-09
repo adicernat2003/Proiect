@@ -122,6 +122,7 @@ public class CaminService {
             camin.setNrCamereTreiStudenti(0);
             camin.setNrCamerePatruStudenti(0);
             cameraRepository.deleteAll(camere);
+            caminRepository.save(camin);
             return camin.getAnUniversitar();
         } else {
             throw new IllegalStateException("Camin with id " + caminId + " does not exist");
@@ -129,9 +130,10 @@ public class CaminService {
     }
 
     private void deleteCamere(Camin foundCamin, Integer numberOfCamereToBeRemoved, Integer numarTotalPersoane) {
-        List<Camera> camerePentruUnStudent = cameraRepository.findAllByCaminIdAndNumarTotalPersoane(foundCamin.getId(), numarTotalPersoane)
-                .stream().limit(numberOfCamereToBeRemoved).toList();
-        cameraRepository.deleteAll(camerePentruUnStudent);
+        List<Camera> camere = cameraRepository.findAllByCaminIdAndNumarTotalPersoane(foundCamin.getId(), numarTotalPersoane).stream()
+                .limit(numberOfCamereToBeRemoved)
+                .toList();
+        cameraRepository.deleteAll(camere);
     }
 
     private void addNewCamere(Camin foundCamin, Integer numberOfCamereToBeAdded, Integer numarTotalPersoane) {

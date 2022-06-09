@@ -148,9 +148,6 @@ public class AccommodationService {
                         log.info("Solution found! Room: {}\n", emptyRoom.get().getNumarCamera());
                         accommodated = true;
 
-                        log.info("\t\t\tAdding reservation for {}\n", reserveForColleague);
-                        studentService.addPriorityAccommodationPreference(emptyRoom.get().getCamin().getId(), emptyRoom.get().getId(), student.getId());
-
                         break;
                     } else {
                         log.info("No solution.\n");
@@ -168,7 +165,7 @@ public class AccommodationService {
                         accommodated = true;
 
                         log.info("\t\t\tAdding reservation for {}\n", reserveForColleague);
-                        studentService.addPriorityAccommodationPreference(emptyRoom.get().getCamin().getId(), emptyRoom.get().getId(), student.getId());
+                        studentService.addPriorityAccommodationPreference(emptyRoom.get().getCamin().getId(), emptyRoom.get().getId(), reserveForColleague.get().getId());
 
                         break;
                     } else {

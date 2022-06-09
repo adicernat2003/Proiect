@@ -38,7 +38,7 @@ public class Camera extends BaseEntityForIdsAndAnUniversitar implements Comparab
     @JoinTable(name = "student_camera_preferata", joinColumns = @JoinColumn(name = "camera_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"))
     @LazyCollection(LazyCollectionOption.FALSE)
-    private Collection<Student> mPreferedBy = new TreeSet<>();
+    private Collection<Student> mPreferredBy = new TreeSet<>();
 
     @Override
     public boolean equals(Object o) {

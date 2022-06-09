@@ -33,7 +33,6 @@ public class StudentDto {
     private Double medie;
     private Boolean isCazSpecial;
     private Boolean isMasterand;
-    private List<String> numarLocuriCamera;
     private List<String> friends;
     private List<String> camerePreferate;
     private List<String> camineNedorite;

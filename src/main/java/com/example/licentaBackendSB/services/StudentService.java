@@ -33,7 +33,6 @@ public class StudentService {
     private final CameraService cameraService;
     private final CaminService caminService;
 
-
     public List<StudentDto> getStudentsByAnUniversitar(Integer anUniversitar) {
         return studentRepository.findAllByAnUniversitar(anUniversitar)
                 .stream()
@@ -44,8 +43,7 @@ public class StudentService {
 
     public Student findStudentByNameAndSurnameAndAnUniversitar(StudentAccount studentAccount, Integer anUniversitar) {
         Optional<Student> foundStudent = studentRepository.getStudentByNumeAndPrenumeAndAnUniversitar(studentAccount.getNume(), studentAccount.getPrenume(), anUniversitar);
-        return foundStudent
-                .orElseThrow(() -> new IllegalStateException("Student doesn't exist!"));
+        return foundStudent.orElseThrow(() -> new IllegalStateException("Student doesn't exist!"));
     }
 
     public void deleteStudent(long studentId) {
@@ -488,6 +486,7 @@ public class StudentService {
 
     public void insertRandomPreferinteForEachStudent(String anUniversitar) {
         List<Long> studentIds = studentRepository.findAllIdsOfStudendsByAnUniversitar(Integer.parseInt(anUniversitar));
+        List<Camin> camine = caminRepository.findAllByAnUniversitar(Integer.parseInt(anUniversitar));
         for (Long studentId : studentIds) {
             int randomNumberOfPreferences = random.nextInt(6);
             Student student = studentRepository.getById(studentId);
@@ -495,7 +494,7 @@ public class StudentService {
                 if (Boolean.TRUE.equals(student.getAlreadySelectedPreferences())) {
                     break;
                 }
-                List<Camin> camine = caminRepository.findAllByAnUniversitar(Integer.parseInt(anUniversitar));
+
                 Camin randomCamin = caminRepository.getById(camine.get(random.nextInt(camine.size())).getId());
 
                 if (caminRepository.getAllUndesiredCamineOfStudent(student.getId()).contains(randomCamin)) {

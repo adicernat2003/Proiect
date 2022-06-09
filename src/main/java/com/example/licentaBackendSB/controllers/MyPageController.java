@@ -30,7 +30,7 @@ public class MyPageController {
         return "redirect:/student/mypage/" + year;
     }
 
-    @PostMapping(value = {"/camine-update/{studentId}/{anUniversitar}", "/friend-tokens-update/{studentId}/{anUniversitar}",
+    @PostMapping(value = {"/friend-tokens-update/{studentId}/{anUniversitar}",
             "/camere-update/{studentId}/{anUniversitar}", "/camine-nedorite-update/{studentId}/{anUniversitar}"}, params = "action=cancel")
     public String redirectToMyPage(@PathVariable("anUniversitar") String anUniversitar) {
         return studentService.redirectToMyPage(anUniversitar);
@@ -39,11 +39,6 @@ public class MyPageController {
     @GetMapping(path = "/camine-nedorite-edit/{studentId}")
     public String editCamineNedorite(@PathVariable("studentId") Long studentId, Model model) {
         return studentService.editCamineNedorite(studentId, model);
-    }
-
-    @GetMapping(path = "/camere-edit/{studentId}")
-    public String editCamerePreferate(@PathVariable("studentId") Long studentId, Model model) {
-        return studentService.editOptiuniCamereCamin(studentId, model);
     }
 
     @RequestMapping(value = "/camine-nedorite-update/{studentId}/{anUniversitar}", method = RequestMethod.POST, params = "action=save")
@@ -71,6 +66,11 @@ public class MyPageController {
     public String clearCamineNedorite(@PathVariable("studentId") Long studentId,
                                       @PathVariable("anUniversitar") String anUniversitar) {
         return studentService.clearCamineNedorite(studentId, null, anUniversitar, true);
+    }
+
+    @GetMapping(path = "/camere-edit/{studentId}")
+    public String editCamerePreferate(@PathVariable("studentId") Long studentId, Model model) {
+        return studentService.editOptiuniCamereCamin(studentId, model);
     }
 
     @RequestMapping(value = "/camere-update/{studentId}/{anUniversitar}", method = RequestMethod.POST, params = "action=save")

@@ -300,7 +300,6 @@ public class SessionService {
                 .numeCamin(P23)
                 .anUniversitar(anUniversitar)
                 .build());
-
     }
 
     private void createCamereNoiOfAnUniversitar(Integer anUniversitar) {
