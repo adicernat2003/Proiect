@@ -38,7 +38,8 @@ public class CameraService {
         Camera camera = cameraRepository.getById(cameraId);
         int numberOfStudentsAccommodatedToCamera = cameraRepository.getAllStudentsAccommodatedToCamera(cameraId).size();
         log.info(camera.getNumarCamera() + " are " + (numberOfStudentsAccommodatedToCamera == 1
-                ? "1 student cazat" : numberOfStudentsAccommodatedToCamera + " studenti cazati") + " momentan, maximul este de " + camera.getNumarTotalPersoane());
+                ? "1 student cazat" : numberOfStudentsAccommodatedToCamera + " studenti cazati") +
+                " momentan, maximul este de " + camera.getNumarTotalPersoane());
         return numberOfStudentsAccommodatedToCamera == camera.getNumarTotalPersoane();
     }
 

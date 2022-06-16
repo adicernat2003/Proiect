@@ -42,7 +42,8 @@ public class StudentService {
     }
 
     public Student findStudentByNameAndSurnameAndAnUniversitar(StudentAccount studentAccount, Integer anUniversitar) {
-        Optional<Student> foundStudent = studentRepository.getStudentByNumeAndPrenumeAndAnUniversitar(studentAccount.getNume(), studentAccount.getPrenume(), anUniversitar);
+        Optional<Student> foundStudent = studentRepository.getStudentByNumeAndPrenumeAndAnUniversitar(studentAccount.getNume(),
+                studentAccount.getPrenume(), anUniversitar);
         return foundStudent.orElseThrow(() -> new IllegalStateException("Student doesn't exist!"));
     }
 
@@ -161,18 +162,23 @@ public class StudentService {
         } else {
             StudentAccount loggedStudentAccount = studentAccountService.getLoggedStudentAccount();
 
-            Student infoStudent = this.findStudentByNameAndSurnameAndAnUniversitar(loggedStudentAccount, Integer.parseInt(anUniversitar));
+            Student infoStudent = this.findStudentByNameAndSurnameAndAnUniversitar(loggedStudentAccount,
+                    Integer.parseInt(anUniversitar));
 
             model.addAttribute("loggedStudentAccount", loggedStudentAccount);
             model.addAttribute("infoStudent", infoStudent);
             model.addAttribute("isDevAcc", loggedAccount.checkIfStandardAccLogged().toString());
 
-            model.addAttribute("selectedYears", manager.getListOfYearsForStudentPage(infoStudent, Integer.parseInt(anUniversitar)));
+            model.addAttribute("selectedYears",
+                    manager.getListOfYearsForStudentPage(infoStudent, Integer.parseInt(anUniversitar)));
             model.addAttribute("anCurent", anUniversitar);
             model.addAttribute("anUniversitar", anUniversitar);
-            model.addAttribute("friends", studentRepository.findAllFriendsOfStudent(infoStudent.getId()).stream().map(Student::getFullName).toList());
-            model.addAttribute("optiuniCamere", stringUtils.mapCamereToNumarCamere(preferintaRepository.findAllPreferencesOfStudent(infoStudent.getId())));
-            model.addAttribute("camineNedorite", caminRepository.getAllUndesiredCamineOfStudent(infoStudent.getId()).stream().map(Camin::getNumeCamin).toList());
+            model.addAttribute("friends",
+                    studentRepository.findAllFriendsOfStudent(infoStudent.getId()).stream().map(Student::getFullName).toList());
+            model.addAttribute("optiuniCamere",
+                    stringUtils.mapCamereToNumarCamere(preferintaRepository.findAllPreferencesOfStudent(infoStudent.getId())));
+            model.addAttribute("camineNedorite",
+                    caminRepository.getAllUndesiredCamineOfStudent(infoStudent.getId()).stream().map(Camin::getNumeCamin).toList());
         }
         return "pages/layer 4/info pages/student/mypage";
     }
@@ -203,7 +209,8 @@ public class StudentService {
         Student student = this.getStudentById(studentId);
         if (newStudent.getCamerePreferate() != null && !newStudent.getCamerePreferate().isEmpty()) {
             for (String numeCamera : newStudent.getCamerePreferate()) {
-                Camera camera = cameraRepository.findByNumarCameraAndAnUniversitar(stringUtils.extractNumeCameraFromString(numeCamera), Integer.parseInt(anUniversitar));
+                Camera camera = cameraRepository.findByNumarCameraAndAnUniversitar(stringUtils.extractNumeCameraFromString(numeCamera),
+                        Integer.parseInt(anUniversitar));
                 this.addAccommodationPreference(camera.getId(), studentId);
             }
             studentRepository.save(student);
@@ -226,7 +233,8 @@ public class StudentService {
             preferintaRepository.deleteAll(preferinte);
             return "redirect:/student/mypage/" + anUniversitar;
         } else {
-            Camera camera = cameraRepository.findByNumarCameraAndAnUniversitar(numarCamera.split(",")[0], Integer.parseInt(anUniversitar));
+            Camera camera = cameraRepository.findByNumarCameraAndAnUniversitar(numarCamera.split(",")[0],
+                    Integer.parseInt(anUniversitar));
             List<Preferinta> preferinte = preferintaRepository.findAllPreferencesOfStudent(studentId);
             for (Preferinta preferinta : preferinte) {
                 preferintaRepository.deleteRowFromPreferintaCamera(preferinta.getId(), camera.getId());
@@ -249,7 +257,8 @@ public class StudentService {
         if (newStudent.getFriends() != null && !newStudent.getFriends().isEmpty()) {
             for (String friend : newStudent.getFriends()) {
                 String[] numeSiPrenume = friend.split(" ");
-                Student studentFriend = studentRepository.getStudentByNumeAndPrenumeAndAnUniversitar(numeSiPrenume[0], numeSiPrenume[1], Integer.parseInt(anUniversitar)).orElse(null);
+                Student studentFriend = studentRepository.getStudentByNumeAndPrenumeAndAnUniversitar(numeSiPrenume[0],
+                        numeSiPrenume[1], Integer.parseInt(anUniversitar)).orElse(null);
                 student.getFriends().add(studentFriend);
                 Objects.requireNonNull(studentFriend).getFriends().add(student);
                 studentRepository.save(studentFriend);
@@ -327,7 +336,8 @@ public class StudentService {
         if (student.getCameraRepartizata() != null && accommodation.getCamin().equals(student.getCameraRepartizata().getCamin())
                 && cameraRepository.getAllCamerePreferateOfStudent(studentId).stream()
                 .noneMatch(camera -> camera.equals(finalAccommodation1))) {
-            log.info("No point in moving {} from {} to {}\n", student.getFullName(), student.getCameraRepartizata().getNumarCamera(), accommodation.getNumarCamera());
+            log.info("No point in moving {} from {} to {}\n", student.getFullName(), student.getCameraRepartizata().getNumarCamera(),
+                    accommodation.getNumarCamera());
             return;
         }
 
@@ -336,7 +346,8 @@ public class StudentService {
                 (accommodation.getCamin().equals(student.getCameraRepartizata().getCamin())
                         && cameraRepository.getAllCamerePreferateOfStudent(studentId).stream()
                         .anyMatch(camera -> camera.equals(finalAccommodation))))) {
-            log.info("Moving {} from {} to {}...\n", student.getFullName(), student.getCameraRepartizata().getNumarCamera(), accommodation.getNumarCamera());
+            log.info("Moving {} from {} to {}...\n", student.getFullName(), student.getCameraRepartizata().getNumarCamera(),
+                    accommodation.getNumarCamera());
             accommodation = cameraService.removeStudent(accommodation.getId(), student);
         }
 
@@ -351,7 +362,8 @@ public class StudentService {
             }
         }
 
-        log.info("Camera " + accommodation.getNumarCamera() + " are acum " + cameraRepository.getAllStudentsAccommodatedToCamera(accommodation.getId()).size() + " studenti cazati!");
+        log.info("Camera " + accommodation.getNumarCamera() + " are acum " +
+                cameraRepository.getAllStudentsAccommodatedToCamera(accommodation.getId()).size() + " studenti cazati!");
         log.info("Studentii cazati sunt: " + cameraRepository.getAllStudentsAccommodatedToCamera(accommodation.getId()));
     }
 
@@ -407,7 +419,8 @@ public class StudentService {
         for (Long studentId : studentIdsWithNoFriendsYet) {
             int randomNumberOfFriends = random.nextInt(4);
 
-            List<Student> studentsWithNoFriendsYetWithSameGenderAsSelectedStudent = this.getStudentsWithNoFriendsYet(studentId, studentIdsWithNoFriendsYet);
+            List<Student> studentsWithNoFriendsYetWithSameGenderAsSelectedStudent = this.getStudentsWithNoFriendsYet(studentId,
+                    studentIdsWithNoFriendsYet);
 
             if (studentsWithNoFriendsYetWithSameGenderAsSelectedStudent.size() < randomNumberOfFriends) {
                 randomNumberOfFriends = studentsWithNoFriendsYetWithSameGenderAsSelectedStudent.size();

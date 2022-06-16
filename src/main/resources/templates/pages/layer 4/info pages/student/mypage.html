@@ -95,7 +95,8 @@
             <p class="card-text">
             <h3><b>Nume: </b> <span th:text="${loggedStudentAccount.getNume()}"></span></h3>
             <h3><b>Prenume: </b> <span th:text="${loggedStudentAccount.getPrenume()}"></span></h3>
-            <h3><b>Zi de nastere: </b> <span th:text="${loggedStudentAccount.getZi_de_nastere()}"></span></h3>
+            <h3><b>Zi de nastere: </b> <span
+                    th:text="${loggedStudentAccount.getZi_de_nastere().replace('.', ' ')}"></span></h3>
             <h3><b>CNP: </b> <span th:text="${loggedStudentAccount.getCnp()}"></span></h3>
             <hr class="solid">
             <h3><b>Username: </b> <span th:text="${loggedStudentAccount.getUsername()}"></span></h3>
@@ -163,7 +164,7 @@
 
             <h3>
                 <b>Camera repartizata: - </b>
-                <td th:text="${infoStudent.cameraRepartizata != null ? infoStudent.cameraRepartizata  : ''}"></td>
+                <td th:text="${infoStudent.cameraRepartizata != null ? infoStudent.cameraRepartizata.numarCamera  : ''}"></td>
             </h3>
             <!--                        <span th:if="${infoStudent.getCaminPreferat() != 'null'}">-->
             <!--                            <div th:switch="${infoStudent.getCaminPreferat()}">-->

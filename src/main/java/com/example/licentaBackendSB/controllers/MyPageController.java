@@ -31,7 +31,8 @@ public class MyPageController {
     }
 
     @PostMapping(value = {"/friend-tokens-update/{studentId}/{anUniversitar}",
-            "/camere-update/{studentId}/{anUniversitar}", "/camine-nedorite-update/{studentId}/{anUniversitar}"}, params = "action=cancel")
+            "/camere-update/{studentId}/{anUniversitar}", "/camine-nedorite-update/{studentId}/{anUniversitar}"},
+            params = "action=cancel")
     public String redirectToMyPage(@PathVariable("anUniversitar") String anUniversitar) {
         return studentService.redirectToMyPage(anUniversitar);
     }
@@ -41,14 +42,16 @@ public class MyPageController {
         return studentService.editCamineNedorite(studentId, model);
     }
 
-    @RequestMapping(value = "/camine-nedorite-update/{studentId}/{anUniversitar}", method = RequestMethod.POST, params = "action=save")
+    @RequestMapping(value = "/camine-nedorite-update/{studentId}/{anUniversitar}", method = RequestMethod.POST,
+            params = "action=save")
     public String updateCamineNedorite(@PathVariable("studentId") Long studentId,
                                        @PathVariable("anUniversitar") String anUniversitar,
                                        StudentDto newStudent) {
         return studentService.updateCamineNedorite(studentId, anUniversitar, newStudent, false);
     }
 
-    @RequestMapping(value = "/camine-nedorite-update/{studentId}/{anUniversitar}", method = RequestMethod.POST, params = "action=add-more")
+    @RequestMapping(value = "/camine-nedorite-update/{studentId}/{anUniversitar}", method = RequestMethod.POST,
+            params = "action=add-more")
     public String addAnotherCaminNedorit(@PathVariable("studentId") Long studentId,
                                          @PathVariable("anUniversitar") String anUniversitar,
                                          StudentDto newStudent) {
@@ -73,14 +76,16 @@ public class MyPageController {
         return studentService.editOptiuniCamereCamin(studentId, model);
     }
 
-    @RequestMapping(value = "/camere-update/{studentId}/{anUniversitar}", method = RequestMethod.POST, params = "action=save")
+    @RequestMapping(value = "/camere-update/{studentId}/{anUniversitar}", method = RequestMethod.POST,
+            params = "action=save")
     public String updateOptiuniCamere(@PathVariable("studentId") Long studentId,
                                       @PathVariable("anUniversitar") String anUniversitar,
                                       StudentDto newStudent) {
         return studentService.updateOptiuniCamere(studentId, anUniversitar, newStudent, false);
     }
 
-    @RequestMapping(value = "/camere-update/{studentId}/{anUniversitar}", method = RequestMethod.POST, params = "action=add-more")
+    @RequestMapping(value = "/camere-update/{studentId}/{anUniversitar}", method = RequestMethod.POST,
+            params = "action=add-more")
     public String addAnotherOptiuneCamera(@PathVariable("studentId") Long studentId,
                                           @PathVariable("anUniversitar") String anUniversitar,
                                           StudentDto newStudent) {
@@ -105,14 +110,16 @@ public class MyPageController {
         return studentService.editFriendTokens(studentId, model);
     }
 
-    @RequestMapping(value = "/friend-tokens-update/{studentId}/{anUniversitar}", method = RequestMethod.POST, params = "action=save")
+    @RequestMapping(value = "/friend-tokens-update/{studentId}/{anUniversitar}", method = RequestMethod.POST,
+            params = "action=save")
     public String updateFriendTokens(@PathVariable("studentId") Long studentId,
                                      @PathVariable("anUniversitar") String anUniversitar,
                                      StudentDto newStudent) {
         return studentService.updateFriendTokens(studentId, anUniversitar, newStudent, false);
     }
 
-    @RequestMapping(value = "/friend-tokens-update/{studentId}/{anUniversitar}", method = RequestMethod.POST, params = "action=add-more")
+    @RequestMapping(value = "/friend-tokens-update/{studentId}/{anUniversitar}", method = RequestMethod.POST,
+            params = "action=add-more")
     public String addAnotherFriend(@PathVariable("studentId") Long studentId,
                                    @PathVariable("anUniversitar") String anUniversitar,
                                    StudentDto newStudent) {

@@ -163,13 +163,15 @@ public class CaminService {
     public boolean hasSpotForGender(Long caminId, Gender gender) {
         List<Camera> camere = cameraRepository.findAllByCaminId(caminId);
         return camere.stream()
-                .anyMatch(camera -> !cameraService.isFull(camera.getId()) && ((camera.getMAssignedGender() != null ? camera.getMAssignedGender() : gender).equals(gender)));
+                .anyMatch(camera -> !cameraService.isFull(camera.getId()) && ((camera.getMAssignedGender() != null ?
+                        camera.getMAssignedGender() : gender).equals(gender)));
     }
 
     public Camera getSpotForGender(Long caminId, Gender gender) {
         List<Camera> camere = cameraRepository.findAllByCaminId(caminId);
         return camere.stream()
-                .filter(camera -> !cameraService.isFull(camera.getId()) && ((camera.getMAssignedGender() != null ? camera.getMAssignedGender() : gender).equals(gender)))
+                .filter(camera -> !cameraService.isFull(camera.getId()) && ((camera.getMAssignedGender() != null ?
+                        camera.getMAssignedGender() : gender).equals(gender)))
                 .findAny()
                 .orElse(null);
     }

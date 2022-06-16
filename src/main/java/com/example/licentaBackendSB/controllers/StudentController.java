@@ -28,7 +28,8 @@ public class StudentController {
         model.addAttribute("isDevAcc", loggedAccount.checkIfStandardAccLogged().toString());
 
         StudentAccount loggedStudentAccount = studentAccountService.getLoggedStudentAccount();
-        Integer anUniversitar = studentService.getLowestAnUniversitarForStudent(loggedStudentAccount.getNume(), loggedStudentAccount.getPrenume());
+        Integer anUniversitar = studentService.getLowestAnUniversitarForStudent(loggedStudentAccount.getNume(),
+                loggedStudentAccount.getPrenume());
 
         model.addAttribute("anUniversitar", String.valueOf(anUniversitar));
         return "pages/layer 3/student";

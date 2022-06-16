@@ -110,7 +110,8 @@ public class AccommodationService {
                 for (Camera camera : camere) {
                     camera = cameraRepository.getById(camera.getId());
                     log.info("\t\tWants room {}... ", camera.getNumarCamera());
-                    if (!cameraService.isFull(camera.getId()) && (camera.getMAssignedGender() != null ? camera.getMAssignedGender() : student.getGenSexual()).getGen().equals(student.getGenSexual().getGen())) {
+                    if (!cameraService.isFull(camera.getId()) && (camera.getMAssignedGender() != null ?
+                            camera.getMAssignedGender() : student.getGenSexual()).getGen().equals(student.getGenSexual().getGen())) {
                         studentService.setAccommodation(student.getId(), camera.getId());
                         log.info("Solution found! Room: {}\n", camera.getNumarCamera());
                         accommodated = true;
@@ -125,11 +126,13 @@ public class AccommodationService {
                 if (reserveForColleague.isEmpty()) {
                     log.info("\t\tLooking for partially occupied non-desired room... ");
                     Student finalStudent = student;
-                    Optional<Camera> partiallyOccupiedRoom = cameraRepository.findAllByCaminId(caminService.getCaminOfPreferinta(preferinta).getId())
-                            .stream()
-                            .filter(camera -> !cameraService.isEmpty(camera.getId()) && !cameraService.isFull(camera.getId())
-                                    && camera.getMAssignedGender().equals(finalStudent.getGenSexual()) && studentRepository.getAllStudentsThatPreferCamera(camera.getId()).isEmpty())
-                            .findAny();
+                    Optional<Camera> partiallyOccupiedRoom =
+                            cameraRepository.findAllByCaminId(caminService.getCaminOfPreferinta(preferinta).getId())
+                                    .stream()
+                                    .filter(camera -> !cameraService.isEmpty(camera.getId()) && !cameraService.isFull(camera.getId())
+                                            && camera.getMAssignedGender().equals(finalStudent.getGenSexual())
+                                            && studentRepository.getAllStudentsThatPreferCamera(camera.getId()).isEmpty())
+                                    .findAny();
                     if (partiallyOccupiedRoom.isPresent()) {
                         log.info("Solution found! Room: {}\n", partiallyOccupiedRoom.get().getNumarCamera());
                         studentService.setAccommodation(student.getId(), partiallyOccupiedRoom.get().getId());
@@ -139,10 +142,12 @@ public class AccommodationService {
                         log.info("No solution.\n");
                     }
                     log.info("\t\tLooking for empty non-desired room... ");
-                    Optional<Camera> emptyRoom = cameraRepository.findAllByCaminId(caminService.getCaminOfPreferinta(preferinta).getId())
-                            .stream()
-                            .filter(camera -> cameraService.isEmpty(camera.getId()) && studentRepository.getAllStudentsThatPreferCamera(camera.getId()).isEmpty())
-                            .findAny();
+                    Optional<Camera> emptyRoom =
+                            cameraRepository.findAllByCaminId(caminService.getCaminOfPreferinta(preferinta).getId())
+                                    .stream()
+                                    .filter(camera -> cameraService.isEmpty(camera.getId())
+                                            && studentRepository.getAllStudentsThatPreferCamera(camera.getId()).isEmpty())
+                                    .findAny();
                     if (emptyRoom.isPresent()) {
                         studentService.setAccommodation(student.getId(), emptyRoom.get().getId());
                         log.info("Solution found! Room: {}\n", emptyRoom.get().getNumarCamera());
@@ -155,17 +160,20 @@ public class AccommodationService {
                 } else {
                     log.info("\t\tLooking for empty non-desired room... ");
                     preferinta = preferintaRepository.getById(preferinta.getId());
-                    Optional<Camera> emptyRoom = cameraRepository.findAllByCaminId(caminService.getCaminOfPreferinta(preferinta).getId())
-                            .stream().
-                            filter(camera -> cameraService.isEmpty(camera.getId()) && studentRepository.getAllStudentsThatPreferCamera(camera.getId()).isEmpty())
-                            .findAny();
+                    Optional<Camera> emptyRoom =
+                            cameraRepository.findAllByCaminId(caminService.getCaminOfPreferinta(preferinta).getId())
+                                    .stream().
+                                    filter(camera -> cameraService.isEmpty(camera.getId())
+                                            && studentRepository.getAllStudentsThatPreferCamera(camera.getId()).isEmpty())
+                                    .findAny();
                     if (emptyRoom.isPresent()) {
                         studentService.setAccommodation(student.getId(), emptyRoom.get().getId());
                         log.info("Solution found! Room: {}\n", emptyRoom.get().getNumarCamera());
                         accommodated = true;
 
                         log.info("\t\t\tAdding reservation for {}\n", reserveForColleague);
-                        studentService.addPriorityAccommodationPreference(emptyRoom.get().getCamin().getId(), emptyRoom.get().getId(), reserveForColleague.get().getId());
+                        studentService.addPriorityAccommodationPreference(emptyRoom.get().getCamin().getId(),
+                                emptyRoom.get().getId(), reserveForColleague.get().getId());
 
                         break;
                     } else {
@@ -175,11 +183,13 @@ public class AccommodationService {
                     log.info("\t\tLooking for partially occupied non-desired room... ");
                     Student finalStudent1 = student;
                     preferinta = preferintaRepository.getById(preferinta.getId());
-                    Optional<Camera> partiallyOccupiedRoom = cameraRepository.findAllByCaminId(caminService.getCaminOfPreferinta(preferinta).getId())
-                            .stream()
-                            .filter(camera -> !cameraService.isEmpty(camera.getId()) && !cameraService.isFull(camera.getId())
-                                    && camera.getMAssignedGender().equals(finalStudent1.getGenSexual()) && studentRepository.getAllStudentsThatPreferCamera(camera.getId()).isEmpty())
-                            .findAny();
+                    Optional<Camera> partiallyOccupiedRoom =
+                            cameraRepository.findAllByCaminId(caminService.getCaminOfPreferinta(preferinta).getId())
+                                    .stream()
+                                    .filter(camera -> !cameraService.isEmpty(camera.getId()) && !cameraService.isFull(camera.getId())
+                                            && camera.getMAssignedGender().equals(finalStudent1.getGenSexual())
+                                            && studentRepository.getAllStudentsThatPreferCamera(camera.getId()).isEmpty())
+                                    .findAny();
                     if (partiallyOccupiedRoom.isPresent()) {
                         log.info("Solution found! Room: {}\n", partiallyOccupiedRoom.get().getNumarCamera());
                         studentService.setAccommodation(student.getId(), partiallyOccupiedRoom.get().getId());
@@ -195,7 +205,8 @@ public class AccommodationService {
                 preferinta = preferintaRepository.getById(preferinta.getId());
                 Optional<Camera> lastChanceRoom = cameraRepository.findAllByCaminId(caminService.getCaminOfPreferinta(preferinta).getId())
                         .stream()
-                        .filter(camera -> (cameraService.isEmpty(camera.getId()) || (!cameraService.isFull(camera.getId()) && camera.getMAssignedGender().equals(finalStudent2.getGenSexual())))
+                        .filter(camera -> (cameraService.isEmpty(camera.getId())
+                                || (!cameraService.isFull(camera.getId()) && camera.getMAssignedGender().equals(finalStudent2.getGenSexual())))
                                 && finalStudent2.compareTo(new TreeSet<>(studentRepository.getAllStudentsThatPreferCamera(camera.getId())).last()) < 0)
                         .max(Comparator.comparing(camera -> new TreeSet<>(studentRepository.getAllStudentsThatPreferCamera(camera.getId())).last()));
                 if (lastChanceRoom.isPresent()) {
@@ -261,7 +272,8 @@ public class AccommodationService {
                     List<Camera> camereOfCamin = cameraRepository.findAllByCaminId(camin.getId());
 
                     Optional<Camera> emptyRoom = camereOfCamin.stream()
-                            .filter(camera -> cameraService.isEmpty(camera.getId()) && studentRepository.getAllStudentsThatPreferCamera(camera.getId()).isEmpty())
+                            .filter(camera -> cameraService.isEmpty(camera.getId())
+                                    && studentRepository.getAllStudentsThatPreferCamera(camera.getId()).isEmpty())
                             .findAny();
 
                     if (emptyRoom.isPresent()) {
@@ -279,7 +291,8 @@ public class AccommodationService {
                 for (Camin camin : mBuildings.values()) {
                     camin = caminRepository.getById(camin.getId());
                     log.info("Trying {}... ", camin);
-                    if (caminService.hasSpotForGender(camin.getId(), student.getGenSexual()) && !caminRepository.getAllUndesiredCamineOfStudent(student.getId()).contains(camin)) {
+                    if (caminService.hasSpotForGender(camin.getId(), student.getGenSexual())
+                            && !caminRepository.getAllUndesiredCamineOfStudent(student.getId()).contains(camin)) {
                         Camera camera = caminService.getSpotForGender(camin.getId(), student.getGenSexual());
                         studentService.setAccommodation(student.getId(), camera.getId());
                         log.info("Solution found! Room: {}\n", camera.getNumarCamera());

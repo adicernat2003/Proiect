@@ -55,16 +55,6 @@ public class AdminController {
         return this.getStudents(anUniversitar, model);
     }
 
-    @GetMapping
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
-    public String getAdminView(Model model) {
-        LoggedAccount loggedAccount = new LoggedAccount();
-        model.addAttribute("loggedUsername", loggedAccount.getLoggedUsername());
-        model.addAttribute("isDevAcc", loggedAccount.checkIfStandardAccLogged().toString());
-
-        return "pages/layer 3/admin";
-    }
-
     @GetMapping("/students/{anUniversitar}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
     public String getStudents(@PathVariable String anUniversitar, Model model) {
@@ -74,6 +64,16 @@ public class AdminController {
         model.addAttribute("anUniversitar", anUniversitar);
         model.addAttribute("isAdmin", "admin");
         return "pages/layer 4/students table/students_list";
+    }
+
+    @GetMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ASSISTANT')")
+    public String getAdminView(Model model) {
+        LoggedAccount loggedAccount = new LoggedAccount();
+        model.addAttribute("loggedUsername", loggedAccount.getLoggedUsername());
+        model.addAttribute("isDevAcc", loggedAccount.checkIfStandardAccLogged().toString());
+
+        return "pages/layer 3/admin";
     }
 
     @RequestMapping("/students")

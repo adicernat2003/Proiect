@@ -31,19 +31,22 @@ public class StudentConverter {
                 .nume(student.getNume())
                 .prenume(student.getPrenume())
                 .serie(student.getSerie())
-                .zi_de_nastere(student.getZi_de_nastere())
+                .zi_de_nastere(student.getZi_de_nastere().replace(".", " "))
                 .master(student.getMaster())
                 .isMasterand(student.getIsMasterand())
                 .friends(student.getFriends() != null ? student.getFriends().stream()
                         .map(friend -> stringUtils.concatenateStrings(friend.getNume(), friend.getPrenume()))
                         .toList() : null)
                 .camerePreferate(cameraService.getAllCamerePreferredByStudent(student.getId()).stream()
-                        .map(camera -> camera.getNumarCamera() + ", " + stringUtils.mapIntegerNumarPersoaneCameraToString(camera.getNumarTotalPersoane()))
+                        .map(camera -> camera.getNumarCamera() + ", " +
+                                stringUtils.mapIntegerNumarPersoaneCameraToString(camera.getNumarTotalPersoane()))
                         .toList())
                 .prioritate(student.getPrioritate())
-                .cameraRepartizata(student.getCameraRepartizata() != null ? student.getCameraRepartizata().getNumarCamera() : "")
+                .cameraRepartizata(student.getCameraRepartizata() != null ?
+                        student.getCameraRepartizata().getNumarCamera() : "")
                 .camineNedorite(caminRepository.getAllUndesiredCamineOfStudent(student.getId()).stream().map(Camin::getNumeCamin).toList())
-                .caminRepartizat(student.getCameraRepartizata() != null ? student.getCameraRepartizata().getCamin().getNumeCamin() : "")
+                .caminRepartizat(student.getCameraRepartizata() != null ?
+                        student.getCameraRepartizata().getCamin().getNumeCamin() : "")
                 .build();
     }
 }

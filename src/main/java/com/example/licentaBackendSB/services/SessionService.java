@@ -126,7 +126,8 @@ public class SessionService {
     private int getTotalNumberOfStudentsInFirstYearOfLicenta(Integer previousNumberOfStudentsInFourthYearOfLicenta,
                                                              Integer totalNumberOfStudentsCareAplicaPentruMaster,
                                                              Integer previousNumberOfStudentsInSecondYearOfMaster) {
-        int totalNumberOfStudentsLeavingAfterFourthYearOfLicenta = previousNumberOfStudentsInFourthYearOfLicenta - totalNumberOfStudentsCareAplicaPentruMaster;
+        int totalNumberOfStudentsLeavingAfterFourthYearOfLicenta = previousNumberOfStudentsInFourthYearOfLicenta
+                - totalNumberOfStudentsCareAplicaPentruMaster;
         return previousNumberOfStudentsInSecondYearOfMaster + totalNumberOfStudentsLeavingAfterFourthYearOfLicenta;
     }
 
