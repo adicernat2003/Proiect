@@ -376,7 +376,6 @@ public class StudentService {
             preferinta = preferintaRepository.getById(preferinta.getId());
             if (caminRepository.getCaminOfCamera(cameraId).equals(caminService.getCaminOfPreferinta(preferinta))) {
                 cameraRepository.insertIntoPreferintaCamera(preferinta.getId(), cameraId);
-                log.info(preferinta.getId() + " interior " + camera.getId());
                 return student;
             }
         }
@@ -384,7 +383,6 @@ public class StudentService {
         preferintaRepository.updateCaminOfPreferinta(caminRepository.getCaminIdOfCamera(cameraId), preferintaNoua.getId());
         preferintaNoua = preferintaRepository.getById(preferintaNoua.getId());
         student.getPreferinte().put(caminService.getCaminOfPreferinta(preferintaNoua), preferintaNoua);
-        log.info(preferintaNoua.getId() + " exterior " + camera.getId());
         return studentRepository.save(student);
     }
 
