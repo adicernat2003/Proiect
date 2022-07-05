@@ -54,6 +54,7 @@ public class CamineController {
                               Model model) {
         model.addAttribute("listOfStudents",
                 studentService.getStudentsByCaminAndAnUniversitar(numeCamin.replace('_', ' '), anUniversitar));
+        model.addAttribute("anUniversitar", anUniversitar);
         return "pages/layer 4/camine/tables/studentCaminList";
     }
 

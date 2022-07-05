@@ -33,7 +33,7 @@
 //        List<ApplicationUser> applicationUsers = Lists.newArrayList(
 //                new ApplicationUser(
 //                        ADMIN.getGrantedAuthorities(),
-//                        "iancu",
+//                        "Adrian",
 //                        passwordEncoder.encode("1233"),
 //                        true,
 //                        true,

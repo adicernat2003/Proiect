@@ -29,7 +29,7 @@ public class CamereLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        log.info("Loading data from CamineLoader...");
+        log.info("Loading data from CamereLoader...");
 
         camereDB = cameraRepository.findAll();
         if (camereDB.isEmpty()) {

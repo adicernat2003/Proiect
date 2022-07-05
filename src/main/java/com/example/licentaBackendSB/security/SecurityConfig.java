@@ -88,7 +88,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .build();
 
         UserDetails adminUser = User.builder()
-                .username("iancu")
+                .username("Adrian")
                 .password(passwordEncoder.encode("1233"))
                 .authorities(ADMIN.getGrantedAuthorities())
                 .build();

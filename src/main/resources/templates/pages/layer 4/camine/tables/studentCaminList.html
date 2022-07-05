@@ -47,7 +47,10 @@
                 </li>
 
                 <li class="nav-item">
-                    <a aria-current="page" class="nav-link" href="/admin/camine">Lista caminelor</a>
+                    <a aria-current="page" class="nav-link"
+                       th:href="@{/admin/camine/{anUniversitar}(anUniversitar = ${anUniversitar})}">
+                        Lista caminelor
+                    </a>
                 </li>
             </ul>
         </div>
@@ -64,6 +67,8 @@
         <th>CNP</th>
         <th>Medie</th>
         <th>An</th>
+        <th>Prioritate</th>
+        <th>Medie</th>
     </tr>
     </thead>
     <tbody>
@@ -74,6 +79,8 @@
         <td th:text="${student.getCnp()}"></td>
         <td th:text="${student.getMedie()}"></td>
         <td th:text="${student.getAn()}"></td>
+        <td th:text="${student.getPrioritate()}"></td>
+        <td th:text="${student.getMedie()}"></td>
     </tbody>
 </table>
 

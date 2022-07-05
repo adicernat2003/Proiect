@@ -20,14 +20,14 @@ public class LoggedAccount {
 
     public Boolean checkIfStandardAccLogged() {
         return this.loggedUsername.equals("checu")
-                || this.loggedUsername.equals("iancu")
+                || this.loggedUsername.equals("Adrian")
                 || this.loggedUsername.equals("lixi");
     }
 
     public String getAuthorityOfStandardAcc() {
         return switch (this.loggedUsername) {
             case ("checu") -> STUDENT;
-            case ("iancu") -> ADMIN;
+            case ("Adrian") -> ADMIN;
             default -> ASSISTANT;
         };
     }
