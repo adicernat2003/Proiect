@@ -13,6 +13,11 @@ public interface PreferintaRepository extends JpaRepository<Preferinta, Long> {
     @Query("select p from Preferinta p where p.student.id = ?1 ORDER BY p.id")
     List<Preferinta> findAllPreferencesOfStudent(Long studentId);
 
+    @Query(nativeQuery = true, value = "delete from preferinta p where p.id = ?1")
+    @Modifying
+    @Transactional
+    void deleteRowFromPreferinta(Long preferintaId);
+
     @Query(nativeQuery = true, value = "delete from preferinta_camera pc where pc.preferinta_id = ?1 AND pc.camera_id = ?2")
     @Modifying
     @Transactional

@@ -211,6 +211,11 @@ public class StudentService {
             for (String numeCamera : newStudent.getCamerePreferate()) {
                 Camera camera = cameraRepository.findByNumarCameraAndAnUniversitar(stringUtils.extractNumeCameraFromString(numeCamera),
                         Integer.parseInt(anUniversitar));
+
+                if (camera == null) {
+                    continue;
+                }
+
                 this.addAccommodationPreference(camera.getId(), studentId);
             }
             studentRepository.save(student);
@@ -240,6 +245,15 @@ public class StudentService {
                 preferintaRepository.deleteRowFromPreferintaCamera(preferinta.getId(), camera.getId());
             }
             cameraRepository.deleteRowFromStudentCameraPreferata(camera.getId(), studentId);
+
+            preferinte = preferintaRepository.findAllPreferencesOfStudent(studentId);
+
+            for (Preferinta preferinta : preferinte) {
+                if (preferinta.getCamere().size() == 0) {
+                    preferintaRepository.deleteRowFromPreferinta(preferinta.getId());
+                }
+            }
+
             return "redirect:/student/mypage/camere-edit/" + studentId;
         }
     }
