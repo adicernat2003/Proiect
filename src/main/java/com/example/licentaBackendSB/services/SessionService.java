@@ -146,7 +146,7 @@ public class SessionService {
     }
 
     private Student buildNewStudentInFirstYearOfMaster(Student studentFromPreviousYear, Integer anUniversitar) {
-        return Student.builder()
+        return new Student().toBuilder()
                 .nume(studentFromPreviousYear.getNume())
                 .prenume(studentFromPreviousYear.getPrenume())
                 .an(ONE.getValue())
@@ -172,7 +172,7 @@ public class SessionService {
     }
 
     private Student buildNewStudentInSecondYearOfMaster(Student studentFromPreviousYear, Integer anUniversitar) {
-        return Student.builder()
+        return new Student().toBuilder()
                 .nume(studentFromPreviousYear.getNume())
                 .prenume(studentFromPreviousYear.getPrenume())
                 .an(TWO.getValue())
@@ -197,7 +197,7 @@ public class SessionService {
         Gender randomGender = doBandCNPandGenderRandomizer.getGender();
         String randomCNP = doBandCNPandGenderRandomizer.getCNP(randomDoB, randomGender);
 
-        return Student.builder()
+        return new Student().toBuilder()
                 .nume(randomNume)
                 .prenume(randomPrenume)
                 .grupa(this.getNewGrupaForFirstOrThirdYear(ONE))
@@ -216,7 +216,7 @@ public class SessionService {
     }
 
     private Student buildNewStudentInThirdYear(Student studentFromPreviousYear, Integer anUniversitar) {
-        return Student.builder()
+        return new Student().toBuilder()
                 .nume(studentFromPreviousYear.getNume())
                 .prenume(studentFromPreviousYear.getPrenume())
                 .grupa(this.getNewGrupaForFirstOrThirdYear(THREE))
@@ -235,7 +235,7 @@ public class SessionService {
     }
 
     private Student buildNewStudentInSecondOrFourthYear(Student studentFromPreviousYear, Integer anUniversitar) {
-        return Student.builder()
+        return new Student().toBuilder()
                 .nume(studentFromPreviousYear.getNume())
                 .prenume(studentFromPreviousYear.getPrenume())
                 .grupa(this.incrementAndGetNewGrupaForSecondAndFourthYear(studentFromPreviousYear.getGrupa()))
